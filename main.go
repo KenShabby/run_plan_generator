@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -12,13 +13,16 @@ import (
 func main() {
 	connStr := getEnv("DATABASE_URL", "postgres:///run_plan_generator?sslmode=disable")
 
-	pool, err := pgxpool.New(context.Background(), connStr)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	pool, err := pgxpool.New(ctx, connStr)
 	if err != nil {
 		log.Fatalf("unable to create connection pool: %v", err)
 	}
 	defer pool.Close()
 
-	if err := pool.Ping(context.Background()); err != nil {
+	if err := pool.Ping(ctx); err != nil {
 		log.Fatalf("unable to reach database: %v", err)
 	}
 
