@@ -15,32 +15,36 @@ const (
 type RunType string
 
 const (
-	Aerobic           RunType = "aerobic"
 	CruiseInterval    RunType = "cruise_interval"
 	Easy              RunType = "easy"
 	FastFinish        RunType = "fast_finish"
 	Foundation        RunType = "foundation"
+	GeneralAerobic    RunType = "general_aerobic"
 	HillRepetitions   RunType = "hill_repetitions"
 	Interval          RunType = "interval"
+	LactateThreshold  RunType = "lactate_threshold"
 	LongInterval      RunType = "long_interval"
 	LongRun           RunType = "long_run"
 	LongRunFastFinish RunType = "long_run_with_fast_finish"
 	LongRunSpeedPlay  RunType = "long_run_with_speed_play"
+	MediumLong        RunType = "medium_long"
 	Race              RunType = "race"
+	RacePace          RunType = "race_pace"
 	Recovery          RunType = "recovery"
 	ShortInterval     RunType = "short_interval"
 	SpeedPlay         RunType = "speed_play"
 	Tempo             RunType = "tempo"
+	VO2Max            RunType = "vo2_max"
 )
 
-type EffortType string
+type EffortType string // Are we running a given distance or given time?
 
 const (
 	ByDistance EffortType = "distance"
 	ByTime     EffortType = "time"
 )
 
-type DistanceUnit string
+type DistanceUnit string // Km or Freedom units?
 
 const (
 	Miles      DistanceUnit = "miles"
@@ -56,7 +60,7 @@ type HeartRateTarget struct {
 }
 
 type Segment struct {
-	Order       int
+	Order       int // The order this segment comes in the run
 	Description string
 	EffortType  EffortType
 	Duration    time.Duration
