@@ -93,3 +93,10 @@ type RunPlan struct {
 	EndDate      time.Time
 	Runs         []Run
 }
+
+type User struct {
+	ID        int32
+	Email     string
+	Username  string
+	CreatedAt time.Time
+}
