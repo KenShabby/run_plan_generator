@@ -4,9 +4,11 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
+	"github.com/KenShabby/run_plan_generator/internal/db"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -27,6 +29,22 @@ func main() {
 	}
 
 	fmt.Println("connected to postgres successfully")
+
+	queries := db.New(pool)
+	_ = queries
+
+	srv := &http.Server{
+		Addr:         ":8080",
+		Handler:      newServer(),
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	log.Printf("starting server on %s", srv.Addr)
+	if err := srv.ListenAndServe(); err != nil {
+		log.Fatalf("server error: %v", err)
+	}
 }
 
 func getEnv(key, fallback string) string {
