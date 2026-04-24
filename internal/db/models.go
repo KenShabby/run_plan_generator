@@ -5,76 +5,75 @@
 package db
 
 import (
-	"database/sql"
-	"time"
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type HrZone struct {
-	ID          int32          `json:"id"`
-	ProfileID   int32          `json:"profile_id"`
-	ZoneNumber  int32          `json:"zone_number"`
-	Name        sql.NullString `json:"name"`
-	HrMin       int32          `json:"hr_min"`
-	HrMax       int32          `json:"hr_max"`
-	Description sql.NullString `json:"description"`
-	CreatedAt   sql.NullTime   `json:"created_at"`
+	ID          int32            `json:"id"`
+	ProfileID   int32            `json:"profile_id"`
+	ZoneNumber  int32            `json:"zone_number"`
+	Name        pgtype.Text      `json:"name"`
+	HrMin       int32            `json:"hr_min"`
+	HrMax       int32            `json:"hr_max"`
+	Description pgtype.Text      `json:"description"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }
 
 type RunDay struct {
-	ID            int32          `json:"id"`
-	PlanID        int32          `json:"plan_id"`
-	Date          time.Time      `json:"date"`
-	RunType       string         `json:"run_type"`
-	TotalDistance sql.NullString `json:"total_distance"`
-	TotalDuration sql.NullInt64  `json:"total_duration"`
-	Completed     bool           `json:"completed"`
-	Notes         sql.NullString `json:"notes"`
-	CreatedAt     sql.NullTime   `json:"created_at"`
+	ID            int32            `json:"id"`
+	PlanID        int32            `json:"plan_id"`
+	Date          pgtype.Date      `json:"date"`
+	RunType       string           `json:"run_type"`
+	TotalDistance pgtype.Float8    `json:"total_distance"`
+	TotalDuration pgtype.Int8      `json:"total_duration"`
+	Completed     bool             `json:"completed"`
+	Notes         pgtype.Text      `json:"notes"`
+	CreatedAt     pgtype.Timestamp `json:"created_at"`
 }
 
 type Segment struct {
-	ID          int32          `json:"id"`
-	RunID       int32          `json:"run_id"`
-	OrderIndex  int32          `json:"order_index"`
-	Description sql.NullString `json:"description"`
-	EffortType  string         `json:"effort_type"`
-	Duration    sql.NullInt64  `json:"duration"`
-	Distance    sql.NullString `json:"distance"`
-	Pace        sql.NullInt64  `json:"pace"`
-	Repetitions int32          `json:"repetitions"`
-	HrZoneMin   sql.NullInt32  `json:"hr_zone_min"`
-	HrZoneMax   sql.NullInt32  `json:"hr_zone_max"`
-	HrAbsMin    sql.NullInt32  `json:"hr_abs_min"`
-	HrAbsMax    sql.NullInt32  `json:"hr_abs_max"`
-	CreatedAt   sql.NullTime   `json:"created_at"`
+	ID          int32            `json:"id"`
+	RunID       int32            `json:"run_id"`
+	OrderIndex  int32            `json:"order_index"`
+	Description pgtype.Text      `json:"description"`
+	EffortType  string           `json:"effort_type"`
+	Duration    pgtype.Int8      `json:"duration"`
+	Distance    pgtype.Float8    `json:"distance"`
+	Pace        pgtype.Int8      `json:"pace"`
+	Repetitions int32            `json:"repetitions"`
+	HrZoneMin   pgtype.Int4      `json:"hr_zone_min"`
+	HrZoneMax   pgtype.Int4      `json:"hr_zone_max"`
+	HrAbsMin    pgtype.Int4      `json:"hr_abs_min"`
+	HrAbsMax    pgtype.Int4      `json:"hr_abs_max"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }
 
 type TrainingPlan struct {
-	ID           int32          `json:"id"`
-	UserID       int32          `json:"user_id"`
-	Name         string         `json:"name"`
-	Description  sql.NullString `json:"description"`
-	PlanType     string         `json:"plan_type"`
-	DistanceUnit string         `json:"distance_unit"`
-	StartDate    time.Time      `json:"start_date"`
-	EndDate      time.Time      `json:"end_date"`
-	CreatedAt    sql.NullTime   `json:"created_at"`
+	ID           int32            `json:"id"`
+	UserID       int32            `json:"user_id"`
+	Name         string           `json:"name"`
+	Description  pgtype.Text      `json:"description"`
+	PlanType     string           `json:"plan_type"`
+	DistanceUnit string           `json:"distance_unit"`
+	StartDate    pgtype.Date      `json:"start_date"`
+	EndDate      pgtype.Date      `json:"end_date"`
+	CreatedAt    pgtype.Timestamp `json:"created_at"`
 }
 
 type User struct {
-	ID           int32        `json:"id"`
-	Email        string       `json:"email"`
-	Username     string       `json:"username"`
-	PasswordHash string       `json:"password_hash"`
-	CreatedAt    sql.NullTime `json:"created_at"`
+	ID           int32            `json:"id"`
+	Email        string           `json:"email"`
+	Username     string           `json:"username"`
+	PasswordHash string           `json:"password_hash"`
+	CreatedAt    pgtype.Timestamp `json:"created_at"`
 }
 
 type UserHrProfile struct {
-	ID                 int32         `json:"id"`
-	UserID             int32         `json:"user_id"`
-	MaxHr              sql.NullInt32 `json:"max_hr"`
-	RestingHr          sql.NullInt32 `json:"resting_hr"`
-	LactateThresholdHr sql.NullInt32 `json:"lactate_threshold_hr"`
-	CalculationMethod  string        `json:"calculation_method"`
-	CreatedAt          sql.NullTime  `json:"created_at"`
+	ID                 int32            `json:"id"`
+	UserID             int32            `json:"user_id"`
+	MaxHr              pgtype.Int4      `json:"max_hr"`
+	RestingHr          pgtype.Int4      `json:"resting_hr"`
+	LactateThresholdHr pgtype.Int4      `json:"lactate_threshold_hr"`
+	CalculationMethod  string           `json:"calculation_method"`
+	CreatedAt          pgtype.Timestamp `json:"created_at"`
 }

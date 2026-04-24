@@ -85,7 +85,7 @@ type Run struct {
 type RunPlan struct {
 	ID           int32
 	UserID       int32
-	Neme         string // e.g. Santa Rosa Marathon 2026
+	Name         string // e.g. Santa Rosa Marathon 2026
 	Description  string
 	PlanType     PlanType
 	DistanceUnit DistanceUnit

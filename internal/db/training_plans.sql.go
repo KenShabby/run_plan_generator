@@ -7,8 +7,8 @@ package db
 
 import (
 	"context"
-	"database/sql"
-	"time"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createTrainingPlan = `-- name: CreateTrainingPlan :one
@@ -18,17 +18,17 @@ RETURNING id, user_id, name, description, plan_type, distance_unit, start_date, 
 `
 
 type CreateTrainingPlanParams struct {
-	UserID       int32          `json:"user_id"`
-	Name         string         `json:"name"`
-	Description  sql.NullString `json:"description"`
-	PlanType     string         `json:"plan_type"`
-	DistanceUnit string         `json:"distance_unit"`
-	StartDate    time.Time      `json:"start_date"`
-	EndDate      time.Time      `json:"end_date"`
+	UserID       int32       `json:"user_id"`
+	Name         string      `json:"name"`
+	Description  pgtype.Text `json:"description"`
+	PlanType     string      `json:"plan_type"`
+	DistanceUnit string      `json:"distance_unit"`
+	StartDate    pgtype.Date `json:"start_date"`
+	EndDate      pgtype.Date `json:"end_date"`
 }
 
 func (q *Queries) CreateTrainingPlan(ctx context.Context, arg CreateTrainingPlanParams) (TrainingPlan, error) {
-	row := q.db.QueryRowContext(ctx, createTrainingPlan,
+	row := q.db.QueryRow(ctx, createTrainingPlan,
 		arg.UserID,
 		arg.Name,
 		arg.Description,
@@ -57,7 +57,7 @@ DELETE FROM training_plans WHERE id = $1
 `
 
 func (q *Queries) DeleteTrainingPlan(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, deleteTrainingPlan, id)
+	_, err := q.db.Exec(ctx, deleteTrainingPlan, id)
 	return err
 }
 
@@ -66,7 +66,7 @@ SELECT id, user_id, name, description, plan_type, distance_unit, start_date, end
 `
 
 func (q *Queries) GetTrainingPlan(ctx context.Context, id int32) (TrainingPlan, error) {
-	row := q.db.QueryRowContext(ctx, getTrainingPlan, id)
+	row := q.db.QueryRow(ctx, getTrainingPlan, id)
 	var i TrainingPlan
 	err := row.Scan(
 		&i.ID,
@@ -87,7 +87,7 @@ SELECT id, user_id, name, description, plan_type, distance_unit, start_date, end
 `
 
 func (q *Queries) ListTrainingPlansByUser(ctx context.Context, userID int32) ([]TrainingPlan, error) {
-	rows, err := q.db.QueryContext(ctx, listTrainingPlansByUser, userID)
+	rows, err := q.db.Query(ctx, listTrainingPlansByUser, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -109,9 +109,6 @@ func (q *Queries) ListTrainingPlansByUser(ctx context.Context, userID int32) ([]
 			return nil, err
 		}
 		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
