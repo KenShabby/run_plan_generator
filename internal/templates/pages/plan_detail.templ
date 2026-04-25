@@ -2,6 +2,7 @@ package pages
 
 import (
     "fmt"
+    "time"
     "github.com/KenShabby/run_plan_generator/internal/db"
     "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
@@ -13,17 +14,96 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
            hx-get="/plans"
            hx-target="main"
            hx-push-url="true">
-            ← Back to Plans
+            ← Back
         </a>
     </div>
-    <p>
-        <small>{ plan.PlanType } · { plan.DistanceUnit }</small>
-    </p>
+    <p><small>{ plan.PlanType } · { plan.DistanceUnit }
+        if plan.StartDate.Valid && plan.EndDate.Valid {
+            · { plan.StartDate.Time.Format("Jan 2") } – { plan.EndDate.Time.Format("Jan 2, 2006") }
+        }
+    </small></p>
     if plan.Description.Valid {
         <p>{ plan.Description.String }</p>
     }
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2>Runs</h2>
+
+    <style>
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+        .day-header {
+            text-align: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--pico-muted-color);
+            padding: 4px 0;
+        }
+        .week-label {
+            font-size: 0.65rem;
+            color: var(--pico-muted-color);
+            padding: 6px 0 2px;
+        }
+        .day-cell {
+            min-height: 80px;
+            background: var(--pico-card-background-color);
+            border: 1px solid var(--pico-card-border-color);
+            border-radius: 4px;
+            padding: 4px;
+            font-size: 0.7rem;
+        }
+        .day-cell.empty {
+            background: transparent;
+            border-color: transparent;
+        }
+        .run-chip {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            height: 100%;
+        }
+        .run-chip .run-type {
+            font-weight: 600;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--pico-primary);
+        }
+        .run-chip .run-dist {
+            font-size: 0.75rem;
+        }
+        .run-chip .run-date {
+            font-size: 0.6rem;
+            color: var(--pico-muted-color);
+        }
+        .run-chip .chip-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: auto;
+            padding-top: 4px;
+        }
+        .chip-actions a,
+        .chip-actions button {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            margin: 0;
+            border-radius: 3px;
+        }
+        .add-run-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+        .add-run-bar button {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+        }
+    </style>
+
+    <div class="add-run-bar">
         <button
             hx-get={ fmt.Sprintf("/plans/%d/runs/new", plan.ID) }
             hx-target="#run-form-container"
@@ -32,13 +112,59 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
         </button>
     </div>
     <div id="run-form-container"></div>
+
+    <!-- Day of week headers -->
+    <div class="week-grid">
+        <div class="day-header">Mon</div>
+        <div class="day-header">Tue</div>
+        <div class="day-header">Wed</div>
+        <div class="day-header">Thu</div>
+        <div class="day-header">Fri</div>
+        <div class="day-header">Sat</div>
+        <div class="day-header">Sun</div>
+    </div>
+
     <div id="runs-list">
-        for _, run := range runs {
-            @RunCard(run)
-        }
-        if len(runs) == 0 {
-            <p>No runs yet. Add one to get started.</p>
-        }
+        @RunCalendar(runs, plan.StartDate.Time)
+    </div>
+}
+
+templ RunCalendar(runs []db.RunDay, startDate time.Time) {
+    for _, week := range GroupRunsByWeek(runs, startDate) {
+        <div class="week-label">Week { fmt.Sprintf("%d", week.WeekNum) }</div>
+        <div class="week-grid">
+            for _, run := range week.Days {
+                if run != nil {
+                    @CompactRunCard(*run)
+                } else {
+                    <div class="day-cell empty"></div>
+                }
+            }
+        </div>
+    }
+}
+
+templ CompactRunCard(run db.RunDay) {
+    <div class="day-cell" id={ fmt.Sprintf("run-%d", run.ID) }>
+        <div class="run-chip">
+            <span class="run-date">{ run.Date.Time.Format("Jan 2") }</span>
+            <span class="run-type">{ run.RunType }</span>
+            if run.TotalDistance.Valid {
+                <span class="run-dist">{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } mi</span>
+            }
+            if run.Notes.Valid {
+                <span class="run-date">{ run.Notes.String }</span>
+            }
+            <div class="chip-actions">
+                <button class="secondary outline"
+                    hx-delete={ fmt.Sprintf("/runs/%d", run.ID) }
+                    hx-target={ fmt.Sprintf("#run-%d", run.ID) }
+                    hx-swap="outerHTML"
+                    hx-confirm="Delete this run?">
+                    ✕
+                </button>
+            </div>
+        </div>
     </div>
 }
 
