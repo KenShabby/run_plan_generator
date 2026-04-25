@@ -310,7 +310,7 @@ func newServer(queries *db.Queries) http.Handler {
 		}
 
 		// redirect to the new plan
-		plans, _ := queries.ListPlansByUser(r.Context(), 1)
+		plans, _ := queries.ListTrainingPlansByUser(r.Context(), 1)
 		pages.PlansContent(plans).Render(r.Context(), w)
 	})
 
