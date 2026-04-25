@@ -7,44 +7,325 @@ peak_weekly_mileage: 35
 
 runs:
   # Week 1
-  - day_offset: 1   # Tuesday
+  - day_offset: 1
     run_type: easy
     distance: 3.0
-    segments:
-      - order_index: 1
-        description: Easy run
-        effort_type: distance
-        distance: 3.0
-        hr_zone_min: 1
-        hr_zone_max: 2
-
-  - day_offset: 3   # Thursday
+    notes: "Easy run"
+  - day_offset: 2
     run_type: easy
     distance: 3.0
-    segments:
-      - order_index: 1
-        description: Easy run
-        effort_type: distance
-        distance: 3.0
-        hr_zone_min: 1
-        hr_zone_max: 2
-
-  - day_offset: 5   # Saturday
+    notes: "Easy run"
+  - day_offset: 3
     run_type: easy
     distance: 3.0
-    segments:
-      - order_index: 1
-        description: Easy run
-        effort_type: distance
-        distance: 3.0
-
-  - day_offset: 6   # Sunday — long run
+    notes: "Easy run"
+  - day_offset: 5
     run_type: long_run
     distance: 6.0
-    segments:
-      - order_index: 1
-        description: Long run — easy effort
-        effort_type: distance
-        distance: 6.0
-        hr_zone_min: 1
-        hr_zone_max: 2
+    notes: "Long run — easy effort"
+
+  # Week 2
+  - day_offset: 8
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 9
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 10
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 12
+    run_type: long_run
+    distance: 7.0
+    notes: "Long run — easy effort"
+
+  # Week 3
+  - day_offset: 15
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 16
+    run_type: general_aerobic
+    distance: 4.0
+    notes: "Midweek medium run"
+  - day_offset: 17
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 19
+    run_type: long_run
+    distance: 5.0
+    notes: "Long run — easy effort"
+
+  # Week 4
+  - day_offset: 22
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 23
+    run_type: general_aerobic
+    distance: 4.0
+    notes: "Midweek medium run"
+  - day_offset: 24
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 26
+    run_type: long_run
+    distance: 9.0
+    notes: "Long run — easy effort"
+
+  # Week 5
+  - day_offset: 29
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 30
+    run_type: general_aerobic
+    distance: 5.0
+    notes: "Midweek medium run"
+  - day_offset: 31
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 33
+    run_type: long_run
+    distance: 10.0
+    notes: "Long run — easy effort"
+
+  # Week 6
+  - day_offset: 36
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 37
+    run_type: general_aerobic
+    distance: 5.0
+    notes: "Midweek medium run"
+  - day_offset: 38
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 40
+    run_type: long_run
+    distance: 7.0
+    notes: "Recovery long run — easy effort"
+
+  # Week 7
+  - day_offset: 43
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 44
+    run_type: general_aerobic
+    distance: 6.0
+    notes: "Midweek medium run"
+  - day_offset: 45
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 47
+    run_type: long_run
+    distance: 12.0
+    notes: "Long run — easy effort"
+
+  # Week 8 — half marathon week (Saturday is race, no long run Sunday)
+  - day_offset: 50
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 51
+    run_type: general_aerobic
+    distance: 6.0
+    notes: "Midweek medium run"
+  - day_offset: 52
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 55
+    run_type: race
+    distance: 13.1
+    notes: "Half marathon tune-up race"
+
+  # Week 9
+  - day_offset: 57
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 58
+    run_type: general_aerobic
+    distance: 7.0
+    notes: "Midweek medium run"
+  - day_offset: 59
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 61
+    run_type: long_run
+    distance: 10.0
+    notes: "Long run — easy effort"
+
+  # Week 10
+  - day_offset: 64
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 65
+    run_type: general_aerobic
+    distance: 7.0
+    notes: "Midweek medium run"
+  - day_offset: 66
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 68
+    run_type: long_run
+    distance: 15.0
+    notes: "Long run — easy effort"
+
+  # Week 11
+  - day_offset: 71
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 72
+    run_type: general_aerobic
+    distance: 8.0
+    notes: "Midweek medium run"
+  - day_offset: 73
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 75
+    run_type: long_run
+    distance: 16.0
+    notes: "Long run — easy effort"
+
+  # Week 12
+  - day_offset: 78
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 79
+    run_type: general_aerobic
+    distance: 8.0
+    notes: "Midweek medium run"
+  - day_offset: 80
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 82
+    run_type: long_run
+    distance: 12.0
+    notes: "Recovery long run — easy effort"
+
+  # Week 13
+  - day_offset: 85
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 86
+    run_type: general_aerobic
+    distance: 9.0
+    notes: "Midweek medium run"
+  - day_offset: 87
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 89
+    run_type: long_run
+    distance: 18.0
+    notes: "Long run — easy effort"
+
+  # Week 14
+  - day_offset: 92
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 93
+    run_type: general_aerobic
+    distance: 9.0
+    notes: "Midweek medium run"
+  - day_offset: 94
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 96
+    run_type: long_run
+    distance: 14.0
+    notes: "Recovery long run — easy effort"
+
+  # Week 15 — peak week
+  - day_offset: 99
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 100
+    run_type: general_aerobic
+    distance: 10.0
+    notes: "Midweek medium run"
+  - day_offset: 101
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 103
+    run_type: long_run
+    distance: 20.0
+    notes: "Peak long run — easy effort, this is the big one"
+
+  # Week 16 — taper begins
+  - day_offset: 106
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 107
+    run_type: general_aerobic
+    distance: 8.0
+    notes: "Midweek medium run"
+  - day_offset: 108
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 110
+    run_type: long_run
+    distance: 12.0
+    notes: "Taper long run — easy effort"
+
+  # Week 17 — taper continues
+  - day_offset: 113
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 114
+    run_type: general_aerobic
+    distance: 6.0
+    notes: "Midweek medium run"
+  - day_offset: 115
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 117
+    run_type: long_run
+    distance: 8.0
+    notes: "Taper long run — easy effort"
+
+  # Week 18 — race week
+  - day_offset: 120
+    run_type: easy
+    distance: 3.0
+    notes: "Easy shakeout"
+  - day_offset: 121
+    run_type: easy
+    distance: 4.0
+    notes: "Easy shakeout"
+  - day_offset: 122
+    run_type: easy
+    distance: 2.0
+    notes: "Short shakeout, stay loose"
+  - day_offset: 126
+    run_type: race
+    distance: 26.2
+    notes: "Race day! You've done the work. Trust your training."

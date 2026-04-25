@@ -66,15 +66,19 @@ templ TemplateSelectForm(t db.TemplatePlan) {
         <form hx-post={ fmt.Sprintf("/templates/%d/instantiate", t.ID) }
               hx-target="main"
               hx-push-url="/plans">
+            <div class="grid">
+                <label>
+                    Plan Name
+                    <input type="text" name="name" value={ t.Name } required>
+                </label>
+                <label>
+                    Race Date
+                    <input type="date" name="race_date" required>
+                </label>
+            </div>
             <label>
-                Plan Name
-                <input type="text" name="name"
-                       value={ t.Name }
-                       required>
-            </label>
-            <label>
-                Race Date
-                <input type="date" name="race_date" required>
+                Description
+                <textarea name="description" placeholder="Optional notes about your goal, target time, etc."></textarea>
             </label>
             <p>
                 <small>Your plan will start { fmt.Sprintf("%d", t.TotalWeeks) } weeks before your race date.</small>

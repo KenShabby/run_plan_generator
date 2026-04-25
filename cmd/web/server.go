@@ -254,7 +254,9 @@ func newServer(queries *db.Queries) http.Handler {
 			return
 		}
 
-		raceDate, err := time.Parse("2006-01-02", r.FormValue("race_date"))
+		log.Printf("DEBUG instantiate form values: %v", r.Form)
+
+		raceDate, err := time.ParseInLocation("2006-01-02", r.FormValue("race_date"), time.Local)
 		if err != nil {
 			http.Error(w, "invalid race date", http.StatusBadRequest)
 			return
@@ -271,7 +273,7 @@ func newServer(queries *db.Queries) http.Handler {
 		plan, err := queries.CreateTrainingPlan(r.Context(), db.CreateTrainingPlanParams{
 			UserID:       1,
 			Name:         r.FormValue("name"),
-			Description:  pgtype.Text{String: tmpl.Description.String, Valid: tmpl.Description.Valid},
+			Description:  pgtype.Text{String: r.FormValue("description"), Valid: r.FormValue("description") != ""},
 			PlanType:     tmpl.PlanType,
 			DistanceUnit: tmpl.DistanceUnit,
 			StartDate:    pgtype.Date{Time: startDate, Valid: true},
