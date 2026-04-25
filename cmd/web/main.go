@@ -31,11 +31,10 @@ func main() {
 	fmt.Println("connected to postgres successfully")
 
 	queries := db.New(pool)
-	_ = queries
 
 	srv := &http.Server{
 		Addr:         ":8080",
-		Handler:      newServer(),
+		Handler:      newServer(queries),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
