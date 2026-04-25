@@ -1,0 +1,50 @@
+name: "Higdon Novice 1"
+description: "18-week marathon plan for first-time marathoners. Tops out at 20 miles for the long run."
+plan_type: marathon
+distance_unit: miles
+total_weeks: 18
+peak_weekly_mileage: 35
+
+runs:
+  # Week 1
+  - day_offset: 1   # Tuesday
+    run_type: easy
+    distance: 3.0
+    segments:
+      - order_index: 1
+        description: Easy run
+        effort_type: distance
+        distance: 3.0
+        hr_zone_min: 1
+        hr_zone_max: 2
+
+  - day_offset: 3   # Thursday
+    run_type: easy
+    distance: 3.0
+    segments:
+      - order_index: 1
+        description: Easy run
+        effort_type: distance
+        distance: 3.0
+        hr_zone_min: 1
+        hr_zone_max: 2
+
+  - day_offset: 5   # Saturday
+    run_type: easy
+    distance: 3.0
+    segments:
+      - order_index: 1
+        description: Easy run
+        effort_type: distance
+        distance: 3.0
+
+  - day_offset: 6   # Sunday — long run
+    run_type: long_run
+    distance: 6.0
+    segments:
+      - order_index: 1
+        description: Long run — easy effort
+        effort_type: distance
+        distance: 6.0
+        hr_zone_min: 1
+        hr_zone_max: 2

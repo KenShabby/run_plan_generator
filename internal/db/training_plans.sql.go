@@ -12,9 +12,9 @@ import (
 )
 
 const createTrainingPlan = `-- name: CreateTrainingPlan :one
-INSERT INTO training_plans (user_id, name, description, plan_type, distance_unit, start_date, end_date)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
-RETURNING id, user_id, name, description, plan_type, distance_unit, start_date, end_date, created_at
+INSERT INTO training_plans (user_id, name, description, plan_type, distance_unit, start_date, end_date, template_id)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+RETURNING id, user_id, name, description, plan_type, distance_unit, start_date, end_date, created_at, template_id
 `
 
 type CreateTrainingPlanParams struct {
@@ -25,6 +25,7 @@ type CreateTrainingPlanParams struct {
 	DistanceUnit string      `json:"distance_unit"`
 	StartDate    pgtype.Date `json:"start_date"`
 	EndDate      pgtype.Date `json:"end_date"`
+	TemplateID   pgtype.Int4 `json:"template_id"`
 }
 
 func (q *Queries) CreateTrainingPlan(ctx context.Context, arg CreateTrainingPlanParams) (TrainingPlan, error) {
@@ -36,6 +37,7 @@ func (q *Queries) CreateTrainingPlan(ctx context.Context, arg CreateTrainingPlan
 		arg.DistanceUnit,
 		arg.StartDate,
 		arg.EndDate,
+		arg.TemplateID,
 	)
 	var i TrainingPlan
 	err := row.Scan(
@@ -48,6 +50,7 @@ func (q *Queries) CreateTrainingPlan(ctx context.Context, arg CreateTrainingPlan
 		&i.StartDate,
 		&i.EndDate,
 		&i.CreatedAt,
+		&i.TemplateID,
 	)
 	return i, err
 }
@@ -62,7 +65,7 @@ func (q *Queries) DeleteTrainingPlan(ctx context.Context, id int32) error {
 }
 
 const getTrainingPlan = `-- name: GetTrainingPlan :one
-SELECT id, user_id, name, description, plan_type, distance_unit, start_date, end_date, created_at FROM training_plans WHERE id = $1
+SELECT id, user_id, name, description, plan_type, distance_unit, start_date, end_date, created_at, template_id FROM training_plans WHERE id = $1
 `
 
 func (q *Queries) GetTrainingPlan(ctx context.Context, id int32) (TrainingPlan, error) {
@@ -78,12 +81,13 @@ func (q *Queries) GetTrainingPlan(ctx context.Context, id int32) (TrainingPlan, 
 		&i.StartDate,
 		&i.EndDate,
 		&i.CreatedAt,
+		&i.TemplateID,
 	)
 	return i, err
 }
 
 const listTrainingPlansByUser = `-- name: ListTrainingPlansByUser :many
-SELECT id, user_id, name, description, plan_type, distance_unit, start_date, end_date, created_at FROM training_plans WHERE user_id = $1
+SELECT id, user_id, name, description, plan_type, distance_unit, start_date, end_date, created_at, template_id FROM training_plans WHERE user_id = $1
 `
 
 func (q *Queries) ListTrainingPlansByUser(ctx context.Context, userID int32) ([]TrainingPlan, error) {
@@ -105,6 +109,7 @@ func (q *Queries) ListTrainingPlansByUser(ctx context.Context, userID int32) ([]
 			&i.StartDate,
 			&i.EndDate,
 			&i.CreatedAt,
+			&i.TemplateID,
 		); err != nil {
 			return nil, err
 		}
@@ -114,4 +119,49 @@ func (q *Queries) ListTrainingPlansByUser(ctx context.Context, userID int32) ([]
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateTrainingPlan = `-- name: UpdateTrainingPlan :one
+UPDATE training_plans
+SET name = $2, description = $3, plan_type = $4, distance_unit = $5, start_date = $6, end_date = $7, template_id = $8
+WHERE id = $1
+RETURNING id, user_id, name, description, plan_type, distance_unit, start_date, end_date, created_at, template_id
+`
+
+type UpdateTrainingPlanParams struct {
+	ID           int32       `json:"id"`
+	Name         string      `json:"name"`
+	Description  pgtype.Text `json:"description"`
+	PlanType     string      `json:"plan_type"`
+	DistanceUnit string      `json:"distance_unit"`
+	StartDate    pgtype.Date `json:"start_date"`
+	EndDate      pgtype.Date `json:"end_date"`
+	TemplateID   pgtype.Int4 `json:"template_id"`
+}
+
+func (q *Queries) UpdateTrainingPlan(ctx context.Context, arg UpdateTrainingPlanParams) (TrainingPlan, error) {
+	row := q.db.QueryRow(ctx, updateTrainingPlan,
+		arg.ID,
+		arg.Name,
+		arg.Description,
+		arg.PlanType,
+		arg.DistanceUnit,
+		arg.StartDate,
+		arg.EndDate,
+		arg.TemplateID,
+	)
+	var i TrainingPlan
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Name,
+		&i.Description,
+		&i.PlanType,
+		&i.DistanceUnit,
+		&i.StartDate,
+		&i.EndDate,
+		&i.CreatedAt,
+		&i.TemplateID,
+	)
+	return i, err
 }

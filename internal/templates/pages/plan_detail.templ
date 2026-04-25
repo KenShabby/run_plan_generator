@@ -1,0 +1,49 @@
+package pages
+
+import (
+    "fmt"
+    "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+)
+
+templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>{ plan.Name }</h1>
+        <a href="/plans" role="button" class="secondary"
+           hx-get="/plans"
+           hx-target="main"
+           hx-push-url="true">
+            ← Back to Plans
+        </a>
+    </div>
+    <p>
+        <small>{ plan.PlanType } · { plan.DistanceUnit }</small>
+    </p>
+    if plan.Description.Valid {
+        <p>{ plan.Description.String }</p>
+    }
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Runs</h2>
+        <button
+            hx-get={ fmt.Sprintf("/plans/%d/runs/new", plan.ID) }
+            hx-target="#run-form-container"
+            hx-swap="innerHTML">
+            + Add Run
+        </button>
+    </div>
+    <div id="run-form-container"></div>
+    <div id="runs-list">
+        for _, run := range runs {
+            @RunCard(run)
+        }
+        if len(runs) == 0 {
+            <p>No runs yet. Add one to get started.</p>
+        }
+    </div>
+}
+
+templ PlanDetail(plan db.TrainingPlan, runs []db.RunDay) {
+    @layouts.Base(plan.Name) {
+        @PlanDetailContent(plan, runs)
+    }
+}

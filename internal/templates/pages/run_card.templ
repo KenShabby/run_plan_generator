@@ -1,0 +1,41 @@
+package pages
+
+import (
+    "fmt"
+    "github.com/KenShabby/run_plan_generator/internal/db"
+)
+
+templ RunCard(run db.RunDay) {
+    <article id={ fmt.Sprintf("run-%d", run.ID) }>
+        <header>
+            <div style="display: flex; justify-content: space-between;">
+                <strong>{ run.RunType }</strong>
+                <small>{ run.Date.Time.Format("Mon Jan 2, 2006") }</small>
+            </div>
+        </header>
+        if run.TotalDistance.Valid {
+            <p>{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } miles</p>
+        }
+        if run.Notes.Valid {
+            <p><small>{ run.Notes.String }</small></p>
+        }
+        <footer>
+            <div class="grid">
+                <a href={ templ.SafeURL(fmt.Sprintf("/runs/%d", run.ID)) }
+                   role="button"
+                   hx-get={ fmt.Sprintf("/runs/%d", run.ID) }
+                   hx-target="main"
+                   hx-push-url="true">
+                    View
+                </a>
+                <button class="secondary"
+                    hx-delete={ fmt.Sprintf("/runs/%d", run.ID) }
+                    hx-target={ fmt.Sprintf("#run-%d", run.ID) }
+                    hx-swap="outerHTML"
+                    hx-confirm="Delete this run?">
+                    Delete
+                </button>
+            </div>
+        </footer>
+    </article>
+}

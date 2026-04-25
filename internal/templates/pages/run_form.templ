@@ -1,0 +1,58 @@
+package pages
+
+import "fmt"
+
+templ RunForm(planID int32) {
+    <article>
+        <header><strong>Add Run</strong></header>
+        <form hx-post={ fmt.Sprintf("/plans/%d/runs", planID) }
+              hx-target="#runs-list"
+              hx-swap="beforeend"
+              hx-on::after-request="this.reset()">
+            <div class="grid">
+                <label>
+                    Date
+                    <input type="date" name="date" required>
+                </label>
+                <label>
+                    Run Type
+                    <select name="run_type" required>
+                        <option value="easy">Easy</option>
+                        <option value="long_run">Long Run</option>
+                        <option value="tempo">Tempo</option>
+                        <option value="interval">Interval</option>
+                        <option value="recovery">Recovery</option>
+                        <option value="race_pace">Race Pace</option>
+                        <option value="general_aerobic">General Aerobic</option>
+                        <option value="medium_long">Medium Long</option>
+                        <option value="foundation">Foundation</option>
+                        <option value="vo2_max">VO2 Max</option>
+                    </select>
+                </label>
+            </div>
+            <div class="grid">
+                <label>
+                    Distance
+                    <input type="number" name="total_distance" step="0.1" placeholder="e.g. 8.5">
+                </label>
+                <label>
+                    Notes
+                    <input type="text" name="notes" placeholder="Optional">
+                </label>
+            </div>
+            <div class="grid">
+                <button type="submit">Add Run</button>
+                <button type="button" class="secondary"
+                        hx-get={ fmt.Sprintf("/plans/%d/runs/form/cancel", planID) }
+                        hx-target="#run-form-container"
+                        hx-swap="innerHTML">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </article>
+}
+
+templ RunFormEmpty() {
+    <!-- empty -->
+}

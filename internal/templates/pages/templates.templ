@@ -1,0 +1,97 @@
+package pages
+
+import (
+    "fmt"
+    "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+)
+
+templ TemplatesContent(plans []db.ListTemplatePlansWithCountsRow) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Training Plan Templates</h1>
+        <a href="/plans" role="button" class="secondary"
+           hx-get="/plans"
+           hx-target="main"
+           hx-push-url="true">
+            ← My Plans
+        </a>
+    </div>
+    <p>Choose a plan template and enter your race date to generate your personal training schedule.</p>
+
+    <div id="template-list" class="grid">
+        for _, t := range plans {
+            @TemplateCard(t)
+        }
+        if len(plans) == 0 {
+            <p>No templates available yet.</p>
+        }
+    </div>
+
+    <div id="template-form-container"></div>
+}
+
+templ Templates(plans []db.ListTemplatePlansWithCountsRow) {
+    @layouts.Base("Training Plan Templates") {
+        @TemplatesContent(plans)
+    }
+}
+
+templ TemplateCard(t db.ListTemplatePlansWithCountsRow) {
+    <article>
+        <header>{ t.Name }</header>
+        <p><small>{ t.PlanType } · { t.DistanceUnit }</small></p>
+        if t.Description.Valid {
+            <p>{ t.Description.String }</p>
+        }
+        <p>
+            <strong>{ fmt.Sprintf("%d", t.TotalWeeks) } weeks</strong>
+            if t.PeakWeeklyMileage.Valid {
+                · up to { fmt.Sprintf("%.0f", mustFloat(t.PeakWeeklyMileage)) } { t.DistanceUnit }/week
+            }
+        </p>
+        <footer>
+            <button
+                hx-get={ fmt.Sprintf("/templates/%d/select", t.ID) }
+                hx-target="#template-form-container"
+                hx-swap="innerHTML">
+                Use This Plan
+            </button>
+        </footer>
+    </article>
+}
+
+templ TemplateSelectForm(t db.TemplatePlan) {
+    <article>
+        <header><strong>Set Up: { t.Name }</strong></header>
+        <form hx-post={ fmt.Sprintf("/templates/%d/instantiate", t.ID) }
+              hx-target="main"
+              hx-push-url="/plans">
+            <label>
+                Plan Name
+                <input type="text" name="name"
+                       value={ t.Name }
+                       required>
+            </label>
+            <label>
+                Race Date
+                <input type="date" name="race_date" required>
+            </label>
+            <p>
+                <small>Your plan will start { fmt.Sprintf("%d", t.TotalWeeks) } weeks before your race date.</small>
+            </p>
+            <div class="grid">
+                <button type="submit">Generate My Plan</button>
+                <button type="button" class="secondary"
+                        hx-get="/templates/form/cancel"
+                        hx-target="#template-form-container"
+                        hx-swap="innerHTML">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </article>
+}
+
+templ TemplateFormEmpty() {
+    <!-- empty -->
+}

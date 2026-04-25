@@ -34,7 +34,7 @@ func PlansContent(plans []db.TrainingPlan) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h1>My Training Plans</h1><button hx-get=\"/plans/new\" hx-target=\"#plan-form-container\" hx-swap=\"innerHTML\">+ New Plan</button><div id=\"plan-form-container\"></div><div id=\"plans-list\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div style=\"display: flex; justify-content: space-between; align-items: center;\"><h1>My Training Plans</h1><button hx-get=\"/plans/new\" hx-target=\"#plan-form-container\" hx-swap=\"innerHTML\">+ New Plan</button></div><div id=\"plan-form-container\"></div><div id=\"plans-list\" class=\"grid\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

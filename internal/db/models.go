@@ -48,6 +48,42 @@ type Segment struct {
 	CreatedAt   pgtype.Timestamp `json:"created_at"`
 }
 
+type TemplatePlan struct {
+	ID                int32            `json:"id"`
+	Name              string           `json:"name"`
+	Description       pgtype.Text      `json:"description"`
+	PlanType          string           `json:"plan_type"`
+	DistanceUnit      string           `json:"distance_unit"`
+	TotalWeeks        int32            `json:"total_weeks"`
+	PeakWeeklyMileage pgtype.Numeric   `json:"peak_weekly_mileage"`
+	CreatedAt         pgtype.Timestamp `json:"created_at"`
+}
+
+type TemplateRunDay struct {
+	ID        int32            `json:"id"`
+	PlanID    int32            `json:"plan_id"`
+	DayOffset int32            `json:"day_offset"`
+	RunType   string           `json:"run_type"`
+	Distance  pgtype.Float8    `json:"distance"`
+	Notes     pgtype.Text      `json:"notes"`
+	CreatedAt pgtype.Timestamp `json:"created_at"`
+}
+
+type TemplateSegment struct {
+	ID          int32            `json:"id"`
+	RunID       int32            `json:"run_id"`
+	OrderIndex  int32            `json:"order_index"`
+	Description pgtype.Text      `json:"description"`
+	EffortType  string           `json:"effort_type"`
+	Distance    pgtype.Float8    `json:"distance"`
+	Duration    pgtype.Int8      `json:"duration"`
+	Pace        pgtype.Int8      `json:"pace"`
+	Repetitions int32            `json:"repetitions"`
+	HrZoneMin   pgtype.Int4      `json:"hr_zone_min"`
+	HrZoneMax   pgtype.Int4      `json:"hr_zone_max"`
+	CreatedAt   pgtype.Timestamp `json:"created_at"`
+}
+
 type TrainingPlan struct {
 	ID           int32            `json:"id"`
 	UserID       int32            `json:"user_id"`
@@ -58,6 +94,7 @@ type TrainingPlan struct {
 	StartDate    pgtype.Date      `json:"start_date"`
 	EndDate      pgtype.Date      `json:"end_date"`
 	CreatedAt    pgtype.Timestamp `json:"created_at"`
+	TemplateID   pgtype.Int4      `json:"template_id"`
 }
 
 type User struct {

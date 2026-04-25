@@ -2,20 +2,32 @@ package layouts
 
 templ Base(title string) {
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="en" data-theme="dark">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{ title } | Run Plan Generator</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-        <link rel="stylesheet" href="/static/css/main.css">
     </head>
     <body>
-        <nav>
-            <a href="/">Run Plan Generator</a>
-            <a href="/plans">My Plans</a>
-        </nav>
-        <main>
+        <header class="container">
+            <nav>
+                <ul>
+                    <li><strong>Run Plan Generator</strong></li>
+                </ul>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/plans">My Plans</a></li>
+                </ul>
+                <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/plans">My Plans</a></li>
+                <li><a href="/templates">Browse Templates</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main class="container">
             { children... }
         </main>
     </body>
