@@ -1,0 +1,27 @@
+package pages
+
+import (
+    "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+    "github.com/KenShabby/run_plan_generator/internal/db"
+)
+
+templ Plans(plans []db.TrainingPlan) {
+    @layouts.Base("My Plans") {
+        <h1>My Training Plans</h1>
+        <button
+            hx-get="/plans/new"
+            hx-target="#plan-form-container"
+            hx-swap="innerHTML">
+            + New Plan
+        </button>
+        <div id="plan-form-container"></div>
+        <div id="plans-list">
+            for _, plan := range plans {
+                @PlanCard(plan)
+            }
+            if len(plans) == 0 {
+                <p>No plans yet. Create one to get started.</p>
+            }
+        </div>
+    }
+}

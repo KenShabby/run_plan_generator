@@ -1,0 +1,13 @@
+package pages
+
+import "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+
+templ Index() {
+    @layouts.Base("Home") {
+        <h1>Welcome to Run Plan Generator</h1>
+        <p>Build and track your run training plans.</p>
+        <a href="/plans" hx-get="/plans" hx-target="main" hx-push-url="true">
+            View My Plans
+        </a>
+    }
+}

@@ -1,0 +1,27 @@
+package pages
+
+import (
+    "github.com/KenShabby/run_plan_generator/internal/db"
+    "fmt"
+)
+
+templ PlanCard(plan db.TrainingPlan) {
+    <div class="plan-card" id={ fmt.Sprintf("plan-%d", plan.ID) }>
+        <h3>{ plan.Name }</h3>
+        <p>{ plan.PlanType } · { plan.DistanceUnit }</p>
+        <div class="plan-actions">
+            <a hx-get={ fmt.Sprintf("/plans/%d", plan.ID) }
+               hx-target="main"
+               hx-push-url="true">
+                View
+            </a>
+            <button
+                hx-delete={ fmt.Sprintf("/plans/%d", plan.ID) }
+                hx-target={ fmt.Sprintf("#plan-%d", plan.ID) }
+                hx-swap="outerHTML"
+                hx-confirm="Delete this plan?">
+                Delete
+            </button>
+        </div>
+    </div>
+}

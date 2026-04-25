@@ -1,0 +1,23 @@
+package layouts
+
+templ Base(title string) {
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{ title } | Run Plan Generator</title>
+        <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+        <link rel="stylesheet" href="/static/css/main.css">
+    </head>
+    <body>
+        <nav>
+            <a href="/">Run Plan Generator</a>
+            <a href="/plans">My Plans</a>
+        </nav>
+        <main>
+            { children... }
+        </main>
+    </body>
+    </html>
+}
