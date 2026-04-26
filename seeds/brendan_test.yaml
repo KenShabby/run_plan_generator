@@ -1,0 +1,73 @@
+name: "Brendan Test Run Plan Template"
+description: "Just a test to make sure days of the week are lining up properly"
+plan_type: marathon
+distance_unit: miles
+total_weeks: 3
+peak_weekly_mileage: 95
+
+runs:
+  # Week 1
+  - day_offset: 0 #Sunday
+    run_type: easy
+    distance: 3.0
+    notes: "Long run"
+  - day_offset: 1
+    run_type: easy
+    distance: 3.0
+    notes: "Rest day"
+  - day_offset: 2
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 3
+    run_type: medium_long
+    distance: 6.0
+    notes: "medium long run"
+  - day_offset: 4
+    run_type: easy
+    distance: 6.0
+    notes: "Easy run"
+  - day_offset: 5
+    run_type: easy
+    distance: 6.0
+    notes: "Easy Run"
+  - day_offset: 6
+    run_type: easy
+    distance: 6.0
+    notes: "Easy Run"
+
+  # Week 2
+  - day_offset: 8
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 9
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 10
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 12
+    run_type: long_run
+    distance: 7.0
+    notes: "Long run — easy effort"
+
+  # Week 3
+  - day_offset: 15
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 16
+    run_type: general_aerobic
+    distance: 4.0
+    notes: "Midweek medium run"
+  - day_offset: 17
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 19
+    run_type: long_run
+    distance: 5.0
+    notes: "Race Day"

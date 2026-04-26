@@ -42,7 +42,7 @@ func Base(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " | Run Plan Generator</title><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\"><script src=\"https://unpkg.com/htmx.org@2.0.4\"></script></head><body><header class=\"container\"><nav><ul><li><strong>Run Plan Generator</strong></li></ul><ul><li><a href=\"/\">Home</a></li><li><a href=\"/plans\">My Plans</a></li></ul><ul><li><a href=\"/\">Home</a></li><li><a href=\"/plans\">My Plans</a></li><li><a href=\"/templates\">Browse Templates</a></li></ul></nav></header><main class=\"container\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " | Run Plan Generator</title><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css\"><script src=\"https://unpkg.com/htmx.org@2.0.4\"></script></head><body><header class=\"container\"><nav><ul><li><strong>Run Plan Generator</strong></li></ul><ul><li><a href=\"/\">Home</a></li><li><a href=\"/plans\">My Plans</a></li><li><a href=\"/templates\">Browse Templates</a></li></ul></nav></header><main class=\"container\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
