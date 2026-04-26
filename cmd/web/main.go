@@ -15,6 +15,11 @@ import (
 func main() {
 	connStr := getEnv("DATABASE_URL", "postgres:///run_plan_generator?sslmode=disable")
 
+	sessionSecret := getEnv("SESSION_SECRET", "")
+	if sessionSecret == "" {
+		log.Fatal("SESSION_SECRET environment variable is required")
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -31,10 +36,11 @@ func main() {
 	fmt.Println("connected to postgres successfully")
 
 	queries := db.New(pool)
+	app := newApplication(queries, sessionSecret)
 
 	srv := &http.Server{
 		Addr:         ":8080",
-		Handler:      newServer(queries),
+		Handler:      newServer(app),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,

@@ -14,7 +14,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func newServer(queries *db.Queries) http.Handler {
+func newServer(app *application) http.Handler {
 	r := chi.NewRouter()
 
 	// Basic middleware
@@ -34,7 +34,7 @@ func newServer(queries *db.Queries) http.Handler {
 
 	r.Get("/plans", func(w http.ResponseWriter, r *http.Request) {
 		// Hardcode user ID for now
-		plans, err := queries.ListTrainingPlansByUser(r.Context(), 1)
+		plans, err := app.queries.ListTrainingPlansByUser(r.Context(), 1)
 		if err != nil {
 			log.Printf("error fetching plans: %v", err)
 			http.Error(w, "failed to load plans", http.StatusInternalServerError)
@@ -68,7 +68,7 @@ func newServer(queries *db.Queries) http.Handler {
 			return
 		}
 
-		plan, err := queries.CreateTrainingPlan(r.Context(), db.CreateTrainingPlanParams{
+		plan, err := app.queries.CreateTrainingPlan(r.Context(), db.CreateTrainingPlanParams{
 			UserID:       1,
 			Name:         r.FormValue("name"),
 			Description:  pgtype.Text{String: r.FormValue("description"), Valid: r.FormValue("description") != ""},
@@ -94,13 +94,13 @@ func newServer(queries *db.Queries) http.Handler {
 			return
 		}
 
-		plan, err := queries.GetTrainingPlan(r.Context(), int32(id))
+		plan, err := app.queries.GetTrainingPlan(r.Context(), int32(id))
 		if err != nil {
 			http.Error(w, "plan not found", http.StatusNotFound)
 			return
 		}
 
-		runs, err := queries.ListRunDaysByPlan(r.Context(), int32(id))
+		runs, err := app.queries.ListRunDaysByPlan(r.Context(), int32(id))
 		if err != nil {
 			log.Printf("error fetching runs: %v", err)
 			http.Error(w, "failed to load runs", http.StatusInternalServerError)
@@ -152,7 +152,7 @@ func newServer(queries *db.Queries) http.Handler {
 			}
 		}
 
-		run, err := queries.CreateRunDay(r.Context(), db.CreateRunDayParams{
+		run, err := app.queries.CreateRunDay(r.Context(), db.CreateRunDayParams{
 			PlanID:        int32(planID),
 			Date:          pgtype.Date{Time: date, Valid: true},
 			RunType:       r.FormValue("run_type"),
@@ -177,7 +177,7 @@ func newServer(queries *db.Queries) http.Handler {
 			return
 		}
 
-		if err := queries.DeleteTrainingPlan(r.Context(), int32(id)); err != nil {
+		if err := app.queries.DeleteTrainingPlan(r.Context(), int32(id)); err != nil {
 			log.Printf("error deleting plan: %v", err)
 			http.Error(w, "failed to delete plan", http.StatusInternalServerError)
 			return
@@ -203,7 +203,7 @@ func newServer(queries *db.Queries) http.Handler {
 			http.Error(w, "invalid id", http.StatusBadRequest)
 			return
 		}
-		if err := queries.DeleteRunDay(r.Context(), int32(id)); err != nil {
+		if err := app.queries.DeleteRunDay(r.Context(), int32(id)); err != nil {
 			log.Printf("error deleting run: %v", err)
 			http.Error(w, "failed to delete run", http.StatusInternalServerError)
 			return
@@ -218,13 +218,13 @@ func newServer(queries *db.Queries) http.Handler {
 			return
 		}
 
-		run, err := queries.GetRunDay(r.Context(), int32(id))
+		run, err := app.queries.GetRunDay(r.Context(), int32(id))
 		if err != nil {
 			http.Error(w, "run not found", http.StatusNotFound)
 			return
 		}
 
-		segments, err := queries.ListSegmentsByRun(r.Context(), int32(id))
+		segments, err := app.queries.ListSegmentsByRun(r.Context(), int32(id))
 		if err != nil {
 			log.Printf("error fetching segments: %v", err)
 			http.Error(w, "failed to load segments", http.StatusInternalServerError)
@@ -239,7 +239,7 @@ func newServer(queries *db.Queries) http.Handler {
 	})
 
 	r.Get("/templates", func(w http.ResponseWriter, r *http.Request) {
-		plans, err := queries.ListTemplatePlansWithCounts(r.Context())
+		plans, err := app.queries.ListTemplatePlansWithCounts(r.Context())
 		if err != nil {
 			log.Printf("error fetching templates: %v", err)
 			http.Error(w, "failed to load templates", http.StatusInternalServerError)
@@ -258,7 +258,7 @@ func newServer(queries *db.Queries) http.Handler {
 			http.Error(w, "invalid id", http.StatusBadRequest)
 			return
 		}
-		tmpl, err := queries.GetTemplatePlan(r.Context(), int32(id))
+		tmpl, err := app.queries.GetTemplatePlan(r.Context(), int32(id))
 		if err != nil {
 			http.Error(w, "template not found", http.StatusNotFound)
 			return
@@ -289,7 +289,7 @@ func newServer(queries *db.Queries) http.Handler {
 			return
 		}
 
-		tmpl, err := queries.GetTemplatePlan(r.Context(), int32(id))
+		tmpl, err := app.queries.GetTemplatePlan(r.Context(), int32(id))
 		if err != nil {
 			http.Error(w, "template not found", http.StatusNotFound)
 			return
@@ -297,7 +297,7 @@ func newServer(queries *db.Queries) http.Handler {
 
 		startDate := raceDate.AddDate(0, 0, -(int(tmpl.TotalWeeks) * 7))
 
-		plan, err := queries.CreateTrainingPlan(r.Context(), db.CreateTrainingPlanParams{
+		plan, err := app.queries.CreateTrainingPlan(r.Context(), db.CreateTrainingPlanParams{
 			UserID:       1,
 			Name:         r.FormValue("name"),
 			Description:  pgtype.Text{String: r.FormValue("description"), Valid: r.FormValue("description") != ""},
@@ -314,7 +314,7 @@ func newServer(queries *db.Queries) http.Handler {
 		}
 
 		// populate run days from template
-		templateRuns, err := queries.ListTemplateRunDaysByPlan(r.Context(), tmpl.ID)
+		templateRuns, err := app.queries.ListTemplateRunDaysByPlan(r.Context(), tmpl.ID)
 		if err != nil {
 			log.Printf("error fetching template runs: %v", err)
 			http.Error(w, "failed to load template runs", http.StatusInternalServerError)
@@ -323,7 +323,7 @@ func newServer(queries *db.Queries) http.Handler {
 
 		for _, tr := range templateRuns {
 			runDate := startDate.AddDate(0, 0, int(tr.DayOffset))
-			run, err := queries.CreateRunDay(r.Context(), db.CreateRunDayParams{
+			run, err := app.queries.CreateRunDay(r.Context(), db.CreateRunDayParams{
 				PlanID:        plan.ID,
 				Date:          pgtype.Date{Time: runDate, Valid: true},
 				RunType:       tr.RunType,
@@ -338,7 +338,7 @@ func newServer(queries *db.Queries) http.Handler {
 			}
 
 			// Copy segments from template
-			templateSegs, err := queries.ListTemplateSegmentsByRun(r.Context(), tr.ID)
+			templateSegs, err := app.queries.ListTemplateSegmentsByRun(r.Context(), tr.ID)
 			if err != nil {
 				log.Printf("error fetching template segments: %v", err)
 				http.Error(w, "failed to load template segments", http.StatusInternalServerError)
@@ -346,7 +346,7 @@ func newServer(queries *db.Queries) http.Handler {
 			}
 
 			for _, ts := range templateSegs {
-				_, err := queries.CreateSegment(r.Context(), db.CreateSegmentParams{
+				_, err := app.queries.CreateSegment(r.Context(), db.CreateSegmentParams{
 					RunID:       run.ID,
 					OrderIndex:  ts.OrderIndex,
 					Description: ts.Description,
@@ -369,7 +369,7 @@ func newServer(queries *db.Queries) http.Handler {
 		}
 
 		// redirect to the new plan
-		plans, _ := queries.ListTrainingPlansByUser(r.Context(), 1)
+		plans, _ := app.queries.ListTrainingPlansByUser(r.Context(), 1)
 		pages.PlansContent(plans).Render(r.Context(), w)
 	})
 
