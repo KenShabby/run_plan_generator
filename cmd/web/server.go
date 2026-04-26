@@ -211,6 +211,33 @@ func newServer(queries *db.Queries) http.Handler {
 		w.WriteHeader(http.StatusOK)
 	})
 
+	r.Get("/runs/{id}", func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.Atoi(chi.URLParam(r, "id"))
+		if err != nil {
+			http.Error(w, "invalid id", http.StatusBadRequest)
+			return
+		}
+
+		run, err := queries.GetRunDay(r.Context(), int32(id))
+		if err != nil {
+			http.Error(w, "run not found", http.StatusNotFound)
+			return
+		}
+
+		segments, err := queries.ListSegmentsByRun(r.Context(), int32(id))
+		if err != nil {
+			log.Printf("error fetching segments: %v", err)
+			http.Error(w, "failed to load segments", http.StatusInternalServerError)
+			return
+		}
+
+		if r.Header.Get("HX-Request") == "true" {
+			pages.RunDetailContent(run, segments).Render(r.Context(), w)
+		} else {
+			pages.RunDetail(run, segments).Render(r.Context(), w)
+		}
+	})
+
 	r.Get("/templates", func(w http.ResponseWriter, r *http.Request) {
 		plans, err := queries.ListTemplatePlansWithCounts(r.Context())
 		if err != nil {
@@ -296,7 +323,7 @@ func newServer(queries *db.Queries) http.Handler {
 
 		for _, tr := range templateRuns {
 			runDate := startDate.AddDate(0, 0, int(tr.DayOffset))
-			_, err := queries.CreateRunDay(r.Context(), db.CreateRunDayParams{
+			run, err := queries.CreateRunDay(r.Context(), db.CreateRunDayParams{
 				PlanID:        plan.ID,
 				Date:          pgtype.Date{Time: runDate, Valid: true},
 				RunType:       tr.RunType,
@@ -308,6 +335,36 @@ func newServer(queries *db.Queries) http.Handler {
 				log.Printf("error creating run day: %v", err)
 				http.Error(w, "failed to create run days", http.StatusInternalServerError)
 				return
+			}
+
+			// Copy segments from template
+			templateSegs, err := queries.ListTemplateSegmentsByRun(r.Context(), tr.ID)
+			if err != nil {
+				log.Printf("error fetching template segments: %v", err)
+				http.Error(w, "failed to load template segments", http.StatusInternalServerError)
+				return
+			}
+
+			for _, ts := range templateSegs {
+				_, err := queries.CreateSegment(r.Context(), db.CreateSegmentParams{
+					RunID:       run.ID,
+					OrderIndex:  ts.OrderIndex,
+					Description: ts.Description,
+					EffortType:  ts.EffortType,
+					Distance:    ts.Distance,
+					Duration:    ts.Duration,
+					Pace:        ts.Pace,
+					Repetitions: ts.Repetitions,
+					HrZoneMin:   ts.HrZoneMin,
+					HrZoneMax:   ts.HrZoneMax,
+					HrAbsMin:    pgtype.Int4{Valid: false},
+					HrAbsMax:    pgtype.Int4{Valid: false},
+				})
+				if err != nil {
+					log.Printf("error creating segment: %v", err)
+					http.Error(w, "failed to create segments", http.StatusInternalServerError)
+					return
+				}
 			}
 		}
 

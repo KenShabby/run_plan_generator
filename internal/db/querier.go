@@ -10,6 +10,7 @@ import (
 
 type Querier interface {
 	CreateRunDay(ctx context.Context, arg CreateRunDayParams) (RunDay, error)
+	CreateSegment(ctx context.Context, arg CreateSegmentParams) (Segment, error)
 	CreateTemplatePlan(ctx context.Context, arg CreateTemplatePlanParams) (TemplatePlan, error)
 	CreateTemplateRunDay(ctx context.Context, arg CreateTemplateRunDayParams) (TemplateRunDay, error)
 	CreateTemplateSegment(ctx context.Context, arg CreateTemplateSegmentParams) (TemplateSegment, error)
@@ -18,12 +19,14 @@ type Querier interface {
 	DeleteRunDay(ctx context.Context, id int32) error
 	DeleteTrainingPlan(ctx context.Context, id int32) error
 	DeleteUser(ctx context.Context, id int32) error
+	GetRunDay(ctx context.Context, id int32) (RunDay, error)
 	GetTemplatePlan(ctx context.Context, id int32) (TemplatePlan, error)
 	GetTrainingPlan(ctx context.Context, id int32) (TrainingPlan, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
 	ListRunDaysByPlan(ctx context.Context, planID int32) ([]RunDay, error)
+	ListSegmentsByRun(ctx context.Context, runID int32) ([]Segment, error)
 	ListTemplatePlans(ctx context.Context) ([]TemplatePlan, error)
 	ListTemplatePlansWithCounts(ctx context.Context) ([]ListTemplatePlansWithCountsRow, error)
 	ListTemplateRunDaysByPlan(ctx context.Context, planID int32) ([]TemplateRunDay, error)

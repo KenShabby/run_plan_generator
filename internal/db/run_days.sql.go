@@ -59,6 +59,27 @@ func (q *Queries) DeleteRunDay(ctx context.Context, id int32) error {
 	return err
 }
 
+const getRunDay = `-- name: GetRunDay :one
+SELECT id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at FROM run_days WHERE id = $1
+`
+
+func (q *Queries) GetRunDay(ctx context.Context, id int32) (RunDay, error) {
+	row := q.db.QueryRow(ctx, getRunDay, id)
+	var i RunDay
+	err := row.Scan(
+		&i.ID,
+		&i.PlanID,
+		&i.Date,
+		&i.RunType,
+		&i.TotalDistance,
+		&i.TotalDuration,
+		&i.Completed,
+		&i.Notes,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const listRunDaysByPlan = `-- name: ListRunDaysByPlan :many
 SELECT id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at FROM run_days
 WHERE plan_id = $1

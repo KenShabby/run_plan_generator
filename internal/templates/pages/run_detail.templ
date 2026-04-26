@@ -1,0 +1,89 @@
+package pages
+
+import (
+    "fmt"
+    "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+)
+
+templ RunDetailContent(run db.RunDay, segments []db.Segment) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>{ run.RunType }</h1>
+        <button class="secondary"
+            onclick="history.back()">
+            ← Back
+        </button>
+    </div>
+
+    <p>
+        <small>{ run.Date.Time.Format("Monday, January 2, 2006") }</small>
+    </p>
+
+    if run.TotalDistance.Valid {
+        <p>{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } miles total</p>
+    }
+
+    if run.Notes.Valid {
+        <p>{ run.Notes.String }</p>
+    }
+
+    if len(segments) > 0 {
+        <h2>Workout Structure</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Segment</th>
+                    <th>Effort</th>
+                    <th>Distance</th>
+                    <th>Reps</th>
+                    <th>HR Zone</th>
+                </tr>
+            </thead>
+            <tbody>
+                for _, seg := range segments {
+                    <tr>
+                        <td>{ fmt.Sprintf("%d", seg.OrderIndex) }</td>
+                        <td>
+                            if seg.Description.Valid {
+                                { seg.Description.String }
+                            }
+                        </td>
+                        <td>{ seg.EffortType }</td>
+                        <td>
+                            if seg.Distance.Valid {
+                                { fmt.Sprintf("%.2f mi", seg.Distance.Float64) }
+                            }
+                        </td>
+                        <td>
+                            if seg.Repetitions > 1 {
+                                { fmt.Sprintf("×%d", seg.Repetitions) }
+                            } else {
+                                —
+                            }
+                        </td>
+                        <td>
+                            if seg.HrZoneMin.Valid && seg.HrZoneMax.Valid {
+                                if seg.HrZoneMin.Int32 == seg.HrZoneMax.Int32 {
+                                    { fmt.Sprintf("Z%d", seg.HrZoneMin.Int32) }
+                                } else {
+                                    { fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }
+                                }
+                            } else {
+                                —
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else {
+        <p><small>No segments defined for this run.</small></p>
+    }
+}
+
+templ RunDetail(run db.RunDay, segments []db.Segment) {
+    @layouts.Base(run.RunType) {
+        @RunDetailContent(run, segments)
+    }
+}

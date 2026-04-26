@@ -1,0 +1,223 @@
+name: "Higdon Half Marathon Novice 2"
+description: "12-week half marathon plan for experienced runners who appreciate a gentler approach. Adds pace runs on Wednesdays and peaks at 12 miles before race day."
+plan_type: half_marathon
+distance_unit: miles
+total_weeks: 12
+peak_weekly_mileage: 23
+
+runs:
+  # Week 1 — Mon=rest, Tue=3, Wed=3, Thu=3, Fri=rest, Sat=4, Sun=cross
+  - day_offset: 1
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 2
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 3
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 5
+    run_type: long_run
+    distance: 4.0
+    notes: "Long run — easy effort"
+
+  # Week 2 — Tue=3, Wed=3 pace, Thu=3, Sat=5
+  - day_offset: 8
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 9
+    run_type: race_pace
+    distance: 3.0
+    notes: "Pace run"
+  - day_offset: 10
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 12
+    run_type: long_run
+    distance: 5.0
+    notes: "Long run — easy effort"
+
+  # Week 3 — Tue=3, Wed=4, Thu=3, Sat=6
+  - day_offset: 15
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 16
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 17
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 19
+    run_type: long_run
+    distance: 6.0
+    notes: "Long run — easy effort"
+
+  # Week 4 — Tue=3, Wed=4 pace, Thu=3, Sat=7
+  - day_offset: 22
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 23
+    run_type: race_pace
+    distance: 4.0
+    notes: "Pace run"
+  - day_offset: 24
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 26
+    run_type: long_run
+    distance: 7.0
+    notes: "Long run — easy effort"
+
+  # Week 5 — Tue=3, Wed=4, Thu=3, Sat=8
+  - day_offset: 29
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 30
+    run_type: easy
+    distance: 4.0
+    notes: "Easy run"
+  - day_offset: 31
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 33
+    run_type: long_run
+    distance: 8.0
+    notes: "Long run — easy effort"
+
+  # Week 6 — Tue=3, Wed=4 pace, Thu=3, Sat=5K race
+  - day_offset: 36
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 37
+    run_type: race_pace
+    distance: 4.0
+    notes: "Pace run"
+  - day_offset: 38
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 40
+    run_type: race
+    distance: 3.1
+    notes: "5K tune-up race"
+
+  # Week 7 — Tue=3, Wed=5, Thu=3, Sat=9
+  - day_offset: 43
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 44
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 45
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 47
+    run_type: long_run
+    distance: 9.0
+    notes: "Long run — easy effort"
+
+  # Week 8 — Tue=3, Wed=5 pace, Thu=3, Sat=10
+  - day_offset: 50
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 51
+    run_type: race_pace
+    distance: 5.0
+    notes: "Pace run"
+  - day_offset: 52
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 54
+    run_type: long_run
+    distance: 10.0
+    notes: "Long run — easy effort"
+
+  # Week 9 — Tue=3, Wed=5, Thu=3, Sat=10K race
+  - day_offset: 57
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 58
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 59
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 61
+    run_type: race
+    distance: 6.2
+    notes: "10K tune-up race"
+
+  # Week 10 — Tue=3, Wed=5 pace, Thu=3, Sat=11
+  - day_offset: 64
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 65
+    run_type: race_pace
+    distance: 5.0
+    notes: "Pace run"
+  - day_offset: 66
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 68
+    run_type: long_run
+    distance: 11.0
+    notes: "Long run — easy effort"
+
+  # Week 11 — Tue=3, Wed=5, Thu=3, Sat=12
+  - day_offset: 71
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 72
+    run_type: easy
+    distance: 5.0
+    notes: "Easy run"
+  - day_offset: 73
+    run_type: easy
+    distance: 3.0
+    notes: "Easy run"
+  - day_offset: 75
+    run_type: long_run
+    distance: 12.0
+    notes: "Peak long run — easy effort"
+
+  # Week 12 — race week — Tue=3, Wed=2 pace, Thu=2, Sat=race
+  - day_offset: 78
+    run_type: easy
+    distance: 3.0
+    notes: "Easy shakeout"
+  - day_offset: 79
+    run_type: race_pace
+    distance: 2.0
+    notes: "Short pace run — stay sharp, don't tire yourself"
+  - day_offset: 80
+    run_type: easy
+    distance: 2.0
+    notes: "Short shakeout, stay loose"
+  - day_offset: 82
+    run_type: race
+    distance: 13.1
+    notes: "Race day! You've done the work. Trust your training."

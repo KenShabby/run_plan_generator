@@ -148,7 +148,13 @@ templ CompactRunCard(run db.RunDay) {
     <div class="day-cell" id={ fmt.Sprintf("run-%d", run.ID) }>
         <div class="run-chip">
             <span class="run-date">{ run.Date.Time.Format("Jan 2") }</span>
-            <span class="run-type">{ run.RunType }</span>
+            <a class="run-type"
+               href={ templ.SafeURL(fmt.Sprintf("/runs/%d", run.ID)) }
+               hx-get={ fmt.Sprintf("/runs/%d", run.ID) }
+               hx-target="main"
+               hx-push-url="true">
+                { run.RunType }
+            </a>
             if run.TotalDistance.Valid {
                 <span class="run-dist">{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } mi</span>
             }

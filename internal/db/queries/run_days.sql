@@ -10,3 +10,6 @@ RETURNING *;
 
 -- name: DeleteRunDay :exec
 DELETE FROM run_days WHERE id = $1;
+
+-- name: GetRunDay :one
+SELECT * FROM run_days WHERE id = $1;
