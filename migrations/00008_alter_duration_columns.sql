@@ -10,10 +10,10 @@ ALTER TABLE segments
 
 -- +goose Down
 ALTER TABLE run_days
-    ALTER COLUMN total_duration TYPE INTERVAL USING (total_duration * INTERVAL '1 nanosecond');
+    ALTER COLUMN total_duration TYPE INTERVAL USING (total_duration * INTERVAL '1 microsecond');
 
 ALTER TABLE segments
-    ALTER COLUMN duration TYPE INTERVAL USING (duration * INTERVAL '1 nanosecond');
+    ALTER COLUMN duration TYPE INTERVAL USING (duration * INTERVAL '1 microsecond');
 
 ALTER TABLE segments
-    ALTER COLUMN pace TYPE INTERVAL USING (pace * INTERVAL '1 nanosecond');
+    ALTER COLUMN pace TYPE INTERVAL USING (pace * INTERVAL '1 microsecond');
