@@ -1,0 +1,374 @@
+name: "80/20 Marathon Level 1"
+description: "18-week marathon plan for newer runners or those preferring lower volume. Base phase weeks 1-9, peak phase weeks 10-16, taper weeks 17-18. Workouts are time-based with heart rate zones. Mon=rest."
+plan_type: marathon
+distance_unit: miles
+total_weeks: 18
+peak_weekly_mileage: 0
+
+runs:
+  # --- BASE PHASE ---
+
+  # Week 1
+  - day_offset: 1   # Tue
+    run_type: fast_finish
+    notes: "Fast Finish Run 2"
+  - day_offset: 2   # Wed
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 3   # Thu
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 4   # Fri
+    run_type: speed_play
+    notes: "Speed Play Run 1"
+  - day_offset: 5   # Sat
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 6   # Sun
+    run_type: long_run
+    notes: "Long Run 1"
+
+  # Week 2
+  - day_offset: 8
+    run_type: fast_finish
+    notes: "Fast Finish Run 3"
+  - day_offset: 9
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 10
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 11
+    run_type: speed_play
+    notes: "Speed Play Run 2"
+  - day_offset: 12
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 13
+    run_type: long_run
+    notes: "Long Run 2"
+
+  # Week 3 (recovery)
+  - day_offset: 15
+    run_type: fast_finish
+    notes: "Fast Finish Run 2"
+  - day_offset: 16
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 17
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 18
+    run_type: speed_play
+    notes: "Speed Play Run 1"
+  - day_offset: 19
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 20
+    run_type: long_run
+    notes: "Long Run 1"
+
+  # Week 4
+  - day_offset: 22
+    run_type: fast_finish
+    notes: "Fast Finish Run 4"
+  - day_offset: 23
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 24
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 25
+    run_type: hill_repetitions
+    notes: "Hill Repetition Run 1"
+  - day_offset: 26
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 27
+    run_type: long_run
+    notes: "Long Run 3"
+
+  # Week 5
+  - day_offset: 29
+    run_type: fast_finish
+    notes: "Fast Finish Run 6"
+  - day_offset: 30
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 31
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 32
+    run_type: hill_repetitions
+    notes: "Hill Repetition Run 2"
+  - day_offset: 33
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 34
+    run_type: long_run
+    notes: "Long Run 4"
+
+  # Week 6 (recovery)
+  - day_offset: 36
+    run_type: fast_finish
+    notes: "Fast Finish Run 4"
+  - day_offset: 37
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 38
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 39
+    run_type: hill_repetitions
+    notes: "Hill Repetition Run 1"
+  - day_offset: 40
+    run_type: recovery
+    notes: "Recovery Run 3"
+  - day_offset: 41
+    run_type: long_run
+    notes: "Long Run 2"
+
+  # Week 7
+  - day_offset: 43
+    run_type: fast_finish
+    notes: "Fast Finish Run 7"
+  - day_offset: 44
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 45
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 46
+    run_type: hill_repetitions
+    notes: "Hill Repetition Run 4"
+  - day_offset: 47
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 48
+    run_type: long_run
+    notes: "Long Run 5"
+
+  # Week 8
+  - day_offset: 50
+    run_type: fast_finish
+    notes: "Fast Finish Run 8"
+  - day_offset: 51
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 52
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 53
+    run_type: hill_repetitions
+    notes: "Hill Repetition Run 6"
+  - day_offset: 54
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 55
+    run_type: long_run
+    notes: "Long Run 7"
+
+  # Week 9 (recovery)
+  - day_offset: 57
+    run_type: fast_finish
+    notes: "Fast Finish Run 6"
+  - day_offset: 58
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 59
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 60
+    run_type: hill_repetitions
+    notes: "Hill Repetition Run 4"
+  - day_offset: 61
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 62
+    run_type: long_run
+    notes: "Long Run 4"
+
+  # --- PEAK PHASE ---
+
+  # Week 10
+  - day_offset: 64
+    run_type: tempo
+    notes: "Tempo Run 2"
+  - day_offset: 65
+    run_type: recovery
+    notes: "Recovery Run 5"
+  - day_offset: 66
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 67
+    run_type: interval
+    notes: "Short Interval Run 1"
+  - day_offset: 68
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 69
+    run_type: long_run
+    notes: "Long Run 9"
+
+  # Week 11
+  - day_offset: 71
+    run_type: lactate_threshold
+    notes: "Cruise Intervals Run 1"
+  - day_offset: 72
+    run_type: recovery
+    notes: "Recovery Run 5"
+  - day_offset: 73
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 74
+    run_type: interval
+    notes: "Short Interval Run 2"
+  - day_offset: 75
+    run_type: recovery
+    notes: "Recovery Run 5"
+  - day_offset: 76
+    run_type: long_run
+    notes: "Long Run 11"
+
+  # Week 12 (recovery)
+  - day_offset: 78
+    run_type: tempo
+    notes: "Tempo Run 2"
+  - day_offset: 79
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 80
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 81
+    run_type: interval
+    notes: "Short Interval Run 1"
+  - day_offset: 82
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 83
+    run_type: long_run_speed_play
+    notes: "Long Run with Speed Play 1"
+
+  # Week 13
+  - day_offset: 85
+    run_type: tempo
+    notes: "Tempo Run 3"
+  - day_offset: 86
+    run_type: recovery
+    notes: "Recovery Run 5"
+  - day_offset: 87
+    run_type: foundation
+    notes: "Foundation Run 6"
+  - day_offset: 88
+    run_type: long_interval
+    notes: "Long Interval Run 2"
+  - day_offset: 89
+    run_type: recovery
+    notes: "Recovery Run 5"
+  - day_offset: 90
+    run_type: long_run_fast_finish
+    notes: "Long Run with Fast Finish 1"
+
+  # Week 14
+  - day_offset: 92
+    run_type: tempo
+    notes: "Tempo Run 4"
+  - day_offset: 93
+    run_type: recovery
+    notes: "Recovery Run 6"
+  - day_offset: 94
+    run_type: foundation
+    notes: "Foundation Run 6"
+  - day_offset: 95
+    run_type: long_interval
+    notes: "Long Interval Run 3"
+  - day_offset: 96
+    run_type: recovery
+    notes: "Recovery Run 5"
+  - day_offset: 97
+    run_type: long_run_speed_play
+    notes: "Long Run with Speed Play 2"
+
+  # Week 15 (recovery)
+  - day_offset: 99
+    run_type: tempo
+    notes: "Tempo Run 2"
+  - day_offset: 100
+    run_type: recovery
+    notes: "Recovery Run 5"
+  - day_offset: 101
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 102
+    run_type: long_interval
+    notes: "Long Interval Run 1"
+  - day_offset: 103
+    run_type: recovery
+    notes: "Recovery Run 5"
+  - day_offset: 104
+    run_type: long_run
+    notes: "Marathon Simulator Run"
+
+  # Week 16
+  - day_offset: 106
+    run_type: lactate_threshold
+    notes: "Cruise Intervals Run 2"
+  - day_offset: 107
+    run_type: recovery
+    notes: "Recovery Run 6"
+  - day_offset: 108
+    run_type: foundation
+    notes: "Foundation Run 6"
+  - day_offset: 109
+    run_type: interval
+    notes: "Mixed Interval Run 1"
+  - day_offset: 110
+    run_type: recovery
+    notes: "Recovery Run 6"
+  - day_offset: 111
+    run_type: long_run_fast_finish
+    notes: "Long Run with Fast Finish 5"
+
+  # --- TAPER PHASE ---
+
+  # Week 17
+  - day_offset: 113
+    run_type: tempo
+    notes: "Tempo Run 4"
+  - day_offset: 114
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 115
+    run_type: foundation
+    notes: "Foundation Run 5"
+  - day_offset: 116
+    run_type: interval
+    notes: "Mixed Interval Run 1"
+  - day_offset: 117
+    run_type: recovery
+    notes: "Recovery Run 4"
+  - day_offset: 118
+    run_type: long_run_speed_play
+    notes: "Long Run with Speed Play 2"
+
+  # Week 18 — race week
+  - day_offset: 120
+    run_type: fast_finish
+    notes: "Fast Finish Run 4"
+  - day_offset: 121
+    run_type: foundation
+    notes: "Foundation Run 4"
+  - day_offset: 122
+    run_type: foundation
+    notes: "Foundation Run 3"
+  - day_offset: 123
+    run_type: speed_play
+    notes: "Speed Play Run 2"
+  - day_offset: 124
+    run_type: recovery
+    notes: "Recovery Run 1"
+  - day_offset: 126
+    run_type: race
+    distance: 26.2
+    notes: "Race day! You've done the work. Trust your training."
