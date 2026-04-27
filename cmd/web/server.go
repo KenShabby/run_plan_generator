@@ -4,9 +4,11 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/KenShabby/run_plan_generator/internal/db"
 	"github.com/KenShabby/run_plan_generator/internal/templates/pages"
@@ -195,6 +197,72 @@ func newServer(app *application) http.Handler {
 	// serves the form fragment
 	r.Get("/plans/new", func(w http.ResponseWriter, r *http.Request) {
 		pages.PlanForm().Render(r.Context(), w)
+	})
+
+	// GET /register — serve the form
+	r.Get("/register", func(w http.ResponseWriter, r *http.Request) {
+		pages.Register("").Render(r.Context(), w)
+	})
+
+	// POST /register — handle submission
+	r.Post("/register", func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "bad request", http.StatusBadRequest)
+			return
+		}
+
+		username := strings.TrimSpace(r.FormValue("username"))
+		email := strings.TrimSpace(r.FormValue("email"))
+		password := r.FormValue("password")
+		confirm := r.FormValue("confirm_password")
+
+		// Basic validation
+		if username == "" || email == "" || password == "" {
+			pages.Register("All fields are required.").Render(r.Context(), w)
+			return
+		}
+		if password != confirm {
+			pages.Register("Passwords do not match.").Render(r.Context(), w)
+			return
+		}
+		if len(password) < 8 {
+			pages.Register("Password must be at least 8 characters.").Render(r.Context(), w)
+			return
+		}
+
+		// Hash the password
+		hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+		if err != nil {
+			log.Printf("bcrypt error: %v", err)
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+
+		// Insert the user
+		user, err := app.queries.CreateUser(r.Context(), db.CreateUserParams{
+			Username:     username,
+			Email:        email,
+			PasswordHash: string(hash),
+		})
+		if err != nil {
+			// Postgres unique violation = 23505
+			if strings.Contains(err.Error(), "23505") {
+				pages.Register("That username or email is already taken.").Render(r.Context(), w)
+				return
+			}
+			log.Printf("CreateUser error: %v", err)
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+
+		// Set session and redirect
+		if err := app.setSessionUserID(w, r, user.ID); err != nil {
+			log.Printf("session error: %v", err)
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, "/plans", http.StatusSeeOther)
 	})
 
 	r.Delete("/runs/{id}", func(w http.ResponseWriter, r *http.Request) {
