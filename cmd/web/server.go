@@ -68,14 +68,28 @@ func newServer(app *application) http.Handler {
 
 	// Protected groups - auth required
 	r.Group(func(r chi.Router) {
+		r.Use(app.requireAuth)
 		r.Post("/logout", func(w http.ResponseWriter, r *http.Request) {
 			app.clearSession(w, r)
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		})
 
+		// serves the form fragment
+		r.Get("/plans/new", func(w http.ResponseWriter, r *http.Request) {
+			pages.PlanForm().Render(r.Context(), w)
+		})
+
+		r.Get("/plans/form/cancel", func(w http.ResponseWriter, r *http.Request) {
+			pages.PlanFormEmpty().Render(r.Context(), w)
+		})
+
 		r.Get("/plans", func(w http.ResponseWriter, r *http.Request) {
-			// Hardcode user ID for now
-			plans, err := app.queries.ListTrainingPlansByUser(r.Context(), 1)
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			plans, err := app.queries.ListTrainingPlansByUser(r.Context(), userID)
 			if err != nil {
 				log.Printf("error fetching plans: %v", err)
 				http.Error(w, "failed to load plans", http.StatusInternalServerError)
@@ -91,7 +105,6 @@ func newServer(app *application) http.Handler {
 			}
 		})
 
-		// handles form submission
 		r.Post("/plans", func(w http.ResponseWriter, r *http.Request) {
 			if err := r.ParseForm(); err != nil {
 				http.Error(w, "bad request", http.StatusBadRequest)
@@ -109,8 +122,13 @@ func newServer(app *application) http.Handler {
 				return
 			}
 
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
 			plan, err := app.queries.CreateTrainingPlan(r.Context(), db.CreateTrainingPlanParams{
-				UserID:       1,
+				UserID:       userID,
 				Name:         r.FormValue("name"),
 				Description:  pgtype.Text{String: r.FormValue("description"), Valid: r.FormValue("description") != ""},
 				PlanType:     r.FormValue("plan_type"),
@@ -229,14 +247,6 @@ func newServer(app *application) http.Handler {
 		})
 
 		// clears the form container on cancel
-		r.Get("/plans/form/cancel", func(w http.ResponseWriter, r *http.Request) {
-			pages.PlanFormEmpty().Render(r.Context(), w)
-		})
-
-		// serves the form fragment
-		r.Get("/plans/new", func(w http.ResponseWriter, r *http.Request) {
-			pages.PlanForm().Render(r.Context(), w)
-		})
 
 		// GET /register — serve the form
 		r.Get("/register", func(w http.ResponseWriter, r *http.Request) {
@@ -402,8 +412,13 @@ func newServer(app *application) http.Handler {
 
 			startDate := raceDate.AddDate(0, 0, -(int(tmpl.TotalWeeks) * 7))
 
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
 			plan, err := app.queries.CreateTrainingPlan(r.Context(), db.CreateTrainingPlanParams{
-				UserID:       1,
+				UserID:       userID,
 				Name:         r.FormValue("name"),
 				Description:  pgtype.Text{String: r.FormValue("description"), Valid: r.FormValue("description") != ""},
 				PlanType:     tmpl.PlanType,
@@ -473,8 +488,12 @@ func newServer(app *application) http.Handler {
 				}
 			}
 
-			// redirect to the new plan
-			plans, _ := app.queries.ListTrainingPlansByUser(r.Context(), 1)
+			userID, ok = app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			plans, _ := app.queries.ListTrainingPlansByUser(r.Context(), userID)
 			pages.PlansContent(plans).Render(r.Context(), w)
 		})
 	})
