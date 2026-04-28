@@ -32,20 +32,22 @@ type RunDay struct {
 }
 
 type Segment struct {
-	ID          int32            `json:"id"`
-	RunID       int32            `json:"run_id"`
-	OrderIndex  int32            `json:"order_index"`
-	Description pgtype.Text      `json:"description"`
-	EffortType  string           `json:"effort_type"`
-	Duration    pgtype.Int8      `json:"duration"`
-	Distance    pgtype.Float8    `json:"distance"`
-	Pace        pgtype.Int8      `json:"pace"`
-	Repetitions int32            `json:"repetitions"`
-	HrZoneMin   pgtype.Int4      `json:"hr_zone_min"`
-	HrZoneMax   pgtype.Int4      `json:"hr_zone_max"`
-	HrAbsMin    pgtype.Int4      `json:"hr_abs_min"`
-	HrAbsMax    pgtype.Int4      `json:"hr_abs_max"`
-	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	ID             int32            `json:"id"`
+	RunID          int32            `json:"run_id"`
+	OrderIndex     int32            `json:"order_index"`
+	Description    pgtype.Text      `json:"description"`
+	EffortType     string           `json:"effort_type"`
+	Duration       pgtype.Int8      `json:"duration"`
+	Distance       pgtype.Float8    `json:"distance"`
+	Pace           pgtype.Int8      `json:"pace"`
+	Repetitions    int32            `json:"repetitions"`
+	HrZoneMin      pgtype.Int4      `json:"hr_zone_min"`
+	HrZoneMax      pgtype.Int4      `json:"hr_zone_max"`
+	HrAbsMin       pgtype.Int4      `json:"hr_abs_min"`
+	HrAbsMax       pgtype.Int4      `json:"hr_abs_max"`
+	CreatedAt      pgtype.Timestamp `json:"created_at"`
+	SetIndex       pgtype.Int4      `json:"set_index"`
+	SetRepetitions pgtype.Int4      `json:"set_repetitions"`
 }
 
 type TemplatePlan struct {
@@ -70,18 +72,20 @@ type TemplateRunDay struct {
 }
 
 type TemplateSegment struct {
-	ID          int32            `json:"id"`
-	RunID       int32            `json:"run_id"`
-	OrderIndex  int32            `json:"order_index"`
-	Description pgtype.Text      `json:"description"`
-	EffortType  string           `json:"effort_type"`
-	Distance    pgtype.Float8    `json:"distance"`
-	Duration    pgtype.Int8      `json:"duration"`
-	Pace        pgtype.Int8      `json:"pace"`
-	Repetitions int32            `json:"repetitions"`
-	HrZoneMin   pgtype.Int4      `json:"hr_zone_min"`
-	HrZoneMax   pgtype.Int4      `json:"hr_zone_max"`
-	CreatedAt   pgtype.Timestamp `json:"created_at"`
+	ID             int32            `json:"id"`
+	RunID          int32            `json:"run_id"`
+	OrderIndex     int32            `json:"order_index"`
+	Description    pgtype.Text      `json:"description"`
+	EffortType     string           `json:"effort_type"`
+	Distance       pgtype.Float8    `json:"distance"`
+	Duration       pgtype.Int8      `json:"duration"`
+	Pace           pgtype.Int8      `json:"pace"`
+	Repetitions    int32            `json:"repetitions"`
+	HrZoneMin      pgtype.Int4      `json:"hr_zone_min"`
+	HrZoneMax      pgtype.Int4      `json:"hr_zone_max"`
+	CreatedAt      pgtype.Timestamp `json:"created_at"`
+	SetIndex       pgtype.Int4      `json:"set_index"`
+	SetRepetitions pgtype.Int4      `json:"set_repetitions"`
 }
 
 type TrainingPlan struct {

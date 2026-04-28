@@ -1,0 +1,53 @@
+name: "Test Interval Plan"
+description: "For testing set-based segments"
+plan_type: "5k"
+distance_unit: "miles"
+total_weeks: 1
+peak_weekly_mileage: 20.0
+runs:
+  - day_offset: 0
+    run_type: "easy"
+    distance: 4.0
+    notes: "Easy day"
+
+  - day_offset: 2
+    run_type: "interval"
+    distance: 6.0
+    notes: "Interval workout"
+    segments:
+      - order_index: 1
+        description: "Warmup"
+        effort_type: distance
+        distance: 1.0
+        hr_zone_min: 2
+        hr_zone_max: 2
+
+      - order_index: 2
+        description: "100 yard interval"
+        effort_type: distance
+        distance: 0.057
+        hr_zone_min: 5
+        hr_zone_max: 5
+        set_index: 1
+        set_repetitions: 5
+
+      - order_index: 3
+        description: "Recovery"
+        effort_type: time
+        duration: 120
+        hr_zone_min: 1
+        hr_zone_max: 1
+        set_index: 1
+        set_repetitions: 5
+
+      - order_index: 4
+        description: "Cooldown"
+        effort_type: distance
+        distance: 1.0
+        hr_zone_min: 2
+        hr_zone_max: 2
+
+  - day_offset: 4
+    run_type: "easy"
+    distance: 3.0
+    notes: "Recovery run"

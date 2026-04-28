@@ -13,13 +13,16 @@ import (
 )
 
 type SegmentYAML struct {
-	OrderIndex  int     `yaml:"order_index"`
-	Description string  `yaml:"description"`
-	EffortType  string  `yaml:"effort_type"`
-	Distance    float64 `yaml:"distance"`
-	Repetitions int     `yaml:"repetitions"`
-	HrZoneMin   int     `yaml:"hr_zone_min"`
-	HrZoneMax   int     `yaml:"hr_zone_max"`
+	OrderIndex     int     `yaml:"order_index"`
+	Description    string  `yaml:"description"`
+	EffortType     string  `yaml:"effort_type"`
+	Distance       float64 `yaml:"distance"`
+	Duration       int     `yaml:"duration"`
+	Repetitions    int     `yaml:"repetitions"`
+	HrZoneMin      int     `yaml:"hr_zone_min"`
+	HrZoneMax      int     `yaml:"hr_zone_max"`
+	SetIndex       int     `yaml:"set_index"`
+	SetRepetitions int     `yaml:"set_repetitions"`
 }
 
 type RunDayYAML struct {
@@ -106,6 +109,11 @@ func main() {
 		// Insert segments for this run
 		for _, seg := range run.Segments {
 			var dist pgtype.Float8
+			var dur pgtype.Int8
+
+			if seg.Duration > 0 {
+				dur = pgtype.Int8{Int64: int64(seg.Duration), Valid: true}
+			}
 			if seg.Distance > 0 {
 				dist = pgtype.Float8{Float64: seg.Distance, Valid: true}
 			}
@@ -121,6 +129,12 @@ func main() {
 				hrMax = pgtype.Int4{Int32: int32(seg.HrZoneMax), Valid: true}
 			}
 
+			var setIndex, setReps pgtype.Int4
+			if seg.SetIndex > 0 {
+				setIndex = pgtype.Int4{Int32: int32(seg.SetIndex), Valid: true}
+				setReps = pgtype.Int4{Int32: int32(seg.SetRepetitions), Valid: true}
+			}
+
 			_, err := queries.CreateTemplateSegment(ctx, db.CreateTemplateSegmentParams{
 				RunID:      tmplRun.ID,
 				OrderIndex: int32(seg.OrderIndex),
@@ -128,13 +142,15 @@ func main() {
 					String: seg.Description,
 					Valid:  seg.Description != "",
 				},
-				EffortType:  seg.EffortType,
-				Distance:    dist,
-				Duration:    pgtype.Int8{Valid: false},
-				Pace:        pgtype.Int8{Valid: false},
-				Repetitions: int32(reps),
-				HrZoneMin:   hrMin,
-				HrZoneMax:   hrMax,
+				EffortType:     seg.EffortType,
+				Distance:       dist,
+				Duration:       dur,
+				Pace:           pgtype.Int8{Valid: false},
+				Repetitions:    int32(reps),
+				HrZoneMin:      hrMin,
+				HrZoneMax:      hrMax,
+				SetIndex:       setIndex,
+				SetRepetitions: setReps,
 			})
 			if err != nil {
 				log.Fatalf("failed to create segment: %v", err)

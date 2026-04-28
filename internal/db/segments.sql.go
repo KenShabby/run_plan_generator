@@ -12,24 +12,26 @@ import (
 )
 
 const createSegment = `-- name: CreateSegment :one
-INSERT INTO segments (run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-RETURNING id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at
+INSERT INTO segments (run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, set_index, set_repetitions)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+RETURNING id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at, set_index, set_repetitions
 `
 
 type CreateSegmentParams struct {
-	RunID       int32         `json:"run_id"`
-	OrderIndex  int32         `json:"order_index"`
-	Description pgtype.Text   `json:"description"`
-	EffortType  string        `json:"effort_type"`
-	Distance    pgtype.Float8 `json:"distance"`
-	Duration    pgtype.Int8   `json:"duration"`
-	Pace        pgtype.Int8   `json:"pace"`
-	Repetitions int32         `json:"repetitions"`
-	HrZoneMin   pgtype.Int4   `json:"hr_zone_min"`
-	HrZoneMax   pgtype.Int4   `json:"hr_zone_max"`
-	HrAbsMin    pgtype.Int4   `json:"hr_abs_min"`
-	HrAbsMax    pgtype.Int4   `json:"hr_abs_max"`
+	RunID          int32         `json:"run_id"`
+	OrderIndex     int32         `json:"order_index"`
+	Description    pgtype.Text   `json:"description"`
+	EffortType     string        `json:"effort_type"`
+	Distance       pgtype.Float8 `json:"distance"`
+	Duration       pgtype.Int8   `json:"duration"`
+	Pace           pgtype.Int8   `json:"pace"`
+	Repetitions    int32         `json:"repetitions"`
+	HrZoneMin      pgtype.Int4   `json:"hr_zone_min"`
+	HrZoneMax      pgtype.Int4   `json:"hr_zone_max"`
+	HrAbsMin       pgtype.Int4   `json:"hr_abs_min"`
+	HrAbsMax       pgtype.Int4   `json:"hr_abs_max"`
+	SetIndex       pgtype.Int4   `json:"set_index"`
+	SetRepetitions pgtype.Int4   `json:"set_repetitions"`
 }
 
 func (q *Queries) CreateSegment(ctx context.Context, arg CreateSegmentParams) (Segment, error) {
@@ -46,6 +48,8 @@ func (q *Queries) CreateSegment(ctx context.Context, arg CreateSegmentParams) (S
 		arg.HrZoneMax,
 		arg.HrAbsMin,
 		arg.HrAbsMax,
+		arg.SetIndex,
+		arg.SetRepetitions,
 	)
 	var i Segment
 	err := row.Scan(
@@ -63,12 +67,14 @@ func (q *Queries) CreateSegment(ctx context.Context, arg CreateSegmentParams) (S
 		&i.HrAbsMin,
 		&i.HrAbsMax,
 		&i.CreatedAt,
+		&i.SetIndex,
+		&i.SetRepetitions,
 	)
 	return i, err
 }
 
 const listSegmentsByRun = `-- name: ListSegmentsByRun :many
-SELECT id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at FROM segments
+SELECT id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at, set_index, set_repetitions FROM segments
 WHERE run_id = $1
 ORDER BY order_index ASC
 `
@@ -97,6 +103,8 @@ func (q *Queries) ListSegmentsByRun(ctx context.Context, runID int32) ([]Segment
 			&i.HrAbsMin,
 			&i.HrAbsMax,
 			&i.CreatedAt,
+			&i.SetIndex,
+			&i.SetRepetitions,
 		); err != nil {
 			return nil, err
 		}

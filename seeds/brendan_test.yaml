@@ -12,9 +12,43 @@ runs:
     distance: 3.0
     notes: "Long run"
   - day_offset: 2
-    run_type: easy
-    distance: 3.0
-    notes: "Rest day"
+    run_type: tempo
+    distance: 9.0
+    notes: "Tempo run"
+    segments:
+    - order_index: 1
+      description: "Warmup"
+      effort_type: distance
+      distance: 2.0
+      hr_zone_min: 2
+      hr_zone_max: 2
+
+    - order_index: 2
+      description: "Intervals"
+      effort_type: distance
+      distance: 0.057  # 100 yards in miles
+      repetitions: 5
+      hr_zone_min: 5
+      hr_zone_max: 5
+      set_index: 1
+      set_repetitions: 5
+
+    - order_index: 3
+      description: "Recovery between intervals"
+      effort_type: time
+      duration: 120
+      repetitions: 5
+      hr_zone_min: 1
+      hr_zone_max: 1
+      set_index: 1
+      set_repetitions: 5
+
+    - order_index: 4
+      description: "Cooldown"
+      effort_type: distance
+      distance: 2.0
+      hr_zone_min: 2
+      hr_zone_max: 2
   - day_offset: 3
     run_type: easy
     distance: 3.0

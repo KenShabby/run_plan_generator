@@ -12,22 +12,24 @@ import (
 )
 
 const createTemplateSegment = `-- name: CreateTemplateSegment :one
-INSERT INTO template_segments (run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-RETURNING id, run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, created_at
+INSERT INTO template_segments (run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, set_index, set_repetitions)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+RETURNING id, run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, created_at, set_index, set_repetitions
 `
 
 type CreateTemplateSegmentParams struct {
-	RunID       int32         `json:"run_id"`
-	OrderIndex  int32         `json:"order_index"`
-	Description pgtype.Text   `json:"description"`
-	EffortType  string        `json:"effort_type"`
-	Distance    pgtype.Float8 `json:"distance"`
-	Duration    pgtype.Int8   `json:"duration"`
-	Pace        pgtype.Int8   `json:"pace"`
-	Repetitions int32         `json:"repetitions"`
-	HrZoneMin   pgtype.Int4   `json:"hr_zone_min"`
-	HrZoneMax   pgtype.Int4   `json:"hr_zone_max"`
+	RunID          int32         `json:"run_id"`
+	OrderIndex     int32         `json:"order_index"`
+	Description    pgtype.Text   `json:"description"`
+	EffortType     string        `json:"effort_type"`
+	Distance       pgtype.Float8 `json:"distance"`
+	Duration       pgtype.Int8   `json:"duration"`
+	Pace           pgtype.Int8   `json:"pace"`
+	Repetitions    int32         `json:"repetitions"`
+	HrZoneMin      pgtype.Int4   `json:"hr_zone_min"`
+	HrZoneMax      pgtype.Int4   `json:"hr_zone_max"`
+	SetIndex       pgtype.Int4   `json:"set_index"`
+	SetRepetitions pgtype.Int4   `json:"set_repetitions"`
 }
 
 func (q *Queries) CreateTemplateSegment(ctx context.Context, arg CreateTemplateSegmentParams) (TemplateSegment, error) {
@@ -42,6 +44,8 @@ func (q *Queries) CreateTemplateSegment(ctx context.Context, arg CreateTemplateS
 		arg.Repetitions,
 		arg.HrZoneMin,
 		arg.HrZoneMax,
+		arg.SetIndex,
+		arg.SetRepetitions,
 	)
 	var i TemplateSegment
 	err := row.Scan(
@@ -57,12 +61,14 @@ func (q *Queries) CreateTemplateSegment(ctx context.Context, arg CreateTemplateS
 		&i.HrZoneMin,
 		&i.HrZoneMax,
 		&i.CreatedAt,
+		&i.SetIndex,
+		&i.SetRepetitions,
 	)
 	return i, err
 }
 
 const listTemplateSegmentsByRun = `-- name: ListTemplateSegmentsByRun :many
-SELECT id, run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, created_at FROM template_segments
+SELECT id, run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, created_at, set_index, set_repetitions FROM template_segments
 WHERE run_id = $1
 ORDER BY order_index ASC
 `
@@ -89,6 +95,8 @@ func (q *Queries) ListTemplateSegmentsByRun(ctx context.Context, runID int32) ([
 			&i.HrZoneMin,
 			&i.HrZoneMax,
 			&i.CreatedAt,
+			&i.SetIndex,
+			&i.SetRepetitions,
 		); err != nil {
 			return nil, err
 		}

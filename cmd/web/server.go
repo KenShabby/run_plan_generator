@@ -465,18 +465,20 @@ func newServer(app *application) http.Handler {
 
 				for _, ts := range templateSegs {
 					_, err := app.queries.CreateSegment(r.Context(), db.CreateSegmentParams{
-						RunID:       run.ID,
-						OrderIndex:  ts.OrderIndex,
-						Description: ts.Description,
-						EffortType:  ts.EffortType,
-						Distance:    ts.Distance,
-						Duration:    ts.Duration,
-						Pace:        ts.Pace,
-						Repetitions: ts.Repetitions,
-						HrZoneMin:   ts.HrZoneMin,
-						HrZoneMax:   ts.HrZoneMax,
-						HrAbsMin:    pgtype.Int4{Valid: false},
-						HrAbsMax:    pgtype.Int4{Valid: false},
+						RunID:          run.ID,
+						OrderIndex:     ts.OrderIndex,
+						Description:    ts.Description,
+						EffortType:     ts.EffortType,
+						Distance:       ts.Distance,
+						Duration:       ts.Duration,
+						Pace:           ts.Pace,
+						Repetitions:    ts.Repetitions,
+						HrZoneMin:      ts.HrZoneMin,
+						HrZoneMax:      ts.HrZoneMax,
+						HrAbsMin:       pgtype.Int4{Valid: false},
+						HrAbsMax:       pgtype.Int4{Valid: false},
+						SetIndex:       ts.SetIndex,
+						SetRepetitions: ts.SetRepetitions,
 					})
 					if err != nil {
 						log.Printf("error creating segment: %v", err)
