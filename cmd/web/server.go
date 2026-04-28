@@ -34,6 +34,44 @@ func newServer(app *application) http.Handler {
 		w.Write([]byte("ok"))
 	})
 
+	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
+		pages.Login("").Render(r.Context(), w)
+	})
+
+	r.Post("/login", func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			http.Error(w, "bad request", http.StatusBadRequest)
+			return
+		}
+
+		email := strings.TrimSpace(r.FormValue("email"))
+		password := r.FormValue("password")
+
+		user, err := app.queries.GetUserByEmail(r.Context(), email)
+		if err != nil {
+			pages.Login("Invalid email or password.").Render(r.Context(), w)
+			return
+		}
+
+		if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
+			pages.Login("Invalid email or password.").Render(r.Context(), w)
+			return
+		}
+
+		if err := app.setSessionUserID(w, r, user.ID); err != nil {
+			log.Printf("session error: %v", err)
+			http.Error(w, "internal error", http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, "/plans", http.StatusSeeOther)
+	})
+
+	r.Post("/logout", func(w http.ResponseWriter, r *http.Request) {
+		app.clearSession(w, r)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+	})
+
 	r.Get("/plans", func(w http.ResponseWriter, r *http.Request) {
 		// Hardcode user ID for now
 		plans, err := app.queries.ListTrainingPlansByUser(r.Context(), 1)

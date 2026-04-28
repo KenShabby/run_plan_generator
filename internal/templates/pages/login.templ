@@ -1,0 +1,32 @@
+package pages
+
+import "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+
+templ LoginContent(errMsg string) {
+    <div style="max-width: 400px; margin: 4rem auto;">
+        <h1>Log In</h1>
+        if errMsg != "" {
+            <div class="notice" style="color: var(--pico-del-color); margin-bottom: 1rem;">
+                { errMsg }
+            </div>
+        }
+        <form method="POST" action="/login">
+            <label>
+                Email
+                <input type="email" name="email" required autocomplete="email">
+            </label>
+            <label>
+                Password
+                <input type="password" name="password" required autocomplete="current-password">
+            </label>
+            <button type="submit">Log In</button>
+        </form>
+        <p><small>Don't have an account? <a href="/register">Register</a></small></p>
+    </div>
+}
+
+templ Login(errMsg string) {
+    @layouts.Base("Log In") {
+        @LoginContent(errMsg)
+    }
+}

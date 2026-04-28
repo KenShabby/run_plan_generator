@@ -18,7 +18,35 @@ templ TemplatesContent(plans []db.ListTemplatePlansWithCountsRow) {
     </div>
     <p>Choose a plan template and enter your race date to generate your personal training schedule.</p>
 
-    <div id="template-list" class="grid">
+    <style>
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .template-card header {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .template-card p {
+            font-size: 0.78rem;
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+        }
+        .template-card footer {
+            margin-top: auto;
+        }
+        .template-card {
+            display: flex;
+            flex-direction: column;
+        }
+        .template-card button {
+            font-size: 0.85rem;
+        }
+    </style>
+
+    <div id="template-list" class="template-grid">
         for _, t := range plans {
             @TemplateCard(t)
         }
