@@ -26,10 +26,7 @@ func newServer(app *application) http.Handler {
 
 	// Public routes, no auth required
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		username := ""
-		if user, ok := userFromContext(r.Context()); ok {
-			username = user.Username
-		}
+		username := app.username(r)
 		pages.Index(username).Render(r.Context(), w)
 	})
 
@@ -40,19 +37,12 @@ func newServer(app *application) http.Handler {
 	})
 
 	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
-		username := ""
-		if user, ok := userFromContext(r.Context()); ok {
-			username = user.Username
-		}
+		username := app.username(r)
 		pages.Login("", username).Render(r.Context(), w)
 	})
 
 	r.Post("/login", func(w http.ResponseWriter, r *http.Request) {
-		username := ""
-		if user, ok := userFromContext(r.Context()); ok {
-			username = user.Username
-		}
-
+		username := app.username(r)
 		if err := r.ParseForm(); err != nil {
 			http.Error(w, "bad request", http.StatusBadRequest)
 			return
@@ -83,20 +73,13 @@ func newServer(app *application) http.Handler {
 
 	// GET /register — serve the form
 	r.Get("/register", func(w http.ResponseWriter, r *http.Request) {
-		username := ""
-		if user, ok := userFromContext(r.Context()); ok {
-			username = user.Username
-		}
+		username := app.username(r)
 		pages.Register("", username).Render(r.Context(), w)
 	})
 
 	// POST /register — handle submission
 	r.Post("/register", func(w http.ResponseWriter, r *http.Request) {
-		navUsername := ""
-		if user, ok := userFromContext(r.Context()); ok {
-			navUsername = user.Username
-		}
-
+		navUsername := app.username(r)
 		if err := r.ParseForm(); err != nil {
 			http.Error(w, "bad request", http.StatusBadRequest)
 			return
@@ -159,6 +142,119 @@ func newServer(app *application) http.Handler {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 		})
 
+		r.Get("/account", func(w http.ResponseWriter, r *http.Request) {
+			user, ok := userFromContext(r.Context())
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			pages.Account(user, "", "", "", app.username(r)).Render(r.Context(), w)
+		})
+
+		r.Post("/account/username", func(w http.ResponseWriter, r *http.Request) {
+			user, ok := userFromContext(r.Context())
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			if err := r.ParseForm(); err != nil {
+				http.Error(w, "bad request", http.StatusBadRequest)
+				return
+			}
+			newUsername := strings.TrimSpace(r.FormValue("username"))
+			if newUsername == "" {
+				pages.Account(user, "Username cannot be empty.", "", "", app.username(r)).Render(r.Context(), w)
+				return
+			}
+			updated, err := app.queries.UpdateUsername(r.Context(), db.UpdateUsernameParams{
+				ID:       user.ID,
+				Username: newUsername,
+			})
+			if err != nil {
+				if strings.Contains(err.Error(), "23505") {
+					pages.Account(user, "That username is already taken.", "", "", app.username(r)).Render(r.Context(), w)
+					return
+				}
+				log.Printf("error updating username: %v", err)
+				http.Error(w, "internal error", http.StatusInternalServerError)
+				return
+			}
+			pages.Account(updated, "", "", "", updated.Username).Render(r.Context(), w)
+		})
+
+		r.Post("/account/email", func(w http.ResponseWriter, r *http.Request) {
+			user, ok := userFromContext(r.Context())
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			if err := r.ParseForm(); err != nil {
+				http.Error(w, "bad request", http.StatusBadRequest)
+				return
+			}
+			newEmail := strings.TrimSpace(r.FormValue("email"))
+			if newEmail == "" {
+				pages.Account(user, "", "Email cannot be empty.", "", app.username(r)).Render(r.Context(), w)
+				return
+			}
+			updated, err := app.queries.UpdateEmail(r.Context(), db.UpdateEmailParams{
+				ID:    user.ID,
+				Email: newEmail,
+			})
+			if err != nil {
+				if strings.Contains(err.Error(), "23505") {
+					pages.Account(user, "", "That email is already taken.", "", app.username(r)).Render(r.Context(), w)
+					return
+				}
+				log.Printf("error updating email: %v", err)
+				http.Error(w, "internal error", http.StatusInternalServerError)
+				return
+			}
+			pages.Account(updated, "", "", "", updated.Username).Render(r.Context(), w)
+		})
+
+		r.Post("/account/password", func(w http.ResponseWriter, r *http.Request) {
+			user, ok := userFromContext(r.Context())
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			if err := r.ParseForm(); err != nil {
+				http.Error(w, "bad request", http.StatusBadRequest)
+				return
+			}
+			currentPassword := r.FormValue("current_password")
+			newPassword := r.FormValue("new_password")
+			confirm := r.FormValue("confirm_password")
+
+			if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(currentPassword)); err != nil {
+				pages.Account(user, "", "", "Current password is incorrect.", app.username(r)).Render(r.Context(), w)
+				return
+			}
+			if newPassword != confirm {
+				pages.Account(user, "", "", "Passwords do not match.", app.username(r)).Render(r.Context(), w)
+				return
+			}
+			if len(newPassword) < 8 {
+				pages.Account(user, "", "", "Password must be at least 8 characters.", app.username(r)).Render(r.Context(), w)
+				return
+			}
+			hash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+			if err != nil {
+				log.Printf("bcrypt error: %v", err)
+				http.Error(w, "internal error", http.StatusInternalServerError)
+				return
+			}
+			if err := app.queries.UpdatePassword(r.Context(), db.UpdatePasswordParams{
+				ID:           user.ID,
+				PasswordHash: string(hash),
+			}); err != nil {
+				log.Printf("error updating password: %v", err)
+				http.Error(w, "internal error", http.StatusInternalServerError)
+				return
+			}
+			pages.Account(user, "", "", "", app.username(r)).Render(r.Context(), w)
+		})
 		// serves the form fragment
 		r.Get("/plans/new", func(w http.ResponseWriter, r *http.Request) {
 			pages.PlanForm().Render(r.Context(), w)
@@ -169,10 +265,7 @@ func newServer(app *application) http.Handler {
 		})
 
 		r.Get("/plans", func(w http.ResponseWriter, r *http.Request) {
-			username := ""
-			if user, ok := userFromContext(r.Context()); ok {
-				username = user.Username
-			}
+			username := app.username(r)
 			userID, ok := app.getSessionUserID(r)
 			if !ok {
 				http.Redirect(w, r, "/login", http.StatusSeeOther)
@@ -236,10 +329,7 @@ func newServer(app *application) http.Handler {
 		})
 
 		r.Get("/plans/{id}", func(w http.ResponseWriter, r *http.Request) {
-			username := ""
-			if user, ok := userFromContext(r.Context()); ok {
-				username = user.Username
-			}
+			username := app.username(r)
 			id, err := strconv.Atoi(chi.URLParam(r, "id"))
 			if err != nil {
 				http.Error(w, "invalid id", http.StatusBadRequest)
@@ -459,10 +549,7 @@ func newServer(app *application) http.Handler {
 		})
 
 		r.Get("/runs/{id}", func(w http.ResponseWriter, r *http.Request) {
-			username := ""
-			if user, ok := userFromContext(r.Context()); ok {
-				username = user.Username
-			}
+			username := app.username(r)
 			id, err := strconv.Atoi(chi.URLParam(r, "id"))
 			if err != nil {
 				http.Error(w, "invalid id", http.StatusBadRequest)
@@ -513,10 +600,7 @@ func newServer(app *application) http.Handler {
 		})
 
 		r.Get("/templates", func(w http.ResponseWriter, r *http.Request) {
-			username := ""
-			if user, ok := userFromContext(r.Context()); ok {
-				username = user.Username
-			}
+			username := app.username(r)
 			plans, err := app.queries.ListTemplatePlansWithCounts(r.Context())
 			if err != nil {
 				log.Printf("error fetching templates: %v", err)
@@ -541,7 +625,11 @@ func newServer(app *application) http.Handler {
 				http.Error(w, "template not found", http.StatusNotFound)
 				return
 			}
-			pages.TemplateSelectForm(tmpl).Render(r.Context(), w)
+			if r.Header.Get("HX-Request") == "true" {
+				pages.TemplateSelectContent(tmpl, app.username(r)).Render(r.Context(), w)
+			} else {
+				pages.TemplateSelectPage(tmpl, app.username(r)).Render(r.Context(), w)
+			}
 		})
 
 		r.Get("/templates/form/cancel", func(w http.ResponseWriter, r *http.Request) {
