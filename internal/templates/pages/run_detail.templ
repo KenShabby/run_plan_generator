@@ -46,8 +46,8 @@ templ RunDetailContent(run db.RunDay, segments []db.Segment) {
 	}
 }
 
-templ RunDetail(run db.RunDay, segments []db.Segment) {
-    @layouts.Base(run.RunType) {
+templ RunDetail(run db.RunDay, segments []db.Segment, username string) {
+    @layouts.Base(run.RunType, username) {
         @RunDetailContent(run, segments)
     }
 }

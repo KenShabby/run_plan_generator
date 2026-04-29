@@ -1,6 +1,6 @@
 package layouts
 
-templ Base(title string) {
+templ Base(title string, username string) {
     <!DOCTYPE html>
     <html lang="en" data-theme="dark">
     <head>
@@ -11,18 +11,7 @@ templ Base(title string) {
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     </head>
     <body>
-        <header class="container">
-            <nav>
-                <ul>
-                    <li><strong>Run Plan Generator</strong></li>
-                </ul>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/plans">My Plans</a></li>
-                    <li><a href="/templates">Browse Templates</a></li>
-                </ul>
-            </nav>
-        </header>
+        @Nav(username)
         <main class="container">
             { children... }
         </main>

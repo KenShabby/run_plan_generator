@@ -22,10 +22,15 @@ func newServer(app *application) http.Handler {
 	// Basic middleware
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
+	r.Use(app.loadUser)
 
 	// Public routes, no auth required
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		pages.Index().Render(r.Context(), w)
+		username := ""
+		if user, ok := userFromContext(r.Context()); ok {
+			username = user.Username
+		}
+		pages.Index(username).Render(r.Context(), w)
 	})
 
 	// Health check
@@ -35,10 +40,19 @@ func newServer(app *application) http.Handler {
 	})
 
 	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
-		pages.Login("").Render(r.Context(), w)
+		username := ""
+		if user, ok := userFromContext(r.Context()); ok {
+			username = user.Username
+		}
+		pages.Login("", username).Render(r.Context(), w)
 	})
 
 	r.Post("/login", func(w http.ResponseWriter, r *http.Request) {
+		username := ""
+		if user, ok := userFromContext(r.Context()); ok {
+			username = user.Username
+		}
+
 		if err := r.ParseForm(); err != nil {
 			http.Error(w, "bad request", http.StatusBadRequest)
 			return
@@ -49,12 +63,12 @@ func newServer(app *application) http.Handler {
 
 		user, err := app.queries.GetUserByEmail(r.Context(), email)
 		if err != nil {
-			pages.Login("Invalid email or password.").Render(r.Context(), w)
+			pages.Login("Invalid email or password.", username).Render(r.Context(), w)
 			return
 		}
 
 		if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
-			pages.Login("Invalid email or password.").Render(r.Context(), w)
+			pages.Login("Invalid email or password.", username).Render(r.Context(), w)
 			return
 		}
 
@@ -69,36 +83,43 @@ func newServer(app *application) http.Handler {
 
 	// GET /register — serve the form
 	r.Get("/register", func(w http.ResponseWriter, r *http.Request) {
-		pages.Register("").Render(r.Context(), w)
+		username := ""
+		if user, ok := userFromContext(r.Context()); ok {
+			username = user.Username
+		}
+		pages.Register("", username).Render(r.Context(), w)
 	})
 
 	// POST /register — handle submission
 	r.Post("/register", func(w http.ResponseWriter, r *http.Request) {
+		navUsername := ""
+		if user, ok := userFromContext(r.Context()); ok {
+			navUsername = user.Username
+		}
+
 		if err := r.ParseForm(); err != nil {
 			http.Error(w, "bad request", http.StatusBadRequest)
 			return
 		}
 
-		username := strings.TrimSpace(r.FormValue("username"))
+		newUsername := strings.TrimSpace(r.FormValue("username"))
 		email := strings.TrimSpace(r.FormValue("email"))
 		password := r.FormValue("password")
 		confirm := r.FormValue("confirm_password")
 
-		// Basic validation
-		if username == "" || email == "" || password == "" {
-			pages.Register("All fields are required.").Render(r.Context(), w)
+		if newUsername == "" || email == "" || password == "" {
+			pages.Register("All fields are required.", navUsername).Render(r.Context(), w)
 			return
 		}
 		if password != confirm {
-			pages.Register("Passwords do not match.").Render(r.Context(), w)
+			pages.Register("Passwords do not match.", navUsername).Render(r.Context(), w)
 			return
 		}
 		if len(password) < 8 {
-			pages.Register("Password must be at least 8 characters.").Render(r.Context(), w)
+			pages.Register("Password must be at least 8 characters.", navUsername).Render(r.Context(), w)
 			return
 		}
 
-		// Hash the password
 		hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 		if err != nil {
 			log.Printf("bcrypt error: %v", err)
@@ -106,16 +127,14 @@ func newServer(app *application) http.Handler {
 			return
 		}
 
-		// Insert the user
 		user, err := app.queries.CreateUser(r.Context(), db.CreateUserParams{
-			Username:     username,
+			Username:     newUsername,
 			Email:        email,
 			PasswordHash: string(hash),
 		})
 		if err != nil {
-			// Postgres unique violation = 23505
 			if strings.Contains(err.Error(), "23505") {
-				pages.Register("That username or email is already taken.").Render(r.Context(), w)
+				pages.Register("That username or email is already taken.", navUsername).Render(r.Context(), w)
 				return
 			}
 			log.Printf("CreateUser error: %v", err)
@@ -123,7 +142,6 @@ func newServer(app *application) http.Handler {
 			return
 		}
 
-		// Set session and redirect
 		if err := app.setSessionUserID(w, r, user.ID); err != nil {
 			log.Printf("session error: %v", err)
 			http.Error(w, "internal error", http.StatusInternalServerError)
@@ -151,6 +169,10 @@ func newServer(app *application) http.Handler {
 		})
 
 		r.Get("/plans", func(w http.ResponseWriter, r *http.Request) {
+			username := ""
+			if user, ok := userFromContext(r.Context()); ok {
+				username = user.Username
+			}
 			userID, ok := app.getSessionUserID(r)
 			if !ok {
 				http.Redirect(w, r, "/login", http.StatusSeeOther)
@@ -168,7 +190,7 @@ func newServer(app *application) http.Handler {
 				pages.PlansContent(plans).Render(r.Context(), w)
 			} else {
 				// Full page load - return the whole layout
-				pages.Plans(plans).Render(r.Context(), w)
+				pages.Plans(plans, username).Render(r.Context(), w)
 			}
 		})
 
@@ -214,6 +236,10 @@ func newServer(app *application) http.Handler {
 		})
 
 		r.Get("/plans/{id}", func(w http.ResponseWriter, r *http.Request) {
+			username := ""
+			if user, ok := userFromContext(r.Context()); ok {
+				username = user.Username
+			}
 			id, err := strconv.Atoi(chi.URLParam(r, "id"))
 			if err != nil {
 				http.Error(w, "invalid id", http.StatusBadRequest)
@@ -223,6 +249,16 @@ func newServer(app *application) http.Handler {
 			plan, err := app.queries.GetTrainingPlan(r.Context(), int32(id))
 			if err != nil {
 				http.Error(w, "plan not found", http.StatusNotFound)
+				return
+			}
+			// Check ownership
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			if plan.UserID != userID {
+				http.Error(w, "forbidden", http.StatusForbidden)
 				return
 			}
 
@@ -236,7 +272,7 @@ func newServer(app *application) http.Handler {
 			if r.Header.Get("HX-Request") == "true" {
 				pages.PlanDetailContent(plan, runs).Render(r.Context(), w)
 			} else {
-				pages.PlanDetail(plan, runs).Render(r.Context(), w)
+				pages.PlanDetail(plan, runs, username).Render(r.Context(), w)
 			}
 		})
 
@@ -244,6 +280,20 @@ func newServer(app *application) http.Handler {
 			id, err := strconv.Atoi(chi.URLParam(r, "id"))
 			if err != nil {
 				http.Error(w, "invalid id", http.StatusBadRequest)
+				return
+			}
+			plan, err := app.queries.GetTrainingPlan(r.Context(), int32(id))
+			if err != nil {
+				http.Error(w, "plan not found", http.StatusNotFound)
+				return
+			}
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			if plan.UserID != userID {
+				http.Error(w, "forbidden", http.StatusForbidden)
 				return
 			}
 			pages.RunForm(int32(id)).Render(r.Context(), w)
@@ -261,6 +311,21 @@ func newServer(app *application) http.Handler {
 			}
 			if err := r.ParseForm(); err != nil {
 				http.Error(w, "bad request", http.StatusBadRequest)
+				return
+			}
+
+			plan, err := app.queries.GetTrainingPlan(r.Context(), int32(planID))
+			if err != nil {
+				http.Error(w, "plan not found", http.StatusNotFound)
+				return
+			}
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			if plan.UserID != userID {
+				http.Error(w, "forbidden", http.StatusForbidden)
 				return
 			}
 
@@ -296,20 +361,26 @@ func newServer(app *application) http.Handler {
 		})
 
 		r.Delete("/plans/{id}", func(w http.ResponseWriter, r *http.Request) {
-			idStr := chi.URLParam(r, "id")
-			id, err := strconv.Atoi(idStr)
+			id, err := strconv.Atoi(chi.URLParam(r, "id"))
 			if err != nil {
 				http.Error(w, "invalid id", http.StatusBadRequest)
 				return
 			}
 
-			if err := app.queries.DeleteTrainingPlan(r.Context(), int32(id)); err != nil {
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+
+			if err := app.queries.DeleteTrainingPlanIfOwner(r.Context(), db.DeleteTrainingPlanIfOwnerParams{
+				ID:     int32(id),
+				UserID: userID,
+			}); err != nil {
 				log.Printf("error deleting plan: %v", err)
 				http.Error(w, "failed to delete plan", http.StatusInternalServerError)
 				return
 			}
-
-			// return empty 200 - HTMX will swap outerHTML with nothing, removing the card
 			w.WriteHeader(http.StatusOK)
 		})
 
@@ -323,6 +394,17 @@ func newServer(app *application) http.Handler {
 			plan, err := app.queries.GetTrainingPlan(r.Context(), int32(id))
 			if err != nil {
 				http.Error(w, "plan not found", http.StatusNotFound)
+				return
+			}
+
+			// Check ownership
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+			if plan.UserID != userID {
+				http.Error(w, "forbidden", http.StatusForbidden)
 				return
 			}
 
@@ -358,7 +440,17 @@ func newServer(app *application) http.Handler {
 				http.Error(w, "invalid id", http.StatusBadRequest)
 				return
 			}
-			if err := app.queries.DeleteRunDay(r.Context(), int32(id)); err != nil {
+
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+
+			if err := app.queries.DeleteRunDayIfOwner(r.Context(), db.DeleteRunDayIfOwnerParams{
+				ID:     int32(id),
+				UserID: userID,
+			}); err != nil {
 				log.Printf("error deleting run: %v", err)
 				http.Error(w, "failed to delete run", http.StatusInternalServerError)
 				return
@@ -367,15 +459,29 @@ func newServer(app *application) http.Handler {
 		})
 
 		r.Get("/runs/{id}", func(w http.ResponseWriter, r *http.Request) {
+			username := ""
+			if user, ok := userFromContext(r.Context()); ok {
+				username = user.Username
+			}
 			id, err := strconv.Atoi(chi.URLParam(r, "id"))
 			if err != nil {
 				http.Error(w, "invalid id", http.StatusBadRequest)
 				return
 			}
 
-			run, err := app.queries.GetRunDay(r.Context(), int32(id))
+			userID, ok := app.getSessionUserID(r)
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+
+			run, err := app.queries.GetRunDayWithPlanOwner(r.Context(), int32(id))
 			if err != nil {
 				http.Error(w, "run not found", http.StatusNotFound)
+				return
+			}
+			if run.UserID != userID {
+				http.Error(w, "forbidden", http.StatusForbidden)
 				return
 			}
 
@@ -386,14 +492,31 @@ func newServer(app *application) http.Handler {
 				return
 			}
 
+			// convert to db.RunDay for the template
+			runDay := db.RunDay{
+				ID:            run.ID,
+				PlanID:        run.PlanID,
+				Date:          run.Date,
+				RunType:       run.RunType,
+				TotalDistance: run.TotalDistance,
+				TotalDuration: run.TotalDuration,
+				Completed:     run.Completed,
+				Notes:         run.Notes,
+				CreatedAt:     run.CreatedAt,
+			}
+
 			if r.Header.Get("HX-Request") == "true" {
-				pages.RunDetailContent(run, segments).Render(r.Context(), w)
+				pages.RunDetailContent(runDay, segments).Render(r.Context(), w)
 			} else {
-				pages.RunDetail(run, segments).Render(r.Context(), w)
+				pages.RunDetail(runDay, segments, username).Render(r.Context(), w)
 			}
 		})
 
 		r.Get("/templates", func(w http.ResponseWriter, r *http.Request) {
+			username := ""
+			if user, ok := userFromContext(r.Context()); ok {
+				username = user.Username
+			}
 			plans, err := app.queries.ListTemplatePlansWithCounts(r.Context())
 			if err != nil {
 				log.Printf("error fetching templates: %v", err)
@@ -403,7 +526,7 @@ func newServer(app *application) http.Handler {
 			if r.Header.Get("HX-Request") == "true" {
 				pages.TemplatesContent(plans).Render(r.Context(), w)
 			} else {
-				pages.Templates(plans).Render(r.Context(), w)
+				pages.Templates(plans, username).Render(r.Context(), w)
 			}
 		})
 

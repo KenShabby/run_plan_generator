@@ -180,8 +180,8 @@ templ CompactRunCard(run db.RunDay) {
     </div>
 }
 
-templ PlanDetail(plan db.TrainingPlan, runs []db.RunDay) {
-    @layouts.Base(plan.Name) {
+templ PlanDetail(plan db.TrainingPlan, runs []db.RunDay, username string) {
+    @layouts.Base(plan.Name, username) {
         @PlanDetailContent(plan, runs)
     }
 }

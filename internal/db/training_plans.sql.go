@@ -64,6 +64,22 @@ func (q *Queries) DeleteTrainingPlan(ctx context.Context, id int32) error {
 	return err
 }
 
+const deleteTrainingPlanIfOwner = `-- name: DeleteTrainingPlanIfOwner :exec
+DELETE FROM training_plans
+WHERE id = $1
+AND user_id = $2
+`
+
+type DeleteTrainingPlanIfOwnerParams struct {
+	ID     int32 `json:"id"`
+	UserID int32 `json:"user_id"`
+}
+
+func (q *Queries) DeleteTrainingPlanIfOwner(ctx context.Context, arg DeleteTrainingPlanIfOwnerParams) error {
+	_, err := q.db.Exec(ctx, deleteTrainingPlanIfOwner, arg.ID, arg.UserID)
+	return err
+}
+
 const getTrainingPlan = `-- name: GetTrainingPlan :one
 SELECT id, user_id, name, description, plan_type, distance_unit, start_date, end_date, created_at, template_id FROM training_plans WHERE id = $1
 `

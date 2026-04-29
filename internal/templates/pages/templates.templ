@@ -58,8 +58,8 @@ templ TemplatesContent(plans []db.ListTemplatePlansWithCountsRow) {
     <div id="template-form-container"></div>
 }
 
-templ Templates(plans []db.ListTemplatePlansWithCountsRow) {
-    @layouts.Base("Training Plan Templates") {
+templ Templates(plans []db.ListTemplatePlansWithCountsRow, username string) {
+    @layouts.Base("Training Plan Templates", username) {
         @TemplatesContent(plans)
     }
 }

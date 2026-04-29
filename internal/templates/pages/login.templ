@@ -25,8 +25,8 @@ templ LoginContent(errMsg string) {
     </div>
 }
 
-templ Login(errMsg string) {
-    @layouts.Base("Log In") {
+templ Login(errMsg string, username string) {
+    @layouts.Base("Log In", username) {
         @LoginContent(errMsg)
     }
 }

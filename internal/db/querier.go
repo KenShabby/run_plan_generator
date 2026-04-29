@@ -17,9 +17,12 @@ type Querier interface {
 	CreateTrainingPlan(ctx context.Context, arg CreateTrainingPlanParams) (TrainingPlan, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteRunDay(ctx context.Context, id int32) error
+	DeleteRunDayIfOwner(ctx context.Context, arg DeleteRunDayIfOwnerParams) error
 	DeleteTrainingPlan(ctx context.Context, id int32) error
+	DeleteTrainingPlanIfOwner(ctx context.Context, arg DeleteTrainingPlanIfOwnerParams) error
 	DeleteUser(ctx context.Context, id int32) error
 	GetRunDay(ctx context.Context, id int32) (RunDay, error)
+	GetRunDayWithPlanOwner(ctx context.Context, id int32) (GetRunDayWithPlanOwnerRow, error)
 	GetTemplatePlan(ctx context.Context, id int32) (TemplatePlan, error)
 	GetTrainingPlan(ctx context.Context, id int32) (TrainingPlan, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)

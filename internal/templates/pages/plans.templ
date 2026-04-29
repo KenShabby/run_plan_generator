@@ -26,8 +26,8 @@ templ PlansContent(plans []db.TrainingPlan) {
     </div>
 }
 
-templ Plans(plans []db.TrainingPlan) {
-    @layouts.Base("My Plans") {
+templ Plans(plans []db.TrainingPlan, username string) {
+    @layouts.Base("My Plans", username) {
         @PlansContent(plans)
     }
 }

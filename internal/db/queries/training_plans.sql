@@ -17,3 +17,8 @@ UPDATE training_plans
 SET name = $2, description = $3, plan_type = $4, distance_unit = $5, start_date = $6, end_date = $7, template_id = $8
 WHERE id = $1
 RETURNING *;
+
+-- name: DeleteTrainingPlanIfOwner :exec
+DELETE FROM training_plans
+WHERE id = $1
+AND user_id = $2;

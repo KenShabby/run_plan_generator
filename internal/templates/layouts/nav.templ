@@ -1,0 +1,35 @@
+package layouts
+
+templ Nav(username string) {
+    <header class="container">
+        <nav>
+            <ul>
+                <li><strong>Run Plan Generator</strong></li>
+            </ul>
+            <ul>
+                <li><a href="/" >Home</a></li>
+                <li><a href="/plans" hx-get="/plans" hx-target="main" hx-push-url="true">My Plans</a></li>
+                <li><a href="/templates" hx-get="/templates" hx-target="main" hx-push-url="true">Browse Templates</a></li>
+                if username != "" {
+                    <li>
+                        <details class="dropdown">
+                            <summary role="button" class="secondary">{ username }</summary>
+                            <ul dir="rtl">
+                                <li><a href="/account">Account</a></li>
+                                <li>
+                                    <form method="POST" action="/logout" style="margin: 0;">
+                                        <button type="submit" class="secondary" style="width: 100%;">
+                                            Log Out
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </details>
+                    </li>
+                } else {
+                    <li><a href="/login">Log In</a></li>
+                }
+            </ul>
+        </nav>
+    </header>
+}

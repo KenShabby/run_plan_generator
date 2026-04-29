@@ -59,6 +59,24 @@ func (q *Queries) DeleteRunDay(ctx context.Context, id int32) error {
 	return err
 }
 
+const deleteRunDayIfOwner = `-- name: DeleteRunDayIfOwner :exec
+DELETE FROM run_days
+WHERE run_days.id = $1
+AND plan_id IN (
+    SELECT id FROM training_plans WHERE user_id = $2
+)
+`
+
+type DeleteRunDayIfOwnerParams struct {
+	ID     int32 `json:"id"`
+	UserID int32 `json:"user_id"`
+}
+
+func (q *Queries) DeleteRunDayIfOwner(ctx context.Context, arg DeleteRunDayIfOwnerParams) error {
+	_, err := q.db.Exec(ctx, deleteRunDayIfOwner, arg.ID, arg.UserID)
+	return err
+}
+
 const getRunDay = `-- name: GetRunDay :one
 SELECT id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at FROM run_days WHERE id = $1
 `
@@ -76,6 +94,44 @@ func (q *Queries) GetRunDay(ctx context.Context, id int32) (RunDay, error) {
 		&i.Completed,
 		&i.Notes,
 		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getRunDayWithPlanOwner = `-- name: GetRunDayWithPlanOwner :one
+SELECT r.id, r.plan_id, r.date, r.run_type, r.total_distance, r.total_duration, r.completed, r.notes, r.created_at, tp.user_id
+FROM run_days r
+JOIN training_plans tp ON tp.id = r.plan_id
+WHERE r.id = $1
+`
+
+type GetRunDayWithPlanOwnerRow struct {
+	ID            int32            `json:"id"`
+	PlanID        int32            `json:"plan_id"`
+	Date          pgtype.Date      `json:"date"`
+	RunType       string           `json:"run_type"`
+	TotalDistance pgtype.Float8    `json:"total_distance"`
+	TotalDuration pgtype.Int8      `json:"total_duration"`
+	Completed     bool             `json:"completed"`
+	Notes         pgtype.Text      `json:"notes"`
+	CreatedAt     pgtype.Timestamp `json:"created_at"`
+	UserID        int32            `json:"user_id"`
+}
+
+func (q *Queries) GetRunDayWithPlanOwner(ctx context.Context, id int32) (GetRunDayWithPlanOwnerRow, error) {
+	row := q.db.QueryRow(ctx, getRunDayWithPlanOwner, id)
+	var i GetRunDayWithPlanOwnerRow
+	err := row.Scan(
+		&i.ID,
+		&i.PlanID,
+		&i.Date,
+		&i.RunType,
+		&i.TotalDistance,
+		&i.TotalDuration,
+		&i.Completed,
+		&i.Notes,
+		&i.CreatedAt,
+		&i.UserID,
 	)
 	return i, err
 }
