@@ -13,6 +13,51 @@ type WeekRow struct {
 	Days    [7]*db.RunDay // index 0=Mon, 6=Sun
 }
 
+type SegmentGroup struct {
+	IsSet       bool
+	Repetitions int32
+	Segments    []db.Segment
+}
+
+func GroupSegments(segments []db.Segment) []SegmentGroup {
+	var groups []SegmentGroup
+	// track which set_indexes we've already processed
+	seenSets := map[int32]bool{}
+
+	for _, seg := range segments {
+		if !seg.SetIndex.Valid {
+			// standalone segment
+			groups = append(groups, SegmentGroup{
+				IsSet:    false,
+				Segments: []db.Segment{seg},
+			})
+			continue
+		}
+
+		setIdx := seg.SetIndex.Int32
+		if seenSets[setIdx] {
+			// already added this set's group, find it and append
+			for i := range groups {
+				if groups[i].IsSet && groups[i].Segments[0].SetIndex.Int32 == setIdx {
+					groups[i].Segments = append(groups[i].Segments, seg)
+					break
+				}
+			}
+			continue
+		}
+
+		// first time seeing this set
+		seenSets[setIdx] = true
+		groups = append(groups, SegmentGroup{
+			IsSet:       true,
+			Repetitions: seg.SetRepetitions.Int32,
+			Segments:    []db.Segment{seg},
+		})
+	}
+
+	return groups
+}
+
 func GroupRunsByWeek(runs []db.RunDay, startDate time.Time) []WeekRow {
 	if len(runs) == 0 {
 		return nil

@@ -27,63 +27,51 @@ templ RunDetailContent(run db.RunDay, segments []db.Segment) {
         <p>{ run.Notes.String }</p>
     }
 
-    if len(segments) > 0 {
-        <h2>Workout Structure</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Segment</th>
-                    <th>Effort</th>
-                    <th>Distance</th>
-                    <th>Reps</th>
-                    <th>HR Zone</th>
-                </tr>
-            </thead>
-            <tbody>
-                for _, seg := range segments {
-                    <tr>
-                        <td>{ fmt.Sprintf("%d", seg.OrderIndex) }</td>
-                        <td>
-                            if seg.Description.Valid {
-                                { seg.Description.String }
-                            }
-                        </td>
-                        <td>{ seg.EffortType }</td>
-                        <td>
-                            if seg.Distance.Valid {
-                                { fmt.Sprintf("%.2f mi", seg.Distance.Float64) }
-                            }
-                        </td>
-                        <td>
-                            if seg.Repetitions > 1 {
-                                { fmt.Sprintf("×%d", seg.Repetitions) }
-                            } else {
-                                —
-                            }
-                        </td>
-                        <td>
-                            if seg.HrZoneMin.Valid && seg.HrZoneMax.Valid {
-                                if seg.HrZoneMin.Int32 == seg.HrZoneMax.Int32 {
-                                    { fmt.Sprintf("Z%d", seg.HrZoneMin.Int32) }
-                                } else {
-                                    { fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }
-                                }
-                            } else {
-                                —
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    } else {
-        <p><small>No segments defined for this run.</small></p>
-    }
+	if len(segments) > 0 {
+		<h2>Workout Structure</h2>
+			for _, group := range GroupSegments(segments) {
+				<div style="border: 1px solid var(--pico-primary); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem;">
+					if group.IsSet {
+						<div style="font-size: 0.75rem; font-weight: 600; color: var(--pico-primary); margin-bottom: 0.5rem;">
+						{ fmt.Sprintf("Repeat %d×", group.Repetitions) }
+						</div>
+					}
+				for _, seg := range group.Segments {
+					@SegmentRow(seg)
+				}
+				</div>
+			}
+	} else {
+		<p><small>No segments defined for this run.</small></p>
+	}
 }
 
 templ RunDetail(run db.RunDay, segments []db.Segment) {
     @layouts.Base(run.RunType) {
         @RunDetailContent(run, segments)
     }
+}
+
+templ SegmentRow(seg db.Segment) {
+	<div style="display: flex; gap: 1rem; align-items: baseline; padding: 0.35rem 0; border-bottom: 1px solid var(--pico-card-border-color); font-size: 0.85rem;">
+		if seg.Description.Valid {
+			<span style="flex: 1; font-weight: 500;">{ seg.Description.String }</span>
+		} else {
+			<span style="flex: 1; color: var(--pico-muted-color);">—</span>
+		}
+	<span style="color: var(--pico-muted-color);">{ seg.EffortType }</span>
+		if seg.Distance.Valid {
+			<span>{ fmt.Sprintf("%.2f mi", seg.Distance.Float64) }</span>
+		}
+	if seg.Duration.Valid {
+		<span>{ fmt.Sprintf("%d:%02d", seg.Duration.Int64/60, seg.Duration.Int64%60) }</span>
+	}
+	if seg.HrZoneMin.Valid && seg.HrZoneMax.Valid {
+		if seg.HrZoneMin.Int32 == seg.HrZoneMax.Int32 {
+			<span>{ fmt.Sprintf("Z%d", seg.HrZoneMin.Int32) }</span>
+		} else {
+			<span>{ fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }</span>
+		}
+	}
+	</div>
 }
