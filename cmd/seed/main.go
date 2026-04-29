@@ -1,5 +1,7 @@
 package main
 
+/* This is a helper app to convert yaml run templates into db run_plans */
+
 import (
 	"context"
 	"fmt"
@@ -13,7 +15,7 @@ import (
 )
 
 type SegmentYAML struct {
-	OrderIndex     int     `yaml:"order_index"`
+	OrderIndex     int     `yaml:"order_index"` // Order in the run
 	Description    string  `yaml:"description"`
 	EffortType     string  `yaml:"effort_type"`
 	Distance       float64 `yaml:"distance"`
@@ -21,7 +23,7 @@ type SegmentYAML struct {
 	Repetitions    int     `yaml:"repetitions"`
 	HrZoneMin      int     `yaml:"hr_zone_min"`
 	HrZoneMax      int     `yaml:"hr_zone_max"`
-	SetIndex       int     `yaml:"set_index"`
+	SetIndex       int     `yaml:"set_index"` // Order in the repetitions
 	SetRepetitions int     `yaml:"set_repetitions"`
 }
 

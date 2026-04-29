@@ -8,3 +8,6 @@ Now implemented:
 - Allow export to Google calendar etc.
 
 TODO:
+
+- Allow user to calculate their heart rate zones using either max heart rate,
+  heart rate reserve, or lactate threshold heart rate, if known.
