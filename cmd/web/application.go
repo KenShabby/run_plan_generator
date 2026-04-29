@@ -51,3 +51,10 @@ func (app *application) clearSession(w http.ResponseWriter, r *http.Request) err
 	session.Options.MaxAge = -1
 	return session.Save(r, w)
 }
+
+func (app *application) username(r *http.Request) string {
+	if user, ok := userFromContext(r.Context()); ok {
+		return user.Username
+	}
+	return ""
+}

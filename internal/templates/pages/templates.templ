@@ -80,8 +80,8 @@ templ TemplateCard(t db.ListTemplatePlansWithCountsRow) {
         <footer>
             <button
                 hx-get={ fmt.Sprintf("/templates/%d/select", t.ID) }
-                hx-target="#template-form-container"
-                hx-swap="innerHTML">
+                hx-target="main"
+                hx-push-url="true">
                 Use This Plan
             </button>
         </footer>
@@ -89,41 +89,51 @@ templ TemplateCard(t db.ListTemplatePlansWithCountsRow) {
 }
 
 templ TemplateSelectForm(t db.TemplatePlan) {
-    <article>
-        <header><strong>Set Up: { t.Name }</strong></header>
-        <form hx-post={ fmt.Sprintf("/templates/%d/instantiate", t.ID) }
-              hx-target="main"
-              hx-push-url="/plans">
-            <div class="grid">
-                <label>
-                    Plan Name
-                    <input type="text" name="name" value={ t.Name } required>
-                </label>
-                <label>
-                    Race Date
-                    <input type="date" name="race_date" required>
-                </label>
-            </div>
+    <form hx-post={ fmt.Sprintf("/templates/%d/instantiate", t.ID) }
+          hx-target="main"
+          hx-push-url="/plans">
+        <div class="grid">
             <label>
-                Description
-                <textarea name="description" placeholder="Optional notes about your goal, target time, etc."></textarea>
+                Plan Name
+                <input type="text" name="name" value={ t.Name } required>
             </label>
-            <p>
-                <small>Your plan will start { fmt.Sprintf("%d", t.TotalWeeks) } weeks before your race date.</small>
-            </p>
-            <div class="grid">
-                <button type="submit">Generate My Plan</button>
-                <button type="button" class="secondary"
-                        hx-get="/templates/form/cancel"
-                        hx-target="#template-form-container"
-                        hx-swap="innerHTML">
-                    Cancel
-                </button>
-            </div>
+            <label>
+                Race Date
+                <input type="date" name="race_date" required>
+            </label>
+        </div>
+        <label>
+            Description
+            <textarea name="description" placeholder="Optional notes about your goal, target time, etc."></textarea>
+        </label>
+        <p>
+            <small>Your plan will start { fmt.Sprintf("%d", t.TotalWeeks) } weeks before your race date.</small>
+        </p>
+        <button type="submit">Generate My Plan</button>
         </form>
-    </article>
 }
 
 templ TemplateFormEmpty() {
     <!-- empty -->
+}
+
+templ TemplateSelectContent(t db.TemplatePlan, username string) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Set Up: { t.Name }</h1>
+        <a href="/templates" role="button" class="secondary"
+           hx-get="/templates"
+           hx-target="main"
+           hx-push-url="true">
+            ← Back
+        </a>
+    </div>
+    <div style="max-width: 480px;">
+        @TemplateSelectForm(t)
+    </div>
+}
+
+templ TemplateSelectPage(t db.TemplatePlan, username string) {
+    @layouts.Base(t.Name, username) {
+        @TemplateSelectContent(t, username)
+    }
 }

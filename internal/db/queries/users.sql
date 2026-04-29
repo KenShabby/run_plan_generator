@@ -14,3 +14,20 @@ SELECT * FROM users WHERE username = $1;
 
 -- name: DeleteUser :exec
 DELETE FROM users WHERE id = $1;
+
+-- name: UpdateUsername :one
+UPDATE users
+SET username = $2
+WHERE id = $1
+RETURNING *;
+
+-- name: UpdateEmail :one
+UPDATE users
+SET email = $2
+WHERE id = $1
+RETURNING *;
+
+-- name: UpdatePassword :exec
+UPDATE users
+SET password_hash = $2
+WHERE id = $1;

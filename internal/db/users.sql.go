@@ -93,3 +93,69 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 	)
 	return i, err
 }
+
+const updateEmail = `-- name: UpdateEmail :one
+UPDATE users
+SET email = $2
+WHERE id = $1
+RETURNING id, email, username, password_hash, created_at
+`
+
+type UpdateEmailParams struct {
+	ID    int32  `json:"id"`
+	Email string `json:"email"`
+}
+
+func (q *Queries) UpdateEmail(ctx context.Context, arg UpdateEmailParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateEmail, arg.ID, arg.Email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Username,
+		&i.PasswordHash,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const updatePassword = `-- name: UpdatePassword :exec
+UPDATE users
+SET password_hash = $2
+WHERE id = $1
+`
+
+type UpdatePasswordParams struct {
+	ID           int32  `json:"id"`
+	PasswordHash string `json:"password_hash"`
+}
+
+func (q *Queries) UpdatePassword(ctx context.Context, arg UpdatePasswordParams) error {
+	_, err := q.db.Exec(ctx, updatePassword, arg.ID, arg.PasswordHash)
+	return err
+}
+
+const updateUsername = `-- name: UpdateUsername :one
+UPDATE users
+SET username = $2
+WHERE id = $1
+RETURNING id, email, username, password_hash, created_at
+`
+
+type UpdateUsernameParams struct {
+	ID       int32  `json:"id"`
+	Username string `json:"username"`
+}
+
+func (q *Queries) UpdateUsername(ctx context.Context, arg UpdateUsernameParams) (User, error) {
+	row := q.db.QueryRow(ctx, updateUsername, arg.ID, arg.Username)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Email,
+		&i.Username,
+		&i.PasswordHash,
+		&i.CreatedAt,
+	)
+	return i, err
+}

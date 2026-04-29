@@ -1,0 +1,70 @@
+package pages
+
+import (
+    "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+)
+
+templ AccountContent(user db.User, usernameErr string, emailErr string, passwordErr string) {
+    <h1>Account Settings</h1>
+
+    <div style="max-width: 480px; display: flex; flex-direction: column; gap: 1rem;">
+
+        <article>
+            <header><strong>Change Username</strong></header>
+            if usernameErr != "" {
+                <p style="color: var(--pico-del-color);"><small>{ usernameErr }</small></p>
+            }
+            <form method="POST" action="/account/username">
+                <label>
+                    Username
+                    <input type="text" name="username" value={ user.Username } required>
+                </label>
+                <button type="submit">Save</button>
+            </form>
+        </article>
+
+        <article>
+            <header><strong>Change Email</strong></header>
+            if emailErr != "" {
+                <p style="color: var(--pico-del-color);"><small>{ emailErr }</small></p>
+            }
+            <form method="POST" action="/account/email">
+                <label>
+                    Email
+                    <input type="email" name="email" value={ user.Email } required>
+                </label>
+                <button type="submit">Save</button>
+            </form>
+        </article>
+
+        <article>
+            <header><strong>Change Password</strong></header>
+            if passwordErr != "" {
+                <p style="color: var(--pico-del-color);"><small>{ passwordErr }</small></p>
+            }
+            <form method="POST" action="/account/password">
+                <label>
+                    Current Password
+                    <input type="password" name="current_password" required autocomplete="current-password">
+                </label>
+                <label>
+                    New Password
+                    <input type="password" name="new_password" required autocomplete="new-password" minlength="8">
+                </label>
+                <label>
+                    Confirm New Password
+                    <input type="password" name="confirm_password" required autocomplete="new-password">
+                </label>
+                <button type="submit">Save</button>
+            </form>
+        </article>
+
+    </div>
+}
+
+templ Account(user db.User, usernameErr string, emailErr string, passwordErr string, username string) {
+    @layouts.Base("Account Settings", username) {
+        @AccountContent(user, usernameErr, emailErr, passwordErr)
+    }
+}

@@ -35,7 +35,10 @@ type Querier interface {
 	ListTemplateRunDaysByPlan(ctx context.Context, planID int32) ([]TemplateRunDay, error)
 	ListTemplateSegmentsByRun(ctx context.Context, runID int32) ([]TemplateSegment, error)
 	ListTrainingPlansByUser(ctx context.Context, userID int32) ([]TrainingPlan, error)
+	UpdateEmail(ctx context.Context, arg UpdateEmailParams) (User, error)
+	UpdatePassword(ctx context.Context, arg UpdatePasswordParams) error
 	UpdateTrainingPlan(ctx context.Context, arg UpdateTrainingPlanParams) (TrainingPlan, error)
+	UpdateUsername(ctx context.Context, arg UpdateUsernameParams) (User, error)
 }
 
 var _ Querier = (*Queries)(nil)
