@@ -54,8 +54,6 @@ templ TemplatesContent(plans []db.ListTemplatePlansWithCountsRow) {
             <p>No templates available yet.</p>
         }
     </div>
-
-    <div id="template-form-container"></div>
 }
 
 templ Templates(plans []db.ListTemplatePlansWithCountsRow, username string) {
@@ -111,10 +109,6 @@ templ TemplateSelectForm(t db.TemplatePlan) {
         </p>
         <button type="submit">Generate My Plan</button>
         </form>
-}
-
-templ TemplateFormEmpty() {
-    <!-- empty -->
 }
 
 templ TemplateSelectContent(t db.TemplatePlan, username string) {

@@ -255,6 +255,27 @@ func newServer(app *application) http.Handler {
 			}
 			pages.Account(user, "", "", "", app.username(r)).Render(r.Context(), w)
 		})
+
+		r.Post("/account/delete", func(w http.ResponseWriter, r *http.Request) {
+			user, ok := userFromContext(r.Context())
+			if !ok {
+				http.Redirect(w, r, "/login", http.StatusSeeOther)
+				return
+			}
+
+			if err := app.queries.DeleteUser(r.Context(), user.ID); err != nil {
+				log.Printf("error deleting user: %v", err)
+				http.Error(w, "internal error", http.StatusInternalServerError)
+				return
+			}
+
+			if err := app.clearSession(w, r); err != nil {
+				log.Printf("error clearing session: %v", err)
+			}
+
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+		})
+
 		// serves the form fragment
 		r.Get("/plans/new", func(w http.ResponseWriter, r *http.Request) {
 			pages.PlanForm().Render(r.Context(), w)
@@ -630,10 +651,6 @@ func newServer(app *application) http.Handler {
 			} else {
 				pages.TemplateSelectPage(tmpl, app.username(r)).Render(r.Context(), w)
 			}
-		})
-
-		r.Get("/templates/form/cancel", func(w http.ResponseWriter, r *http.Request) {
-			pages.TemplateFormEmpty().Render(r.Context(), w)
 		})
 
 		r.Post("/templates/{id}/instantiate", func(w http.ResponseWriter, r *http.Request) {
