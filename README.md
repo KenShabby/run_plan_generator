@@ -2,8 +2,9 @@
 
 Allow users to use canned training plans for upcoming races or create their own.
 
-TODO:
+Now implemented:
 
-- Implement segments in yaml templates
+- Repeated segments in yaml templates (e.g 6x [100 yards zone 5, recover 2 mins])
 - Allow export to Google calendar etc.
-- Interface with Garmin training calendar?
+
+TODO:

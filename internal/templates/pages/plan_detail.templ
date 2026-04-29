@@ -104,6 +104,12 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
     </style>
 
     <div class="add-run-bar">
+        <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d/export.ics", plan.ID)) }
+           role="button"
+           class="secondary"
+           style="font-size: 0.8rem; padding: 4px 12px;">
+            Export to Calendar
+        </a>
         <button
             hx-get={ fmt.Sprintf("/plans/%d/runs/new", plan.ID) }
             hx-target="#run-form-container"
