@@ -11,3 +11,9 @@ RETURNING *;
 -- name: DeleteHRZonesByProfile :exec
 DELETE FROM hr_zones
 WHERE profile_id = $1;
+
+-- name: GetHRZonesByUser :many
+SELECT z.* FROM hr_zones z
+JOIN user_hr_profile p ON p.id = z.profile_id
+WHERE p.user_id = $1
+ORDER BY z.zone_number ASC;

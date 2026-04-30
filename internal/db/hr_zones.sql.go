@@ -93,3 +93,39 @@ func (q *Queries) GetHRZonesByProfile(ctx context.Context, profileID int32) ([]H
 	}
 	return items, nil
 }
+
+const getHRZonesByUser = `-- name: GetHRZonesByUser :many
+SELECT z.id, z.profile_id, z.zone_number, z.name, z.hr_min, z.hr_max, z.description, z.created_at FROM hr_zones z
+JOIN user_hr_profile p ON p.id = z.profile_id
+WHERE p.user_id = $1
+ORDER BY z.zone_number ASC
+`
+
+func (q *Queries) GetHRZonesByUser(ctx context.Context, userID int32) ([]HrZone, error) {
+	rows, err := q.db.Query(ctx, getHRZonesByUser, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []HrZone
+	for rows.Next() {
+		var i HrZone
+		if err := rows.Scan(
+			&i.ID,
+			&i.ProfileID,
+			&i.ZoneNumber,
+			&i.Name,
+			&i.HrMin,
+			&i.HrMax,
+			&i.Description,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

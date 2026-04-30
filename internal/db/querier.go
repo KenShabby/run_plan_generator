@@ -26,6 +26,7 @@ type Querier interface {
 	DeleteUser(ctx context.Context, id int32) error
 	GetHRProfileByUser(ctx context.Context, userID int32) (UserHrProfile, error)
 	GetHRZonesByProfile(ctx context.Context, profileID int32) ([]HrZone, error)
+	GetHRZonesByUser(ctx context.Context, userID int32) ([]HrZone, error)
 	GetRunDay(ctx context.Context, id int32) (RunDay, error)
 	GetRunDayWithPlanOwner(ctx context.Context, id int32) (GetRunDayWithPlanOwnerRow, error)
 	GetTemplatePlan(ctx context.Context, id int32) (TemplatePlan, error)
