@@ -9,6 +9,8 @@ import (
 )
 
 type Querier interface {
+	CreateHRProfile(ctx context.Context, arg CreateHRProfileParams) (UserHrProfile, error)
+	CreateHRZone(ctx context.Context, arg CreateHRZoneParams) (HrZone, error)
 	CreateRunDay(ctx context.Context, arg CreateRunDayParams) (RunDay, error)
 	CreateSegment(ctx context.Context, arg CreateSegmentParams) (Segment, error)
 	CreateTemplatePlan(ctx context.Context, arg CreateTemplatePlanParams) (TemplatePlan, error)
@@ -16,11 +18,14 @@ type Querier interface {
 	CreateTemplateSegment(ctx context.Context, arg CreateTemplateSegmentParams) (TemplateSegment, error)
 	CreateTrainingPlan(ctx context.Context, arg CreateTrainingPlanParams) (TrainingPlan, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteHRZonesByProfile(ctx context.Context, profileID int32) error
 	DeleteRunDay(ctx context.Context, id int32) error
 	DeleteRunDayIfOwner(ctx context.Context, arg DeleteRunDayIfOwnerParams) error
 	DeleteTrainingPlan(ctx context.Context, id int32) error
 	DeleteTrainingPlanIfOwner(ctx context.Context, arg DeleteTrainingPlanIfOwnerParams) error
 	DeleteUser(ctx context.Context, id int32) error
+	GetHRProfileByUser(ctx context.Context, userID int32) (UserHrProfile, error)
+	GetHRZonesByProfile(ctx context.Context, profileID int32) ([]HrZone, error)
 	GetRunDay(ctx context.Context, id int32) (RunDay, error)
 	GetRunDayWithPlanOwner(ctx context.Context, id int32) (GetRunDayWithPlanOwnerRow, error)
 	GetTemplatePlan(ctx context.Context, id int32) (TemplatePlan, error)
@@ -36,6 +41,7 @@ type Querier interface {
 	ListTemplateSegmentsByRun(ctx context.Context, runID int32) ([]TemplateSegment, error)
 	ListTrainingPlansByUser(ctx context.Context, userID int32) ([]TrainingPlan, error)
 	UpdateEmail(ctx context.Context, arg UpdateEmailParams) (User, error)
+	UpdateHRProfile(ctx context.Context, arg UpdateHRProfileParams) (UserHrProfile, error)
 	UpdatePassword(ctx context.Context, arg UpdatePasswordParams) error
 	UpdateTrainingPlan(ctx context.Context, arg UpdateTrainingPlanParams) (TrainingPlan, error)
 	UpdateUsername(ctx context.Context, arg UpdateUsernameParams) (User, error)

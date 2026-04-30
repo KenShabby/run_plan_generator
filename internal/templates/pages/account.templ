@@ -6,7 +6,12 @@ import (
 )
 
 templ AccountContent(user db.User, usernameErr string, emailErr string, passwordErr string) {
-    <h1>Account Settings</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h1 style="margin: 0;">Account Settings</h1>
+        <a href="/account/hr" role="button" class="secondary">
+            ♥ Heart Rate Zones
+        </a>
+    </div>
 
     <div style="max-width: 480px; display: flex; flex-direction: column; gap: 1rem;">
 
