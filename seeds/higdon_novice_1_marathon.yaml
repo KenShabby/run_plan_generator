@@ -325,7 +325,7 @@ runs:
     run_type: easy
     distance: 2.0
     notes: "Short shakeout, stay loose"
-  - day_offset: 126
+  - day_offset: 125
     run_type: race
     distance: 26.2
     notes: "Race day! You've done the work. Trust your training."
