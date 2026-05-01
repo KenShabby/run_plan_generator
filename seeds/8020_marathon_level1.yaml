@@ -2562,7 +2562,7 @@ runs:
     duration: 1200
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 126
+- day_offset: 125
   run_type: race
   distance: 26.2
   notes: Race day! You've done the work. Trust your training.

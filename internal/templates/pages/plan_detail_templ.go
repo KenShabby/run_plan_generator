@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"github.com/KenShabby/run_plan_generator/internal/db"
 	"github.com/KenShabby/run_plan_generator/internal/templates/layouts"
-	"time"
 )
 
 func PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) templ.Component {
@@ -160,7 +159,7 @@ func PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RunCalendar(runs, plan.StartDate.Time).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RunCalendar(runs).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -172,7 +171,7 @@ func PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) templ.Component {
 	})
 }
 
-func RunCalendar(runs []db.RunDay, startDate time.Time) templ.Component {
+func RunCalendar(runs []db.RunDay) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -193,7 +192,7 @@ func RunCalendar(runs []db.RunDay, startDate time.Time) templ.Component {
 			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		for _, week := range GroupRunsByWeek(runs, startDate) {
+		for _, week := range GroupRunsByWeek(runs) {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div class=\"week-label\">Week ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

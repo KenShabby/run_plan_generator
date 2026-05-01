@@ -1,7 +1,7 @@
 package pages
 
 import (
-	"time"
+	"log"
 
 	"github.com/KenShabby/run_plan_generator/internal/db"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -58,17 +58,18 @@ func GroupSegments(segments []db.Segment) []SegmentGroup {
 	return groups
 }
 
-func GroupRunsByWeek(runs []db.RunDay, startDate time.Time) []WeekRow {
+func GroupRunsByWeek(runs []db.RunDay) []WeekRow {
 	if len(runs) == 0 {
 		return nil
 	}
 
-	// Normalise startDate to Monday of its week
-	weekday := int(startDate.Weekday()) // Sunday=0
+	// Anchor to Monday of the week containing the first run
+	firstRun := runs[0].Date.Time
+	weekday := int(firstRun.Weekday()) // Sunday=0
 	if weekday == 0 {
 		weekday = 7
 	}
-	monday := startDate.AddDate(0, 0, -(weekday - 1))
+	monday := firstRun.AddDate(0, 0, -(weekday - 1))
 
 	// Find last run date
 	last := runs[len(runs)-1].Date.Time
@@ -77,6 +78,12 @@ func GroupRunsByWeek(runs []db.RunDay, startDate time.Time) []WeekRow {
 	rows := make([]WeekRow, totalWeeks)
 	for w := range rows {
 		rows[w].WeekNum = w + 1
+	}
+
+	for i := range runs[:3] {
+		r := &runs[i]
+		diff := int(r.Date.Time.Sub(monday).Hours() / 24)
+		log.Printf("run date=%s diff=%d week=%d day=%d", r.Date.Time.Format("Mon Jan 2"), diff, diff/7, diff%7)
 	}
 
 	for i := range runs {

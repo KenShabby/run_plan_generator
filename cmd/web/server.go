@@ -806,6 +806,15 @@ func newServer(app *application) http.Handler {
 			}
 
 			startDate := raceDate.AddDate(0, 0, -(int(tmpl.TotalWeeks) * 7))
+			// Normalise to Monday of that week
+			weekday := int(startDate.Weekday())
+			if weekday == 0 {
+				// Sunday - advance to next Monday rather than going back 6 days
+				startDate = startDate.AddDate(0, 0, 1)
+			} else if weekday != 1 {
+				// Not Monday - go back to Monday of this week
+				startDate = startDate.AddDate(0, 0, -(weekday - 1))
+			}
 
 			userID, ok := app.getSessionUserID(r)
 			if !ok {

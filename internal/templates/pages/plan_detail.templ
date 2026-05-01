@@ -2,7 +2,6 @@ package pages
 
 import (
     "fmt"
-    "time"
     "github.com/KenShabby/run_plan_generator/internal/db"
     "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
@@ -131,12 +130,12 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
     </div>
 
     <div id="runs-list">
-        @RunCalendar(runs, plan.StartDate.Time)
+        @RunCalendar(runs)
     </div>
 }
 
-templ RunCalendar(runs []db.RunDay, startDate time.Time) {
-    for _, week := range GroupRunsByWeek(runs, startDate) {
+templ RunCalendar(runs []db.RunDay) {
+    for _, week := range GroupRunsByWeek(runs) {
         <div class="week-label">Week { fmt.Sprintf("%d", week.WeekNum) }</div>
         <div class="week-grid">
             for _, run := range week.Days {
