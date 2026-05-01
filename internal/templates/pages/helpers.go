@@ -1,8 +1,6 @@
 package pages
 
 import (
-	"log"
-
 	"github.com/KenShabby/run_plan_generator/internal/db"
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -78,12 +76,6 @@ func GroupRunsByWeek(runs []db.RunDay) []WeekRow {
 	rows := make([]WeekRow, totalWeeks)
 	for w := range rows {
 		rows[w].WeekNum = w + 1
-	}
-
-	for i := range runs[:3] {
-		r := &runs[i]
-		diff := int(r.Date.Time.Sub(monday).Hours() / 24)
-		log.Printf("run date=%s diff=%d week=%d day=%d", r.Date.Time.Format("Mon Jan 2"), diff, diff/7, diff%7)
 	}
 
 	for i := range runs {
