@@ -6,7 +6,7 @@ import (
     "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
 
-templ RunDetailContent(run db.RunDay, segments []db.Segment) {
+templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db.HrZone) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>{ run.RunType }</h1>
         <button class="secondary"
@@ -37,7 +37,7 @@ templ RunDetailContent(run db.RunDay, segments []db.Segment) {
 						</div>
 					}
 				for _, seg := range group.Segments {
-					@SegmentRow(seg)
+					@SegmentRow(seg, zoneMap)
 				}
 				</div>
 			}
@@ -46,32 +46,44 @@ templ RunDetailContent(run db.RunDay, segments []db.Segment) {
 	}
 }
 
-templ RunDetail(run db.RunDay, segments []db.Segment, username string) {
+templ RunDetail(run db.RunDay, segments []db.Segment, username string, zoneMap map[int32]db.HrZone) {
     @layouts.Base(run.RunType, username) {
-        @RunDetailContent(run, segments)
+        @RunDetailContent(run, segments, zoneMap)
     }
 }
 
-templ SegmentRow(seg db.Segment) {
-	<div style="display: flex; gap: 1rem; align-items: baseline; padding: 0.35rem 0; border-bottom: 1px solid var(--pico-card-border-color); font-size: 0.85rem;">
-		if seg.Description.Valid {
-			<span style="flex: 1; font-weight: 500;">{ seg.Description.String }</span>
-		} else {
-			<span style="flex: 1; color: var(--pico-muted-color);">—</span>
-		}
-	<span style="color: var(--pico-muted-color);">{ seg.EffortType }</span>
-		if seg.Distance.Valid {
-			<span>{ fmt.Sprintf("%.2f mi", seg.Distance.Float64) }</span>
-		}
-	if seg.Duration.Valid {
-		<span>{ fmt.Sprintf("%d:%02d", seg.Duration.Int64/60, seg.Duration.Int64%60) }</span>
-	}
-	if seg.HrZoneMin.Valid && seg.HrZoneMax.Valid {
-		if seg.HrZoneMin.Int32 == seg.HrZoneMax.Int32 {
-			<span>{ fmt.Sprintf("Z%d", seg.HrZoneMin.Int32) }</span>
-		} else {
-			<span>{ fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }</span>
-		}
-	}
-	</div>
+templ SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) {
+    <div style="display: flex; gap: 1rem; align-items: baseline; padding: 0.35rem 0; border-bottom: 1px solid var(--pico-card-border-color); font-size: 0.85rem;">
+        if seg.Description.Valid {
+            <span style="flex: 1; font-weight: 500;">{ seg.Description.String }</span>
+        } else {
+            if zMin, ok1 := zoneMap[seg.HrZoneMin.Int32]; ok1 {
+                if zMax, ok2 := zoneMap[seg.HrZoneMax.Int32]; ok2 {
+                    <span>{ fmt.Sprintf("Z%d–Z%d (%d–%d bpm)", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32, zMin.HrMin, zMax.HrMax) }</span>
+                } else {
+                    <span>{ fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }</span>
+                }
+            } else {
+                <span>{ fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }</span>
+            }
+        }
+    <span style="color: var(--pico-muted-color);">{ seg.EffortType }</span>
+        if seg.Distance.Valid {
+            <span>{ fmt.Sprintf("%.2f mi", seg.Distance.Float64) }</span>
+        }
+    if seg.Duration.Valid {
+        <span>{ fmt.Sprintf("%d:%02d", seg.Duration.Int64/60, seg.Duration.Int64%60) }</span>
+    }
+    if seg.HrZoneMin.Valid && seg.HrZoneMax.Valid {
+        if seg.HrZoneMin.Int32 == seg.HrZoneMax.Int32 {
+            if zone, ok := zoneMap[seg.HrZoneMin.Int32]; ok {
+                <span>{ fmt.Sprintf("Z%d (%d–%d bpm)", seg.HrZoneMin.Int32, zone.HrMin, zone.HrMax) }</span>
+            } else {
+                <span>{ fmt.Sprintf("Z%d", seg.HrZoneMin.Int32) }</span>
+            }
+        } else {
+            <span>{ fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }</span>
+        }
+    }
+    </div>
 }

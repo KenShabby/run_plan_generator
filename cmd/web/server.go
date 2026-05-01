@@ -719,6 +719,16 @@ func newServer(app *application) http.Handler {
 				return
 			}
 
+			// fetch user's HR zones and build a lookup map
+			hrrZones, err := app.queries.GetHRZonesByUser(r.Context(), userID)
+			if err != nil {
+				log.Printf("error fetching hr zones: %v", err)
+			}
+			zoneMap := make(map[int32]db.HrZone)
+			for _, z := range hrrZones {
+				zoneMap[z.ZoneNumber] = z
+			}
+
 			// convert to db.RunDay for the template
 			runDay := db.RunDay{
 				ID:            run.ID,
@@ -733,9 +743,9 @@ func newServer(app *application) http.Handler {
 			}
 
 			if r.Header.Get("HX-Request") == "true" {
-				pages.RunDetailContent(runDay, segments).Render(r.Context(), w)
+				pages.RunDetailContent(runDay, segments, zoneMap).Render(r.Context(), w)
 			} else {
-				pages.RunDetail(runDay, segments, username).Render(r.Context(), w)
+				pages.RunDetail(runDay, segments, username, zoneMap).Render(r.Context(), w)
 			}
 		})
 
