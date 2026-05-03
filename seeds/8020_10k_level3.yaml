@@ -16,7 +16,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -28,7 +28,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 1
   run_type: fast_finish
   notes: Fast Finish Run 4
@@ -38,7 +38,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
@@ -60,7 +60,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -72,7 +72,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 2
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -82,7 +82,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -94,7 +94,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 3
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -104,7 +104,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -116,7 +116,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 4
   run_type: speed_play
   notes: Speed Play Run 6
@@ -126,7 +126,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -154,7 +154,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 5
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -164,7 +164,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -176,7 +176,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 6
   run_type: long_run
   notes: Long Run 2
@@ -186,7 +186,7 @@ runs:
     effort_type: distance
     distance: 1.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: distance
@@ -198,7 +198,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 7
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -208,7 +208,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -220,7 +220,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 8
   run_type: fast_finish
   notes: Fast Finish Run 6
@@ -230,7 +230,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
@@ -252,7 +252,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -264,7 +264,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 9
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -274,7 +274,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -286,7 +286,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 10
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -296,7 +296,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -308,7 +308,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 11
   run_type: speed_play
   notes: Speed Play Run 10
@@ -318,7 +318,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -346,7 +346,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 12
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -356,7 +356,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -368,7 +368,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 13
   run_type: long_run
   notes: Long Run 3
@@ -378,7 +378,7 @@ runs:
     effort_type: distance
     distance: 1.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: distance
@@ -390,7 +390,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 15
   run_type: fast_finish
   notes: Fast Finish Run 4
@@ -400,7 +400,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
@@ -422,7 +422,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -434,7 +434,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 16
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -444,7 +444,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -456,7 +456,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 17
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -466,7 +466,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -478,7 +478,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 18
   run_type: speed_play
   notes: Speed Play Run 6
@@ -488,7 +488,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -516,7 +516,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 19
   run_type: foundation
   notes: Foundation Run 5 or Cross-Train
@@ -526,7 +526,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -538,7 +538,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 20
   run_type: long_run
   notes: Long Run 4
@@ -548,7 +548,7 @@ runs:
     effort_type: distance
     distance: 1.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: distance
@@ -560,7 +560,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 21
   run_type: foundation
   notes: Foundation Run 6 Cross-Train
@@ -570,7 +570,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -582,7 +582,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 22
   run_type: fast_finish
   notes: Fast Finish Run 7
@@ -592,7 +592,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
@@ -614,7 +614,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -626,7 +626,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 23
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -636,7 +636,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -648,7 +648,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 24
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -658,7 +658,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -670,7 +670,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 25
   run_type: hill_repetitions
   notes: Hill Repetition Run 7
@@ -680,7 +680,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -708,7 +708,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 26
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
@@ -728,7 +728,7 @@ runs:
     effort_type: distance
     distance: 1.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: distance
@@ -740,7 +740,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 28
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -750,7 +750,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -762,7 +762,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 29
   run_type: fast_finish
   notes: Fast Finish Run 8
@@ -772,7 +772,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
@@ -794,7 +794,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -806,7 +806,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 30
   run_type: foundation
   notes: Foundation Run 7 or Cross-Train
@@ -816,7 +816,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -828,7 +828,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 31
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -838,7 +838,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -850,7 +850,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 32
   run_type: hill_repetitions
   notes: Hill Repetition Run 8
@@ -860,7 +860,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -888,7 +888,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 33
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
@@ -908,7 +908,7 @@ runs:
     effort_type: distance
     distance: 1.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: distance
@@ -920,7 +920,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 36
   run_type: fast_finish
   notes: Fast Finish Run 7
@@ -930,7 +930,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
@@ -952,7 +952,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -964,7 +964,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 37
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -974,7 +974,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -986,7 +986,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 38
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -996,7 +996,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1008,7 +1008,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 39
   run_type: hill_repetitions
   notes: Hill Repetition Run 6
@@ -1018,7 +1018,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1046,7 +1046,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 40
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
@@ -1066,7 +1066,7 @@ runs:
     effort_type: distance
     distance: 1.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: distance
@@ -1078,7 +1078,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 42
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -1088,7 +1088,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1100,7 +1100,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 43
   run_type: speed_play
   notes: Speed Play Run 7
@@ -1110,7 +1110,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1138,7 +1138,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 43
   run_type: recovery
   notes: Recovery Run 5 or Cross-Train
@@ -1158,7 +1158,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1170,7 +1170,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 45
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -1180,7 +1180,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1192,7 +1192,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 46
   run_type: interval
   notes: Short Interval Run 4
@@ -1202,7 +1202,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1230,7 +1230,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 47
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
@@ -1250,7 +1250,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
@@ -1282,7 +1282,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1310,7 +1310,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 50
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
@@ -1330,7 +1330,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1342,7 +1342,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 52
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -1352,7 +1352,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1364,7 +1364,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 53
   run_type: interval
   notes: Short Interval Run 5
@@ -1374,7 +1374,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1402,7 +1402,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 54
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
@@ -1422,7 +1422,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: distance
@@ -1450,7 +1450,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 57
   run_type: long_interval
   notes: Long Interval Run 2
@@ -1460,7 +1460,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1488,7 +1488,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 57
   run_type: recovery
   notes: Recovery Run 5 or Cross-Train
@@ -1508,7 +1508,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1520,7 +1520,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 59
   run_type: foundation
   notes: Foundation Run 5 or Cross-Train
@@ -1530,7 +1530,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1542,7 +1542,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 60
   run_type: speed_play
   notes: Speed Play Run 8
@@ -1552,7 +1552,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1580,7 +1580,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 61
   run_type: recovery
   notes: Recovery Run 5 or Cross-Train
@@ -1600,7 +1600,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
@@ -1622,7 +1622,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1634,7 +1634,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 64
   run_type: long_interval
   notes: Long Interval Run 4
@@ -1644,7 +1644,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1672,7 +1672,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 64
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
@@ -1692,7 +1692,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1704,7 +1704,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 66
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -1714,7 +1714,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1726,7 +1726,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 67
   run_type: interval
   notes: Mixed Interval Run 3
@@ -1736,7 +1736,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1780,7 +1780,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 68
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
@@ -1800,7 +1800,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: distance
@@ -1828,7 +1828,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 70
   run_type: recovery
   notes: Recovery Run 5 or Cross-Train
@@ -1848,7 +1848,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1876,7 +1876,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 71
   run_type: recovery
   notes: Recovery Run 5 or Cross-Train
@@ -1896,7 +1896,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1908,7 +1908,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 73
   run_type: foundation
   notes: Foundation Run 5 or Cross-Train
@@ -1918,7 +1918,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -1930,7 +1930,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 74
   run_type: interval
   notes: Mixed Interval Run 3
@@ -1940,7 +1940,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -1984,7 +1984,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 75
   run_type: recovery
   notes: Foundation Run 9 or Cross-Train
@@ -1994,7 +1994,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -2006,7 +2006,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 76
   run_type: long_run_speed_play
   notes: Long Run with Speed Play 1
@@ -2016,7 +2016,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: distance
@@ -2044,7 +2044,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 78
   run_type: speed_play
   notes: Speed Play Run 5
@@ -2054,7 +2054,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Pre-Work
     effort_type: time
@@ -2082,7 +2082,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 79
   run_type: foundation
   notes: Foundation Run 4 or Cross-Train
@@ -2092,7 +2092,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -2104,7 +2104,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 80
   run_type: foundation
   notes: Foundation Run 3 or Cross-Train
@@ -2114,7 +2114,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Main Effort
     effort_type: time
@@ -2126,7 +2126,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 81
   run_type: fast_finish
   notes: Fast Finish Run 3
@@ -2136,7 +2136,7 @@ runs:
     effort_type: time
     duration: 300
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
   - order_index: 2
     description: Aerobic
     effort_type: time
