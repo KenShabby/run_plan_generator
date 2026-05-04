@@ -9,10 +9,11 @@ Now implemented:
 - Allow user to calculate their heart rate zones using either max heart rate,
   heart rate reserve, or lactate threshold heart rate, if known.
 - Template runs are still having some trouble with offsets from the correct days
-of the week.
+of the week. --> seems to be fixed now; off-by-one error.
+- Move HR Zone calculator to somewhere more eye-catching.
+- Allow zone bpm refreshes mid-plan if a user's LTHR or resting HR changes.
 
 TODO:
 
 - Allow users to construct multi-segment runs with repeats etc.
-- Allow zone bpm refreshes mid-plan if a user's LTHR or resting HR changes.
 - Makefile and other installation instructions.

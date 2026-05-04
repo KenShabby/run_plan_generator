@@ -1,4 +1,6 @@
 .envrc
 .env
 notes.txt
+tables.txt
+db_tables.sh
 
