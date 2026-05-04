@@ -1,0 +1,184 @@
+package pages
+
+import (
+    "fmt"
+    "time"
+    "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/hrutil"
+    "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+)
+
+templ DashboardContent(
+    profile *db.UserHrProfile,
+    zones []db.HrZone,
+    history []db.UserHrHistory,
+    nextRace *db.GetNextRaceRow,
+    upcomingRuns []db.GetUpcomingRunsThisWeekRow,
+    username string,
+) {
+    <h1>Dashboard</h1>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
+
+        <!-- Left column -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+            <!-- Countdown to next race -->
+            <article>
+                <header><strong>Next Race</strong></header>
+                if nextRace != nil {
+                    <div style="text-align: center; padding: 1rem 0;">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--pico-primary); line-height: 1;">
+                            { fmt.Sprintf("%d", daysUntil(nextRace.Date.Time)) }
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--pico-muted-color); margin-top: 0.25rem;">
+                            days until race day
+                        </div>
+                        <div style="margin-top: 0.75rem; font-weight: 500;">
+                            { nextRace.PlanName }
+                        </div>
+                        <div style="font-size: 0.85rem; color: var(--pico-muted-color);">
+                            { nextRace.Date.Time.Format("Monday, January 2, 2006") }
+                        </div>
+                    </div>
+                } else {
+                    <p style="color: var(--pico-muted-color);">
+                        <small>No upcoming races. <a href="/templates">Browse training plans</a> to get started.</small>
+                    </p>
+                }
+            </article>
+
+            <!-- Upcoming runs this week -->
+            <article>
+                <header><strong>This Week</strong></header>
+                if len(upcomingRuns) > 0 {
+                    for _, run := range upcomingRuns {
+                        <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0.4rem 0; border-bottom: 1px solid var(--pico-card-border-color); font-size: 0.85rem;">
+                            <div>
+                                <span style="font-weight: 500;">{ formatRunType(run.RunType) }</span>
+                                <span style="color: var(--pico-muted-color); font-size: 0.75rem; margin-left: 0.5rem;">{ run.PlanName }</span>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="color: var(--pico-muted-color);">{ run.Date.Time.Format("Mon Jan 2") }</span>
+                                if run.TotalDistance.Valid {
+                                    <span style="margin-left: 0.5rem;">{ fmt.Sprintf("%.1f mi", run.TotalDistance.Float64) }</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                } else {
+                    <p style="color: var(--pico-muted-color);"><small>No runs scheduled this week.</small></p>
+                }
+            </article>
+
+        </div>
+
+        <!-- Right column -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+            <!-- HR Zones -->
+            <article>
+                <header>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong>Heart Rate Zones</strong>
+                        <a href="/account/hr" style="font-size: 0.8rem;">Update</a>
+                    </div>
+                </header>
+                if profile != nil && len(zones) > 0 {
+                    <p style="font-size: 0.75rem; color: var(--pico-muted-color); margin-bottom: 0.75rem;">
+                        { hrutil.ZoneMethodLabel(profile.CalculationMethod) }
+                    </p>
+                    <table style="font-size: 0.85rem;">
+                        <thead>
+                            <tr>
+                                <th>Zone</th>
+                                <th>Name</th>
+                                <th>Heart Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            for _, zone := range zones {
+                                <tr>
+                                    <td><strong>{ fmt.Sprintf("Z%d", zone.ZoneNumber) }</strong></td>
+                                    <td>{ zone.Name.String }</td>
+                                    <td>{ hrutil.FormatZoneRange(hrutil.CalculatedZone{Number: int(zone.ZoneNumber), Min: int(zone.HrMin), Max: int(zone.HrMax)}) }</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                } else {
+                    <p style="color: var(--pico-muted-color);">
+                        <small>No zones calculated yet. <a href="/account/hr">Set up your heart rate zones</a>.</small>
+                    </p>
+                }
+            </article>
+
+            <!-- HR History -->
+            if len(history) > 0 {
+                <article>
+                    <header><strong>HR History</strong></header>
+                    <table style="font-size: 0.8rem;">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Max</th>
+                                <th>Resting</th>
+                                <th>LTHR</th>
+                                <th>Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            for _, h := range history {
+                                <tr>
+                                    <td>{ h.RecordedAt.Time.Format("Jan 2, 2006") }</td>
+                                    <td>
+                                        if h.MaxHr.Valid {
+                                            { fmt.Sprintf("%d", h.MaxHr.Int32) }
+                                        } else {
+                                            { "—" }
+                                        }
+                                    </td>
+                                    <td>
+                                        if h.RestingHr.Valid {
+                                            { fmt.Sprintf("%d", h.RestingHr.Int32) }
+                                        } else {
+                                            { "—" }
+                                        }
+                                    </td>
+                                    <td>
+                                        if h.Lthr.Valid {
+                                            { fmt.Sprintf("%d", h.Lthr.Int32) }
+                                        } else {
+                                            { "—" }
+                                        }
+                                    </td>
+                                    <td style="font-size: 0.7rem; color: var(--pico-muted-color);">{ hrutil.ZoneMethodLabel(h.Method) }</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </article>
+            }
+
+        </div>
+    </div>
+}
+
+templ Dashboard(
+    profile *db.UserHrProfile,
+    zones []db.HrZone,
+    history []db.UserHrHistory,
+    nextRace *db.GetNextRaceRow,
+    upcomingRuns []db.GetUpcomingRunsThisWeekRow,
+    username string,
+) {
+    @layouts.Base("Dashboard", username) {
+        @DashboardContent(profile, zones, history, nextRace, upcomingRuns, username)
+    }
+}
+
+func daysUntil(t time.Time) int {
+    now := time.Now().Truncate(24 * time.Hour)
+    target := t.Truncate(24 * time.Hour)
+    return int(target.Sub(now).Hours() / 24)
+}

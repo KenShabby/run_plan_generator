@@ -12,9 +12,9 @@ import (
 )
 
 const createRunDay = `-- name: CreateRunDay :one
-INSERT INTO run_days (plan_id, date, run_type, total_distance, total_duration, notes)
-VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at
+INSERT INTO run_days (plan_id, date, run_type, total_distance, total_duration, notes, is_goal_race)
+VALUES ($1, $2, $3, $4, $5, $6, $7)
+RETURNING id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at, is_goal_race
 `
 
 type CreateRunDayParams struct {
@@ -24,6 +24,7 @@ type CreateRunDayParams struct {
 	TotalDistance pgtype.Float8 `json:"total_distance"`
 	TotalDuration pgtype.Int8   `json:"total_duration"`
 	Notes         pgtype.Text   `json:"notes"`
+	IsGoalRace    bool          `json:"is_goal_race"`
 }
 
 func (q *Queries) CreateRunDay(ctx context.Context, arg CreateRunDayParams) (RunDay, error) {
@@ -34,6 +35,7 @@ func (q *Queries) CreateRunDay(ctx context.Context, arg CreateRunDayParams) (Run
 		arg.TotalDistance,
 		arg.TotalDuration,
 		arg.Notes,
+		arg.IsGoalRace,
 	)
 	var i RunDay
 	err := row.Scan(
@@ -46,6 +48,7 @@ func (q *Queries) CreateRunDay(ctx context.Context, arg CreateRunDayParams) (Run
 		&i.Completed,
 		&i.Notes,
 		&i.CreatedAt,
+		&i.IsGoalRace,
 	)
 	return i, err
 }
@@ -77,8 +80,51 @@ func (q *Queries) DeleteRunDayIfOwner(ctx context.Context, arg DeleteRunDayIfOwn
 	return err
 }
 
+const getNextRace = `-- name: GetNextRace :one
+SELECT rd.id, rd.plan_id, rd.date, rd.run_type, rd.total_distance, rd.total_duration, rd.completed, rd.notes, rd.created_at, rd.is_goal_race, tp.name as plan_name FROM run_days rd
+JOIN training_plans tp ON tp.id = rd.plan_id
+WHERE tp.user_id = $1
+AND rd.is_goal_race = TRUE
+AND rd.date >= CURRENT_DATE
+ORDER BY rd.date ASC
+LIMIT 1
+`
+
+type GetNextRaceRow struct {
+	ID            int32            `json:"id"`
+	PlanID        int32            `json:"plan_id"`
+	Date          pgtype.Date      `json:"date"`
+	RunType       string           `json:"run_type"`
+	TotalDistance pgtype.Float8    `json:"total_distance"`
+	TotalDuration pgtype.Int8      `json:"total_duration"`
+	Completed     bool             `json:"completed"`
+	Notes         pgtype.Text      `json:"notes"`
+	CreatedAt     pgtype.Timestamp `json:"created_at"`
+	IsGoalRace    bool             `json:"is_goal_race"`
+	PlanName      string           `json:"plan_name"`
+}
+
+func (q *Queries) GetNextRace(ctx context.Context, userID int32) (GetNextRaceRow, error) {
+	row := q.db.QueryRow(ctx, getNextRace, userID)
+	var i GetNextRaceRow
+	err := row.Scan(
+		&i.ID,
+		&i.PlanID,
+		&i.Date,
+		&i.RunType,
+		&i.TotalDistance,
+		&i.TotalDuration,
+		&i.Completed,
+		&i.Notes,
+		&i.CreatedAt,
+		&i.IsGoalRace,
+		&i.PlanName,
+	)
+	return i, err
+}
+
 const getRunDay = `-- name: GetRunDay :one
-SELECT id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at FROM run_days WHERE id = $1
+SELECT id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at, is_goal_race FROM run_days WHERE id = $1
 `
 
 func (q *Queries) GetRunDay(ctx context.Context, id int32) (RunDay, error) {
@@ -94,12 +140,13 @@ func (q *Queries) GetRunDay(ctx context.Context, id int32) (RunDay, error) {
 		&i.Completed,
 		&i.Notes,
 		&i.CreatedAt,
+		&i.IsGoalRace,
 	)
 	return i, err
 }
 
 const getRunDayWithPlanOwner = `-- name: GetRunDayWithPlanOwner :one
-SELECT r.id, r.plan_id, r.date, r.run_type, r.total_distance, r.total_duration, r.completed, r.notes, r.created_at, tp.user_id
+SELECT r.id, r.plan_id, r.date, r.run_type, r.total_distance, r.total_duration, r.completed, r.notes, r.created_at, r.is_goal_race, tp.user_id
 FROM run_days r
 JOIN training_plans tp ON tp.id = r.plan_id
 WHERE r.id = $1
@@ -115,6 +162,7 @@ type GetRunDayWithPlanOwnerRow struct {
 	Completed     bool             `json:"completed"`
 	Notes         pgtype.Text      `json:"notes"`
 	CreatedAt     pgtype.Timestamp `json:"created_at"`
+	IsGoalRace    bool             `json:"is_goal_race"`
 	UserID        int32            `json:"user_id"`
 }
 
@@ -131,13 +179,69 @@ func (q *Queries) GetRunDayWithPlanOwner(ctx context.Context, id int32) (GetRunD
 		&i.Completed,
 		&i.Notes,
 		&i.CreatedAt,
+		&i.IsGoalRace,
 		&i.UserID,
 	)
 	return i, err
 }
 
+const getUpcomingRunsThisWeek = `-- name: GetUpcomingRunsThisWeek :many
+SELECT rd.id, rd.plan_id, rd.date, rd.run_type, rd.total_distance, rd.total_duration, rd.completed, rd.notes, rd.created_at, rd.is_goal_race, tp.name as plan_name FROM run_days rd
+JOIN training_plans tp ON tp.id = rd.plan_id
+WHERE tp.user_id = $1
+AND rd.date >= CURRENT_DATE
+AND rd.date < CURRENT_DATE + INTERVAL '7 days'
+ORDER BY rd.date ASC
+`
+
+type GetUpcomingRunsThisWeekRow struct {
+	ID            int32            `json:"id"`
+	PlanID        int32            `json:"plan_id"`
+	Date          pgtype.Date      `json:"date"`
+	RunType       string           `json:"run_type"`
+	TotalDistance pgtype.Float8    `json:"total_distance"`
+	TotalDuration pgtype.Int8      `json:"total_duration"`
+	Completed     bool             `json:"completed"`
+	Notes         pgtype.Text      `json:"notes"`
+	CreatedAt     pgtype.Timestamp `json:"created_at"`
+	IsGoalRace    bool             `json:"is_goal_race"`
+	PlanName      string           `json:"plan_name"`
+}
+
+func (q *Queries) GetUpcomingRunsThisWeek(ctx context.Context, userID int32) ([]GetUpcomingRunsThisWeekRow, error) {
+	rows, err := q.db.Query(ctx, getUpcomingRunsThisWeek, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetUpcomingRunsThisWeekRow
+	for rows.Next() {
+		var i GetUpcomingRunsThisWeekRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.PlanID,
+			&i.Date,
+			&i.RunType,
+			&i.TotalDistance,
+			&i.TotalDuration,
+			&i.Completed,
+			&i.Notes,
+			&i.CreatedAt,
+			&i.IsGoalRace,
+			&i.PlanName,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listRunDaysByPlan = `-- name: ListRunDaysByPlan :many
-SELECT id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at FROM run_days
+SELECT id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at, is_goal_race FROM run_days
 WHERE plan_id = $1
 ORDER BY date ASC
 `
@@ -161,6 +265,7 @@ func (q *Queries) ListRunDaysByPlan(ctx context.Context, planID int32) ([]RunDay
 			&i.Completed,
 			&i.Notes,
 			&i.CreatedAt,
+			&i.IsGoalRace,
 		); err != nil {
 			return nil, err
 		}

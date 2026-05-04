@@ -24,16 +24,20 @@ type Querier interface {
 	DeleteTrainingPlan(ctx context.Context, id int32) error
 	DeleteTrainingPlanIfOwner(ctx context.Context, arg DeleteTrainingPlanIfOwnerParams) error
 	DeleteUser(ctx context.Context, id int32) error
+	GetHRHistoryByUser(ctx context.Context, userID int32) ([]UserHrHistory, error)
 	GetHRProfileByUser(ctx context.Context, userID int32) (UserHrProfile, error)
 	GetHRZonesByProfile(ctx context.Context, profileID int32) ([]HrZone, error)
 	GetHRZonesByUser(ctx context.Context, userID int32) ([]HrZone, error)
+	GetNextRace(ctx context.Context, userID int32) (GetNextRaceRow, error)
 	GetRunDay(ctx context.Context, id int32) (RunDay, error)
 	GetRunDayWithPlanOwner(ctx context.Context, id int32) (GetRunDayWithPlanOwnerRow, error)
 	GetTemplatePlan(ctx context.Context, id int32) (TemplatePlan, error)
 	GetTrainingPlan(ctx context.Context, id int32) (TrainingPlan, error)
+	GetUpcomingRunsThisWeek(ctx context.Context, userID int32) ([]GetUpcomingRunsThisWeekRow, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
+	InsertHRHistory(ctx context.Context, arg InsertHRHistoryParams) error
 	ListRunDaysByPlan(ctx context.Context, planID int32) ([]RunDay, error)
 	ListSegmentsByRun(ctx context.Context, runID int32) ([]Segment, error)
 	ListTemplatePlans(ctx context.Context) ([]TemplatePlan, error)

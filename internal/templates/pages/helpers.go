@@ -1,6 +1,9 @@
 package pages
 
 import (
+	"strings"
+	"unicode"
+
 	"github.com/KenShabby/run_plan_generator/internal/db"
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -93,4 +96,17 @@ func GroupRunsByWeek(runs []db.RunDay) []WeekRow {
 func mustFloat(n pgtype.Numeric) float64 {
 	f, _ := n.Float64Value()
 	return f.Float64
+}
+
+func formatRunType(runType string) string {
+	words := strings.Split(runType, "_")
+	for i, w := range words {
+		if len(w) == 0 {
+			continue
+		}
+		runes := []rune(w)
+		runes[0] = unicode.ToUpper(runes[0])
+		words[i] = string(runes)
+	}
+	return strings.Join(words, " ")
 }

@@ -26,8 +26,39 @@ func newServer(app *application) http.Handler {
 
 	// Public routes, no auth required
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		username := app.username(r)
-		pages.Index(username).Render(r.Context(), w)
+		user, loggedIn := userFromContext(r.Context())
+		if !loggedIn {
+			pages.Index(app.username(r)).Render(r.Context(), w)
+			return
+		}
+
+		// Fetch HR profile and zones
+		var hrProfile *db.UserHrProfile
+		var hrZones []db.HrZone
+		var hrHistory []db.UserHrHistory
+
+		profile, err := app.queries.GetHRProfileByUser(r.Context(), user.ID)
+		if err == nil {
+			hrProfile = &profile
+			hrZones, _ = app.queries.GetHRZonesByUser(r.Context(), user.ID)
+			hrHistory, _ = app.queries.GetHRHistoryByUser(r.Context(), user.ID)
+		}
+
+		// Fetch next race
+		var nextRace *db.GetNextRaceRow
+		race, err := app.queries.GetNextRace(r.Context(), user.ID)
+		if err == nil {
+			nextRace = &race
+		}
+
+		// Fetch upcoming runs this week
+		upcomingRuns, _ := app.queries.GetUpcomingRunsThisWeek(r.Context(), user.ID)
+
+		if r.Header.Get("HX-Request") == "true" {
+			pages.DashboardContent(hrProfile, hrZones, hrHistory, nextRace, upcomingRuns, app.username(r)).Render(r.Context(), w)
+		} else {
+			pages.Dashboard(hrProfile, hrZones, hrHistory, nextRace, upcomingRuns, app.username(r)).Render(r.Context(), w)
+		}
 	})
 
 	// Health check
@@ -251,6 +282,15 @@ func newServer(app *application) http.Handler {
 					log.Printf("error deleting old zones: %v", err)
 				}
 			}
+
+			// Record HR history
+			app.queries.InsertHRHistory(r.Context(), db.InsertHRHistoryParams{
+				UserID:    user.ID,
+				MaxHr:     pgtype.Int4{Int32: int32(maxHR), Valid: true},
+				RestingHr: restingHRVal,
+				Lthr:      lthrVal,
+				Method:    method,
+			})
 
 			// calculate and save zones
 			zones := calculateZones(maxHR, restingHR, lthr, method)
@@ -580,6 +620,7 @@ func newServer(app *application) http.Handler {
 				TotalDistance: dist,
 				TotalDuration: pgtype.Int8{Valid: false},
 				Notes:         pgtype.Text{String: r.FormValue("notes"), Valid: r.FormValue("notes") != ""},
+				IsGoalRace:    false,
 			})
 			if err != nil {
 				log.Printf("error creating run: %v", err)
@@ -845,8 +886,10 @@ func newServer(app *application) http.Handler {
 				return
 			}
 
-			for _, tr := range templateRuns {
+			for i, tr := range templateRuns {
 				runDate := startDate.AddDate(0, 0, int(tr.DayOffset))
+				isGoalRace := tr.RunType == "race" && i == len(templateRuns)-1
+
 				run, err := app.queries.CreateRunDay(r.Context(), db.CreateRunDayParams{
 					PlanID:        plan.ID,
 					Date:          pgtype.Date{Time: runDate, Valid: true},
@@ -854,6 +897,7 @@ func newServer(app *application) http.Handler {
 					TotalDistance: tr.Distance,
 					TotalDuration: pgtype.Int8{Valid: false},
 					Notes:         tr.Notes,
+					IsGoalRace:    isGoalRace,
 				})
 				if err != nil {
 					log.Printf("error creating run day: %v", err)

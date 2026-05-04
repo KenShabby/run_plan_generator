@@ -29,6 +29,7 @@ type RunDay struct {
 	Completed     bool             `json:"completed"`
 	Notes         pgtype.Text      `json:"notes"`
 	CreatedAt     pgtype.Timestamp `json:"created_at"`
+	IsGoalRace    bool             `json:"is_goal_race"`
 }
 
 type Segment struct {
@@ -107,6 +108,16 @@ type User struct {
 	Username     string           `json:"username"`
 	PasswordHash string           `json:"password_hash"`
 	CreatedAt    pgtype.Timestamp `json:"created_at"`
+}
+
+type UserHrHistory struct {
+	ID         int32            `json:"id"`
+	UserID     int32            `json:"user_id"`
+	MaxHr      pgtype.Int4      `json:"max_hr"`
+	RestingHr  pgtype.Int4      `json:"resting_hr"`
+	Lthr       pgtype.Int4      `json:"lthr"`
+	Method     string           `json:"method"`
+	RecordedAt pgtype.Timestamp `json:"recorded_at"`
 }
 
 type UserHrProfile struct {
