@@ -79,7 +79,7 @@ runs:
     effort_type: distance
     distance: 4.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 8
   run_type: medium_long
   notes: Medium-long run 11 mi
@@ -102,7 +102,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 10
   run_type: lactate_threshold
   notes: Lactate threshold 8 mi w/ 4 mi @ 15K to half marathon race pace
@@ -125,7 +125,7 @@ runs:
     effort_type: distance
     distance: 3.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 12
   run_type: recovery
   notes: Recovery 5 mi
@@ -159,7 +159,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 15
   run_type: general_aerobic_speed
   notes: General aerobic + speed 8 mi w/ 10 × 100 m strides
@@ -220,7 +220,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 19
   run_type: recovery
   notes: Recovery 4 mi
@@ -254,7 +254,7 @@ runs:
     effort_type: distance
     distance: 5.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 22
   run_type: recovery
   notes: Recovery 5 mi
@@ -288,7 +288,7 @@ runs:
     effort_type: distance
     distance: 4.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 24
   run_type: medium_long
   notes: Medium-long run 11 mi
@@ -311,7 +311,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 26
   run_type: recovery
   notes: Recovery 5 mi
@@ -345,7 +345,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 30
   run_type: medium_long
   notes: Medium-long run 12 mi
@@ -368,7 +368,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 32
   run_type: lactate_threshold
   notes: Lactate threshold 9 mi w/ 4 mi @ 15K to half marathon race pace
@@ -391,7 +391,7 @@ runs:
     effort_type: distance
     distance: 4.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 33
   run_type: recovery
   notes: Recovery 5 mi
@@ -425,7 +425,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 36
   run_type: recovery
   notes: Recovery 5 mi
@@ -492,7 +492,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 40
   run_type: recovery_speed
   notes: Recovery + speed 6 mi w/ 6 × 100 m strides p.m.
@@ -542,7 +542,7 @@ runs:
     effort_type: distance
     distance: 2.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 43
   run_type: recovery_speed
   notes: Recovery + speed 6 mi w/ 6 × 100 m strides
@@ -592,7 +592,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 46
   run_type: lactate_threshold
   notes: Lactate threshold 12 mi w/ 7 mi @ 15K to half marathon race pace
@@ -615,7 +615,7 @@ runs:
     effort_type: distance
     distance: 4.0
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 47
   run_type: recovery
   notes: Recovery 5 mi
@@ -649,7 +649,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 50
   run_type: vo2_max
   notes: VO2max 8 mi w/ 5 × 600 m @ 5K race pace; jog 50 to 90% interval time between
@@ -705,7 +705,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 53
   run_type: recovery_speed
   notes: Recovery + speed 4 mi w/ 6 × 100 m strides
@@ -759,7 +759,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 57
   run_type: recovery_speed
   notes: Recovery + speed 7 mi w/ 6 × 100 m strides
@@ -842,7 +842,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 61
   run_type: recovery
   notes: Recovery 4 mi
@@ -876,7 +876,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 64
   run_type: vo2_max
   notes: VO2max 8 mi w/ 5 × 600 m @ 5K race pace; jog 50 to 90% interval time between
@@ -974,7 +974,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 71
   run_type: general_aerobic_speed
   notes: General aerobic + speed 7 mi w/ 8 × 100 m strides
@@ -1084,7 +1084,7 @@ runs:
     effort_type: distance
     distance: 0.5
     hr_zone_min: 1
-    hr_zone_max: 1
+    hr_zone_max: 2
 - day_offset: 78
   run_type: recovery
   notes: Recovery 6 mi

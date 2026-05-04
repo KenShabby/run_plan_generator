@@ -39,7 +39,7 @@ runs:
       duration: 120
       repetitions: 5
       hr_zone_min: 1
-      hr_zone_max: 1
+      hr_zone_max: 2
       set_index: 1
       set_repetitions: 5
 
