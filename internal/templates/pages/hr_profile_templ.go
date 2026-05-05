@@ -59,7 +59,7 @@ func HRProfileContent(profile *db.UserHrProfile, zones []hrutil.CalculatedZone, 
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<article><header><strong>Your HR Data</strong></header><form method=\"POST\" action=\"/account/hr\"><div class=\"grid\"><label>Max Heart Rate <input type=\"number\" name=\"max_hr\" min=\"100\" max=\"220\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<article><header><strong>Your Heart Rate Data</strong></header><form method=\"POST\" action=\"/account/hr\"><div class=\"grid\"><label>Max Heart Rate <input type=\"number\" name=\"max_hr\" min=\"100\" max=\"220\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
