@@ -43,7 +43,7 @@ templ HRProfileContent(profile *db.UserHrProfile, zones []hrutil.CalculatedZone,
                             value={ fmt.Sprintf("%d", profile.LactateThresholdHr.Int32) }
                         }
                         placeholder="e.g. 162">
-                    <small>Enables 80/20 Fitzgerald method</small>
+                    <small>Enables LTHR method</small>
                 </label>
             </div>
             <button type="submit">Calculate Zones</button>

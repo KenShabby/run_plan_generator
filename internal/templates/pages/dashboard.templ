@@ -50,20 +50,26 @@ templ DashboardContent(
 
             <!-- Upcoming runs this week -->
             <article>
-                <header><strong>This Week</strong></header>
-                if len(upcomingRuns) > 0 {
-                    for _, run := range upcomingRuns {
-                        <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0.4rem 0; border-bottom: 1px solid var(--pico-card-border-color); font-size: 0.85rem;">
-                            <div>
-                                <span style="font-weight: 500;">{ formatRunType(run.RunType) }</span>
-                                <span style="color: var(--pico-muted-color); font-size: 0.75rem; margin-left: 0.5rem;">{ run.PlanName }</span>
-                            </div>
-                            <div style="text-align: right;">
-                                <span style="color: var(--pico-muted-color);">{ run.Date.Time.Format("Mon Jan 2") }</span>
-                                if run.TotalDistance.Valid {
-                                    <span style="margin-left: 0.5rem;">{ fmt.Sprintf("%.1f mi", run.TotalDistance.Float64) }</span>
-                                }
-                            </div>
+            <header><strong>This Week</strong></header>
+            if len(upcomingRuns) > 0 {
+                for _, run := range upcomingRuns {
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; padding: 0.4rem 0; border-bottom: 1px solid var(--pico-card-border-color); font-size: 0.85rem;">
+                        <div>
+                        <a style="font-weight: 500;"
+                        href={ templ.SafeURL(fmt.Sprintf("/runs/%d", run.ID)) }
+                    hx-get={ fmt.Sprintf("/runs/%d", run.ID) }
+                    hx-target="main"
+                        hx-push-url="true">
+                        { formatRunType(run.RunType) }
+                    </a>
+                        <span style="color: var(--pico-muted-color); font-size: 0.75rem; margin-left: 0.5rem;">{ run.PlanName }</span>
+                        </div>
+                        <div style="text-align: right;">
+                        <span style="color: var(--pico-muted-color);">{ run.Date.Time.Format("Mon Jan 2") }</span>
+                        if run.TotalDistance.Valid {
+                            <span style="margin-left: 0.5rem;">{ fmt.Sprintf("%.1f mi", run.TotalDistance.Float64) }</span>
+                        }
+                    </div>
                         </div>
                     }
                 } else {

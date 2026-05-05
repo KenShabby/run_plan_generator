@@ -14,7 +14,6 @@ type ZoneDefinition struct {
 	MaxPct      float64 // 0 means no upper bound
 }
 
-// Fitzgerald 80/20 LTHR-based zones
 var lthrZones = []ZoneDefinition{
 	{1, "Zone 1", "Recovery", 0.75, 0.80},
 	{2, "Zone 2", "Aerobic", 0.81, 0.89},

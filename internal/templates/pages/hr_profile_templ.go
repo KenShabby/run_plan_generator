@@ -128,7 +128,7 @@ func HRProfileContent(profile *db.UserHrProfile, zones []hrutil.CalculatedZone, 
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " placeholder=\"e.g. 162\"> <small>Enables 80/20 Fitzgerald method</small></label></div><button type=\"submit\">Calculate Zones</button></form></article>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " placeholder=\"e.g. 162\"> <small>Enables LTHR method</small></label></div><button type=\"submit\">Calculate Zones</button></form></article>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -20,7 +20,7 @@ func FormatZoneRange(zone CalculatedZone) string {
 func ZoneMethodLabel(method string) string {
 	switch method {
 	case "lthr":
-		return "Lactate Threshold HR (80/20 Fitzgerald)"
+		return "Lactate Threshold HR"
 	case "hrr":
 		return "Heart Rate Reserve (Karvonen)"
 	default:
