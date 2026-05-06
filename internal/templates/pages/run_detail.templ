@@ -1,49 +1,49 @@
 package pages
 
 import (
-    "fmt"
-    "github.com/KenShabby/run_plan_generator/internal/db"
-    "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
-)
+        "fmt"
+        "github.com/KenShabby/run_plan_generator/internal/db"
+        "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+       )
 
 templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db.HrZone) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>{ run.RunType }</h1>
         <button class="secondary"
-            onclick="history.back()">
-            ← Back
+        onclick="history.back()">
+        ← Back
         </button>
-    </div>
+        </div>
 
-    <p>
+        <p>
         <small>{ run.Date.Time.Format("Monday, January 2, 2006") }</small>
-    </p>
+        </p>
 
-    if run.TotalDistance.Valid {
-        <p>{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } miles total</p>
-    }
+        if run.TotalDistance.Valid {
+            <p>{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } miles total</p>
+        }
 
     if run.Notes.Valid {
         <p>{ run.Notes.String }</p>
     }
 
-	if len(segments) > 0 {
-		<h2>Workout Structure</h2>
-			for _, group := range GroupSegments(segments) {
-				<div style="border: 1px solid var(--pico-primary); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem;">
-					if group.IsSet {
-						<div style="font-size: 0.75rem; font-weight: 600; color: var(--pico-primary); margin-bottom: 0.5rem;">
-						{ fmt.Sprintf("Repeat %d×", group.Repetitions) }
-						</div>
-					}
-				for _, seg := range group.Segments {
-					@SegmentRow(seg, zoneMap)
-				}
-				</div>
-			}
-	} else {
-		<p><small>No segments defined for this run.</small></p>
-	}
+    if len(segments) > 0 {
+        <h2>Workout Structure</h2>
+            for _, group := range GroupSegments(segments) {
+                <div style="border: 1px solid var(--pico-primary); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                    if group.IsSet {
+                        <div style="font-size: 0.75rem; font-weight: 600; color: var(--pico-primary); margin-bottom: 0.5rem;">
+                        { fmt.Sprintf("Repeat %d×", group.Repetitions) }
+                        </div>
+                    }
+                for _, seg := range group.Segments {
+                    @SegmentRow(seg, zoneMap)
+                }
+                </div>
+            }
+    } else {
+        <p><small>No segments defined for this run.</small></p>
+    }
 }
 
 templ RunDetail(run db.RunDay, segments []db.Segment, username string, zoneMap map[int32]db.HrZone) {
@@ -82,8 +82,16 @@ templ SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) {
                 <span>{ fmt.Sprintf("Z%d", seg.HrZoneMin.Int32) }</span>
             }
         } else {
-            <span>{ fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }</span>
+            if zMin, okMin := zoneMap[seg.HrZoneMin.Int32]; okMin {
+                if zMax, okMax := zoneMap[seg.HrZoneMax.Int32]; okMax {
+                    <span>{ fmt.Sprintf("Z%d–Z%d (%d–%d bpm)", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32, zMin.HrMin, zMax.HrMax) }</span>
+                } else {
+                    <span>{ fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }</span>
+                }
+            } else {
+                <span>{ fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32) }</span>
+            }
         }
     }
-    </div>
+</div>
 }

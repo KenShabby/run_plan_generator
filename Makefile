@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-.PHONY:fmt vet build
+.PHONY: fmt vet build generate migrate seed run
 
 fmt:
 	go fmt ./...
@@ -8,8 +8,17 @@ fmt:
 vet: fmt
 	go vet ./...
 
+generate:
+	templ generate
+
 build: vet
-	./migrate_up.sh
-	./reset_run_templates.sh
 	go build ./...
 
+migrate:
+	./migrate_up.sh
+
+seed:
+	./reset_run_templates.sh
+
+run: build
+	go run ./cmd/web/main.go
