@@ -16,82 +16,16 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		user, loggedIn := userFromContext(r.Context())
-		if !loggedIn {
-			pages.Index(app.username(r)).Render(r.Context(), w)
-			return
-		}
 
-		// Fetch HR profile and zones
-		var hrProfile *db.UserHrProfile
-		var hrZones []db.HrZone
-		var hrHistory []db.UserHrHistory
+func newServer(app *application) http.Handler {
+	r := chi.NewRouter()
+	r.Use(middleware.Logger, middleware.Recoverer, app.loadUser)
 
-		profile, err := app.queries.GetHRProfileByUser(r.Context(), user.ID)
-		if err == nil {
-			hrProfile = &profile
-			hrZones, _ = app.queries.GetHRZonesByUser(r.Context(), user.ID)
-			hrHistory, _ = app.queries.GetHRHistoryByUser(r.Context(), user.ID)
-		}
+	// Public routes, no auth required
+	r.Get("/", app.handleHome)
+	r.Get("/health", app.handleHealth)
 
-		// Fetch next race
-		var nextRace *db.GetNextRaceRow
-		race, err := app.queries.GetNextRace(r.Context(), user.ID)
-		if err == nil {
-			nextRace = &race
-		}
-
-		// Fetch upcoming runs this week
-		upcomingRuns, _ := app.queries.GetUpcomingRunsThisWeek(r.Context(), user.ID)
-
-		if r.Header.Get("HX-Request") == "true" {
-			pages.DashboardContent(hrProfile, hrZones, hrHistory, nextRace, upcomingRuns, app.username(r)).Render(r.Context(), w)
-		} else {
-			pages.Dashboard(hrProfile, hrZones, hrHistory, nextRace, upcomingRuns, app.username(r)).Render(r.Context(), w)
-		}
-	})
-
-	// Health check
-	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("ok"))
-	})
-
-	r.Get("/login", func(w http.ResponseWriter, r *http.Request) {
-		username := app.username(r)
-		pages.Login("", username).Render(r.Context(), w)
-	})
-
-	r.Post("/login", func(w http.ResponseWriter, r *http.Request) {
-		username := app.username(r)
-		if err := r.ParseForm(); err != nil {
-			http.Error(w, "bad request", http.StatusBadRequest)
-			return
-		}
-
-		email := strings.TrimSpace(r.FormValue("email"))
-		password := r.FormValue("password")
-
-		user, err := app.queries.GetUserByEmail(r.Context(), email)
-		if err != nil {
-			pages.Login("Invalid email or password.", username).Render(r.Context(), w)
-			return
-		}
-
-		if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)); err != nil {
-			pages.Login("Invalid email or password.", username).Render(r.Context(), w)
-			return
-		}
-
-		if err := app.setSessionUserID(w, r, user.ID); err != nil {
-			log.Printf("session error: %v", err)
-			http.Error(w, "internal error", http.StatusInternalServerError)
-			return
-		}
-
-		http.Redirect(w, r, "/plans", http.StatusSeeOther)
-	})
+	app.registerAuthRoutes(r)
 
 	// GET /register — serve the form
 	r.Get("/register", func(w http.ResponseWriter, r *http.Request) {
