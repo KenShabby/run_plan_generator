@@ -10,6 +10,7 @@ vet: fmt
 
 generate:
 	templ generate
+	sqlc generate
 
 build: vet
 	go build ./...
