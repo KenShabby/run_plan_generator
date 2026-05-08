@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/jackc/pgx/v5/pgtype"
-	"golang.org/x/crypto/bcrypt"
 
 	"github.com/KenShabby/run_plan_generator/internal/db"
 	"github.com/KenShabby/run_plan_generator/internal/templates/pages"
@@ -37,131 +36,6 @@ func newServer(app *application) http.Handler {
 		r.Post("/logout", func(w http.ResponseWriter, r *http.Request) {
 			app.clearSession(w, r)
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
-		})
-
-		r.Post("/account/username", func(w http.ResponseWriter, r *http.Request) {
-			user, ok := userFromContext(r.Context())
-			if !ok {
-				http.Redirect(w, r, "/login", http.StatusSeeOther)
-				return
-			}
-			if err := r.ParseForm(); err != nil {
-				http.Error(w, "bad request", http.StatusBadRequest)
-				return
-			}
-			newUsername := strings.TrimSpace(r.FormValue("username"))
-			if newUsername == "" {
-				pages.Account(user, "Username cannot be empty.", "", "", app.username(r)).Render(r.Context(), w)
-				return
-			}
-			updated, err := app.queries.UpdateUsername(r.Context(), db.UpdateUsernameParams{
-				ID:       user.ID,
-				Username: newUsername,
-			})
-			if err != nil {
-				if strings.Contains(err.Error(), "23505") {
-					pages.Account(user, "That username is already taken.", "", "", app.username(r)).Render(r.Context(), w)
-					return
-				}
-				log.Printf("error updating username: %v", err)
-				http.Error(w, "internal error", http.StatusInternalServerError)
-				return
-			}
-			pages.Account(updated, "", "", "", updated.Username).Render(r.Context(), w)
-		})
-
-		r.Post("/account/email", func(w http.ResponseWriter, r *http.Request) {
-			user, ok := userFromContext(r.Context())
-			if !ok {
-				http.Redirect(w, r, "/login", http.StatusSeeOther)
-				return
-			}
-			if err := r.ParseForm(); err != nil {
-				http.Error(w, "bad request", http.StatusBadRequest)
-				return
-			}
-			newEmail := strings.TrimSpace(r.FormValue("email"))
-			if newEmail == "" {
-				pages.Account(user, "", "Email cannot be empty.", "", app.username(r)).Render(r.Context(), w)
-				return
-			}
-			updated, err := app.queries.UpdateEmail(r.Context(), db.UpdateEmailParams{
-				ID:    user.ID,
-				Email: newEmail,
-			})
-			if err != nil {
-				if strings.Contains(err.Error(), "23505") {
-					pages.Account(user, "", "That email is already taken.", "", app.username(r)).Render(r.Context(), w)
-					return
-				}
-				log.Printf("error updating email: %v", err)
-				http.Error(w, "internal error", http.StatusInternalServerError)
-				return
-			}
-			pages.Account(updated, "", "", "", updated.Username).Render(r.Context(), w)
-		})
-
-		r.Post("/account/password", func(w http.ResponseWriter, r *http.Request) {
-			user, ok := userFromContext(r.Context())
-			if !ok {
-				http.Redirect(w, r, "/login", http.StatusSeeOther)
-				return
-			}
-			if err := r.ParseForm(); err != nil {
-				http.Error(w, "bad request", http.StatusBadRequest)
-				return
-			}
-			currentPassword := r.FormValue("current_password")
-			newPassword := r.FormValue("new_password")
-			confirm := r.FormValue("confirm_password")
-
-			if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(currentPassword)); err != nil {
-				pages.Account(user, "", "", "Current password is incorrect.", app.username(r)).Render(r.Context(), w)
-				return
-			}
-			if newPassword != confirm {
-				pages.Account(user, "", "", "Passwords do not match.", app.username(r)).Render(r.Context(), w)
-				return
-			}
-			if len(newPassword) < 8 {
-				pages.Account(user, "", "", "Password must be at least 8 characters.", app.username(r)).Render(r.Context(), w)
-				return
-			}
-			hash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
-			if err != nil {
-				log.Printf("bcrypt error: %v", err)
-				http.Error(w, "internal error", http.StatusInternalServerError)
-				return
-			}
-			if err := app.queries.UpdatePassword(r.Context(), db.UpdatePasswordParams{
-				ID:           user.ID,
-				PasswordHash: string(hash),
-			}); err != nil {
-				log.Printf("error updating password: %v", err)
-				http.Error(w, "internal error", http.StatusInternalServerError)
-				return
-			}
-			pages.Account(user, "", "", "", app.username(r)).Render(r.Context(), w)
-		})
-
-		r.Post("/account/delete", func(w http.ResponseWriter, r *http.Request) {
-			user, ok := userFromContext(r.Context())
-			if !ok {
-				http.Redirect(w, r, "/login", http.StatusSeeOther)
-				return
-			}
-
-			if err := app.queries.DeleteUser(r.Context(), user.ID); err != nil {
-				log.Printf("error deleting user: %v", err)
-				http.Error(w, "internal error", http.StatusInternalServerError)
-				return
-			}
-
-			if err := app.clearSession(w, r); err != nil {
-				log.Printf("error clearing session: %v", err)
-			}
-
-			http.Redirect(w, r, "/", http.StatusSeeOther)
 		})
 
 		// serves the form fragment
