@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/KenShabby/run_plan_generator/internal/db"
@@ -21,6 +23,8 @@ func (app *application) registerPlanRoutes(r chi.Router) {
 	r.Get("/plans/{id}/runs/new", app.handleGetPlansByIdRunsNew)
 	r.Get("/plans/{id}/runs/form/cancel", app.handleGetPlansByIdRunsFormCancel)
 	r.Post("/plans/{id}/runs", app.handlePostPlansByIdRuns)
+	r.Delete("/plans/{id}", app.handleDeletePlan)
+	r.Get("/plans/{id}/export.ics", app.handleExportPlan)
 }
 
 func (app *application) handleGetPlansNew(w http.ResponseWriter, r *http.Request) {
@@ -218,4 +222,78 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 	}
 
 	pages.RunCard(run).Render(r.Context(), w)
+}
+
+func (app *application) handleDeletePlan(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	userID, ok := app.getSessionUserID(r)
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	if err := app.queries.DeleteTrainingPlanIfOwner(r.Context(), db.DeleteTrainingPlanIfOwnerParams{
+		ID:     int32(id),
+		UserID: userID,
+	}); err != nil {
+		log.Printf("error deleting plan: %v", err)
+		http.Error(w, "failed to delete plan", http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (app *application) handleExportPlan(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+
+	plan, err := app.queries.GetTrainingPlan(r.Context(), int32(id))
+	if err != nil {
+		http.Error(w, "plan not found", http.StatusNotFound)
+		return
+	}
+
+	// Check ownership
+	userID, ok := app.getSessionUserID(r)
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	if plan.UserID != userID {
+		http.Error(w, "forbidden", http.StatusForbidden)
+		return
+	}
+
+	runs, err := app.queries.ListRunDaysByPlan(r.Context(), int32(id))
+	if err != nil {
+		log.Printf("error fetching runs: %v", err)
+		http.Error(w, "failed to load runs", http.StatusInternalServerError)
+		return
+	}
+
+	// fetch segments for each run
+	segmentsByRun := make(map[int32][]db.Segment)
+	for _, run := range runs {
+		segs, err := app.queries.ListSegmentsByRun(r.Context(), run.ID)
+		if err != nil {
+			log.Printf("error fetching segments for run %d: %v", run.ID, err)
+			continue
+		}
+		segmentsByRun[run.ID] = segs
+	}
+
+	ics := buildICS(plan, runs, segmentsByRun)
+
+	filename := fmt.Sprintf("%s.ics", strings.ReplaceAll(plan.Name, " ", "_"))
+	w.Header().Set("Content-Type", "text/calendar; charset=utf-8")
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", filename))
+	w.Write([]byte(ics))
 }
