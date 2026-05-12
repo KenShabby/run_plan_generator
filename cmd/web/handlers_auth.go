@@ -16,6 +16,7 @@ func (app *application) registerAuthRoutes(r chi.Router) {
 	r.Post("/login", app.handleLogin)
 	r.Get("/register", app.handleGetRegister)
 	r.Post("/register", app.handlePostRegister)
+	r.Post("/logout", app.handleLogout)
 }
 
 func (app *application) handleLoginForm(w http.ResponseWriter, r *http.Request) {
@@ -113,4 +114,9 @@ func (app *application) handlePostRegister(w http.ResponseWriter, r *http.Reques
 	}
 
 	http.Redirect(w, r, "/plans", http.StatusSeeOther)
+}
+
+func (app *application) handleLogout(w http.ResponseWriter, r *http.Request) {
+	app.clearSession(w, r)
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }

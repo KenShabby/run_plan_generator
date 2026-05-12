@@ -11,9 +11,7 @@ func newServer(app *application) http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger, middleware.Recoverer, app.loadUser)
 
-	// Public routes, no auth required
-	r.Get("/", app.handleHome)
-	r.Get("/health", app.handleHealth)
+	app.registerMiscRoutes(r)
 	app.registerAuthRoutes(r)
 
 	// Protected groups - auth required
@@ -23,11 +21,6 @@ func newServer(app *application) http.Handler {
 		app.registerPlanRoutes(r)
 		app.registerRunRoutes(r)
 		app.registerTemplateRoutes(r)
-
-		r.Post("/logout", func(w http.ResponseWriter, r *http.Request) {
-			app.clearSession(w, r)
-			http.Redirect(w, r, "/login", http.StatusSeeOther)
-		})
 	})
 
 	return r
