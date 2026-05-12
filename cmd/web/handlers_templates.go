@@ -14,7 +14,7 @@ import (
 
 func (app *application) registerTemplateRoutes(r chi.Router) {
 	r.Get("/templates", app.handleGetTemplates)
-	r.Get("/templayes/{id}/select", app.handleGetTemplateById)
+	r.Get("/templates/{id}/select", app.handleGetTemplateById)
 	r.Post("/template/{id}/instantiate", app.handleTemplateInstantiate)
 }
 
