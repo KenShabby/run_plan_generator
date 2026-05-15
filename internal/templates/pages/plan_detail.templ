@@ -158,7 +158,7 @@ templ CompactRunCard(run db.RunDay) {
                hx-get={ fmt.Sprintf("/runs/%d", run.ID) }
                hx-target="main"
                hx-push-url="true">
-                { run.RunType }
+                { formatRunType(run.RunType) }
             </a>
             if run.TotalDistance.Valid {
                 <span class="run-dist">{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } mi</span>
@@ -167,14 +167,25 @@ templ CompactRunCard(run db.RunDay) {
                 <span class="run-date">{ run.Notes.String }</span>
             }
             <div class="chip-actions">
-                <button class="secondary outline"
-                    hx-delete={ fmt.Sprintf("/runs/%d", run.ID) }
-                    hx-target={ fmt.Sprintf("#run-%d", run.ID) }
-                    hx-swap="outerHTML"
-                    hx-confirm="Delete this run?">
-                    ✕
-                </button>
-            </div>
+            if !run.Completed {
+                <a class="secondary outline"
+                   href={ templ.SafeURL(fmt.Sprintf("/runs/%d/log", run.ID)) }
+                   hx-get={ fmt.Sprintf("/runs/%d/log", run.ID) }
+                   hx-target="main"
+                   hx-push-url="true">
+                    ✓
+                </a>
+            } else {
+                <span style="color: var(--pico-primary);">✓</span>
+            }
+            <button class="secondary outline"
+                hx-delete={ fmt.Sprintf("/runs/%d", run.ID) }
+                hx-target={ fmt.Sprintf("#run-%d", run.ID) }
+                hx-swap="outerHTML"
+                hx-confirm="Delete this run?">
+                ✕
+            </button>
+        </div>
         </div>
     </div>
 }

@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type PlanType string
 
@@ -101,4 +104,96 @@ type User struct {
 	Email     string
 	Username  string
 	CreatedAt time.Time
+}
+
+type RPE int
+
+const (
+	RPECompleteRest RPE = 1
+	RPEVeryEasy     RPE = 2
+	RPEEasy         RPE = 3
+	RPEModerate     RPE = 4
+	RPESomewhatHard RPE = 5
+	RPEHard         RPE = 6
+	RPEVeryHard     RPE = 7
+	RPEVeryVeryHard RPE = 8
+	RPENearMaximal  RPE = 9
+	RPEMaximal      RPE = 10
+)
+
+func (r RPE) Label() string {
+	switch r {
+	case RPECompleteRest:
+		return "Complete Rest"
+	case RPEVeryEasy:
+		return "Very Easy"
+	case RPEEasy:
+		return "Easy"
+	case RPEModerate:
+		return "Moderate"
+	case RPESomewhatHard:
+		return "Somewhat Hard"
+	case RPEHard:
+		return "Hard"
+	case RPEVeryHard:
+		return "Very Hard"
+	case RPEVeryVeryHard:
+		return "Very Very Hard"
+	case RPENearMaximal:
+		return "Near Maximal"
+	case RPEMaximal:
+		return "Maximal"
+	default:
+		return "Unknown"
+	}
+}
+
+// RPEOptions is used to populate the select in the UI
+var RPEOptions = []struct {
+	Value int
+	Label string
+}{
+	{1, "1 - Complete Rest"},
+	{2, "2 - Very Easy"},
+	{3, "3 - Easy"},
+	{4, "4 - Moderate"},
+	{5, "5 - Somewhat Hard"},
+	{6, "6 - Hard"},
+	{7, "7 - Very Hard"},
+	{8, "8 - Very Very Hard"},
+	{9, "9 - Near Maximal"},
+	{10, "10 - Maximal"},
+}
+
+// PaceFromDistanceAndDuration calculates pace in seconds per unit
+// given distance and duration in seconds. Returns 0 if either is zero.
+func PaceFromDistanceAndDuration(distance float64, durationSeconds int) int {
+	if distance == 0 || durationSeconds == 0 {
+		return 0
+	}
+	return int(float64(durationSeconds) / distance)
+}
+
+// FormatPace formats pace in seconds per mile as "M:SS /mi"
+func FormatPace(paceSeconds int) string {
+	if paceSeconds == 0 {
+		return ""
+	}
+	mins := paceSeconds / 60
+	secs := paceSeconds % 60
+	return fmt.Sprintf("%d:%02d /mi", mins, secs)
+}
+
+// FormatDuration formats duration in seconds as "H:MM:SS" or "M:SS"
+func FormatDuration(seconds int) string {
+	if seconds == 0 {
+		return ""
+	}
+	h := seconds / 3600
+	m := (seconds % 3600) / 60
+	s := seconds % 60
+	if h > 0 {
+		return fmt.Sprintf("%d:%02d:%02d", h, m, s)
+	}
+	return fmt.Sprintf("%d:%02d", m, s)
 }

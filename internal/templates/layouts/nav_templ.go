@@ -47,7 +47,7 @@ func Nav(username string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</summary><ul dir=\"rtl\"><li><a href=\"/account\">Account</a></li><li><form method=\"POST\" action=\"/logout\" style=\"margin: 0;\"><button type=\"submit\" class=\"secondary\" style=\"width: 100%;\">Log Out</button></form></li></ul></details></li>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</summary><ul dir=\"rtl\"><li><a href=\"/account\">Account</a></li><li><a href=\"/activity/new\">+ Log Run</a></li><li><form method=\"POST\" action=\"/logout\" style=\"margin: 0;\"><button type=\"submit\" class=\"secondary\" style=\"width: 100%;\">Log Out</button></form></li></ul></details></li>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

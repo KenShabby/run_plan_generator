@@ -276,3 +276,12 @@ func (q *Queries) ListRunDaysByPlan(ctx context.Context, planID int32) ([]RunDay
 	}
 	return items, nil
 }
+
+const markRunDayCompleted = `-- name: MarkRunDayCompleted :exec
+UPDATE run_days SET completed = true WHERE id = $1
+`
+
+func (q *Queries) MarkRunDayCompleted(ctx context.Context, id int32) error {
+	_, err := q.db.Exec(ctx, markRunDayCompleted, id)
+	return err
+}

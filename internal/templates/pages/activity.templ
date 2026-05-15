@@ -1,0 +1,296 @@
+package pages
+
+import (
+    "fmt"
+    "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/models"
+    "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+)
+
+templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Label string }, username string) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Log Run</h1>
+        <button class="secondary" onclick="history.back()">← Back</button>
+    </div>
+
+    <div style="max-width: 560px;">
+        <article>
+            <header><strong>What actually happened?</strong></header>
+            <form method="POST" action="/activity">
+                <div class="grid">
+                    <label>
+                        Date
+                        <input type="date" name="date" required
+                            if planned.Date.Valid {
+                                value={ planned.Date.Time.Format("2006-01-02") }
+                            }>
+                    </label>
+                    <label>
+                        Run Type
+                        <select name="run_type" required>
+                            <option value="easy"
+                                if planned.RunType == "easy" { selected } >Easy</option>
+                            <option value="long_run"
+                                if planned.RunType == "long_run" { selected }>Long Run</option>
+                            <option value="tempo"
+                                if planned.RunType == "tempo" { selected }>Tempo</option>
+                            <option value="interval"
+                                if planned.RunType == "interval" { selected }>Interval</option>
+                            <option value="recovery"
+                                if planned.RunType == "recovery" { selected }>Recovery</option>
+                            <option value="race_pace"
+                                if planned.RunType == "race_pace" { selected }>Race Pace</option>
+                            <option value="general_aerobic"
+                                if planned.RunType == "general_aerobic" { selected }>General Aerobic</option>
+                            <option value="medium_long"
+                                if planned.RunType == "medium_long" { selected }>Medium Long</option>
+                            <option value="foundation"
+                                if planned.RunType == "foundation" { selected }>Foundation</option>
+                            <option value="race"
+                                if planned.RunType == "race" { selected }>Race</option>
+                            <option value="other"
+                                if planned.RunType == "other" { selected }>Other</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="grid">
+                    <label>
+                        Distance (mi)
+                        <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
+                            if planned.TotalDistance.Valid {
+                                value={ fmt.Sprintf("%.2f", planned.TotalDistance.Float64) }
+                            }>
+                    </label>
+                    <label>
+                        Duration (seconds)
+                        <input type="number" name="duration" placeholder="e.g. 3600 for 1hr"
+                            if planned.TotalDuration.Valid {
+                                value={ fmt.Sprintf("%d", planned.TotalDuration.Int64) }
+                            }>
+                        <small>We'll calculate pace if you leave pace blank</small>
+                    </label>
+                    <label>
+                        Pace (sec/mi)
+                        <input type="number" name="pace" placeholder="Optional — calculated if blank">
+                    </label>
+                </div>
+
+                <label>
+                    Effort (RPE)
+                    <select name="rpe">
+                        <option value="">— select effort —</option>
+                        for _, opt := range rpeOptions {
+                            <option value={ fmt.Sprintf("%d", opt.Value) }>{ opt.Label }</option>
+                        }
+                    </select>
+                </label>
+
+                <label>
+                    Notes
+                    <textarea name="notes" placeholder="How did it feel? Anything notable?">
+                        if planned.Notes.Valid {
+                            { planned.Notes.String }
+                        }
+                    </textarea>
+                </label>
+
+                <button type="submit">Save</button>
+            </form>
+        </article>
+    </div>
+}
+
+templ ActivityForm(planned db.RunDay, rpeOptions []struct{ Value int; Label string }, username string) {
+    @layouts.Base("Log Run", username) {
+        @ActivityFormContent(planned, rpeOptions, username)
+    }
+}
+
+templ ActivityDetailContent(entry db.ActivityLog, username string) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>{ formatRunType(entry.RunType) }</h1>
+        <button class="secondary" onclick="history.back()">← Back</button>
+    </div>
+
+    <p><small>{ entry.Date.Time.Format("Monday, January 2, 2006") }</small></p>
+
+    <article>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+            if entry.Distance.Valid {
+                <div>
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--pico-primary);">
+                        { fmt.Sprintf("%.2f", entry.Distance.Float64) }
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--pico-muted-color);">miles</div>
+                </div>
+            }
+            if entry.Duration.Valid {
+                <div>
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--pico-primary);">
+                        { models.FormatDuration(int(entry.Duration.Int32)) }
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--pico-muted-color);">duration</div>
+                </div>
+            }
+            if entry.Pace.Valid {
+                <div>
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--pico-primary);">
+                        { models.FormatPace(int(entry.Pace.Int32)) }
+                    </div>
+                    <div style="font-size: 0.75rem; color: var(--pico-muted-color);">pace</div>
+                </div>
+            }
+        </div>
+
+        if entry.Rpe.Valid {
+            <hr>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem;">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--pico-primary);">
+                    { fmt.Sprintf("%d", entry.Rpe.Int16) }
+                </div>
+                <div>
+                    <div style="font-weight: 500;">{ models.RPE(entry.Rpe.Int16).Label() }</div>
+                    <div style="font-size: 0.75rem; color: var(--pico-muted-color);">RPE</div>
+                </div>
+            </div>
+        }
+
+        if entry.Notes.Valid && entry.Notes.String != "" {
+            <hr>
+            <p style="margin-top: 0.75rem;">{ entry.Notes.String }</p>
+        }
+    </article>
+
+    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+        <a href={ templ.SafeURL(fmt.Sprintf("/activity/%d/edit", entry.ID)) }
+           role="button" class="secondary">
+            Edit
+        </a>
+        <button class="secondary"
+            style="color: var(--pico-del-color); border-color: var(--pico-del-color);"
+            hx-delete={ fmt.Sprintf("/activity/%d", entry.ID) }
+            hx-confirm="Delete this activity?"
+            hx-on::after-request="window.history.back()">
+            Delete
+        </button>
+    </div>
+}
+
+templ ActivityDetail(entry db.ActivityLog, username string) {
+    @layouts.Base("Activity", username) {
+        @ActivityDetailContent(entry, username)
+    }
+}
+
+templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value int; Label string }, username string) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Edit Activity</h1>
+        <button class="secondary" onclick="history.back()">← Back</button>
+    </div>
+
+    <div style="max-width: 560px;">
+        <article>
+            <header><strong>Update your logged run</strong></header>
+            <form method="POST" action={ templ.SafeURL(fmt.Sprintf("/activity/%d", entry.ID)) }>
+                <div class="grid">
+                    <label>
+                        Date
+                        <input type="date" name="date" required
+                            value={ entry.Date.Time.Format("2006-01-02") }>
+                    </label>
+                    <label>
+                        Run Type
+                        <select name="run_type" required>
+                            <option value="easy"
+                                if entry.RunType == "easy" { selected }>Easy</option>
+                            <option value="long_run"
+                                if entry.RunType == "long_run" { selected }>Long Run</option>
+                            <option value="tempo"
+                                if entry.RunType == "tempo" { selected }>Tempo</option>
+                            <option value="interval"
+                                if entry.RunType == "interval" { selected }>Interval</option>
+                            <option value="recovery"
+                                if entry.RunType == "recovery" { selected }>Recovery</option>
+                            <option value="race_pace"
+                                if entry.RunType == "race_pace" { selected }>Race Pace</option>
+                            <option value="general_aerobic"
+                                if entry.RunType == "general_aerobic" { selected }>General Aerobic</option>
+                            <option value="medium_long"
+                                if entry.RunType == "medium_long" { selected }>Medium Long</option>
+                            <option value="foundation"
+                                if entry.RunType == "foundation" { selected }>Foundation</option>
+                            <option value="race"
+                                if entry.RunType == "race" { selected }>Race</option>
+                            <option value="other"
+                                if entry.RunType == "other" { selected }>Other</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="grid">
+                    <label>
+                        Distance (mi)
+                        <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
+                            if entry.Distance.Valid {
+                                value={ fmt.Sprintf("%.2f", entry.Distance.Float64) }
+                            }>
+                    </label>
+                    <label>
+                        Duration (seconds)
+                        <input type="number" name="duration" placeholder="e.g. 3600 for 1hr"
+                            if entry.Duration.Valid {
+                                value={ fmt.Sprintf("%d", entry.Duration.Int32) }
+                            }>
+                        <small>We'll calculate pace if you leave pace blank</small>
+                    </label>
+                    <label>
+                        Pace (sec/mi)
+                        <input type="number" name="pace" placeholder="Optional — calculated if blank"
+                            if entry.Pace.Valid {
+                                value={ fmt.Sprintf("%d", entry.Pace.Int32) }
+                            }>
+                    </label>
+                </div>
+
+                <label>
+                    Effort (RPE)
+                    <select name="rpe">
+                        <option value="">— select effort —</option>
+                        for _, opt := range rpeOptions {
+                            <option value={ fmt.Sprintf("%d", opt.Value) }
+                                if entry.Rpe.Valid && int(entry.Rpe.Int16) == opt.Value {
+                                    selected
+                                }>
+                                { opt.Label }
+                            </option>
+                        }
+                    </select>
+                </label>
+
+                <label>
+                    Notes
+                    <textarea name="notes" placeholder="How did it feel? Anything notable?">
+                        if entry.Notes.Valid {
+                            { entry.Notes.String }
+                        }
+                    </textarea>
+                </label>
+
+                <div class="grid">
+                    <button type="submit">Save Changes</button>
+                    <a href={ templ.SafeURL(fmt.Sprintf("/activity/%d", entry.ID)) }
+                       role="button" class="secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </article>
+    </div>
+}
+
+templ ActivityEditForm(entry db.ActivityLog, rpeOptions []struct{ Value int; Label string }, username string) {
+    @layouts.Base("Edit Activity", username) {
+        @ActivityEditFormContent(entry, rpeOptions, username)
+    }
+}

@@ -13,8 +13,9 @@ of the week. --> seems to be fixed now; off-by-one error.
 - Move HR Zone calculator to somewhere more eye-catching.
 - Allow zone bpm refreshes mid-plan if a user's LTHR or resting HR changes.
 - Makefile and other installation instructions.
+- Allow users to log runs to track basic stats like milage, time, pace, etc. This
+can also be done while checking planned runs as "complete"
 
 TODO:
 
 - Allow users to construct multi-segment runs with repeats etc.
-- Allow users to log runs to track basic stats like milage, time, pace, etc.

@@ -43,3 +43,6 @@ WHERE tp.user_id = $1
 AND rd.date >= CURRENT_DATE
 AND rd.date < CURRENT_DATE + INTERVAL '7 days'
 ORDER BY rd.date ASC;
+
+-- name: MarkRunDayCompleted :exec
+UPDATE run_days SET completed = true WHERE id = $1;

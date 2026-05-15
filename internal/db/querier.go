@@ -6,9 +6,12 @@ package db
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 type Querier interface {
+	CreateActivityLog(ctx context.Context, arg CreateActivityLogParams) (ActivityLog, error)
 	CreateHRProfile(ctx context.Context, arg CreateHRProfileParams) (UserHrProfile, error)
 	CreateHRZone(ctx context.Context, arg CreateHRZoneParams) (HrZone, error)
 	CreateRunDay(ctx context.Context, arg CreateRunDayParams) (RunDay, error)
@@ -18,17 +21,22 @@ type Querier interface {
 	CreateTemplateSegment(ctx context.Context, arg CreateTemplateSegmentParams) (TemplateSegment, error)
 	CreateTrainingPlan(ctx context.Context, arg CreateTrainingPlanParams) (TrainingPlan, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
+	DeleteActivityLog(ctx context.Context, id int32) error
 	DeleteHRZonesByProfile(ctx context.Context, profileID int32) error
 	DeleteRunDay(ctx context.Context, id int32) error
 	DeleteRunDayIfOwner(ctx context.Context, arg DeleteRunDayIfOwnerParams) error
 	DeleteTrainingPlan(ctx context.Context, id int32) error
 	DeleteTrainingPlanIfOwner(ctx context.Context, arg DeleteTrainingPlanIfOwnerParams) error
 	DeleteUser(ctx context.Context, id int32) error
+	GetActivityLogByID(ctx context.Context, id int32) (ActivityLog, error)
+	GetActivityLogByRunDay(ctx context.Context, runDayID pgtype.Int4) (ActivityLog, error)
+	GetActivitySummaryByUser(ctx context.Context, userID int32) (GetActivitySummaryByUserRow, error)
 	GetHRHistoryByUser(ctx context.Context, userID int32) ([]UserHrHistory, error)
 	GetHRProfileByUser(ctx context.Context, userID int32) (UserHrProfile, error)
 	GetHRZonesByProfile(ctx context.Context, profileID int32) ([]HrZone, error)
 	GetHRZonesByUser(ctx context.Context, userID int32) ([]HrZone, error)
 	GetNextRace(ctx context.Context, userID int32) (GetNextRaceRow, error)
+	GetRecentActivityByUser(ctx context.Context, userID int32) ([]ActivityLog, error)
 	GetRunDay(ctx context.Context, id int32) (RunDay, error)
 	GetRunDayWithPlanOwner(ctx context.Context, id int32) (GetRunDayWithPlanOwnerRow, error)
 	GetTemplatePlan(ctx context.Context, id int32) (TemplatePlan, error)
@@ -38,6 +46,8 @@ type Querier interface {
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
 	InsertHRHistory(ctx context.Context, arg InsertHRHistoryParams) error
+	ListActivityLogByUser(ctx context.Context, userID int32) ([]ActivityLog, error)
+	ListActivityLogByUserPaged(ctx context.Context, arg ListActivityLogByUserPagedParams) ([]ActivityLog, error)
 	ListRunDaysByPlan(ctx context.Context, planID int32) ([]RunDay, error)
 	ListSegmentsByRun(ctx context.Context, runID int32) ([]Segment, error)
 	ListTemplatePlans(ctx context.Context) ([]TemplatePlan, error)
@@ -45,6 +55,8 @@ type Querier interface {
 	ListTemplateRunDaysByPlan(ctx context.Context, planID int32) ([]TemplateRunDay, error)
 	ListTemplateSegmentsByRun(ctx context.Context, runID int32) ([]TemplateSegment, error)
 	ListTrainingPlansByUser(ctx context.Context, userID int32) ([]TrainingPlan, error)
+	MarkRunDayCompleted(ctx context.Context, id int32) error
+	UpdateActivityLog(ctx context.Context, arg UpdateActivityLogParams) (ActivityLog, error)
 	UpdateEmail(ctx context.Context, arg UpdateEmailParams) (User, error)
 	UpdateHRProfile(ctx context.Context, arg UpdateHRProfileParams) (UserHrProfile, error)
 	UpdatePassword(ctx context.Context, arg UpdatePasswordParams) error

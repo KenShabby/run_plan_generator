@@ -21,6 +21,7 @@ func newServer(app *application) http.Handler {
 		app.registerPlanRoutes(r)
 		app.registerRunRoutes(r)
 		app.registerTemplateRoutes(r)
+		app.registerActivityRoutes(r)
 	})
 
 	return r

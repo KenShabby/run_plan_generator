@@ -8,11 +8,21 @@ import (
 
 templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db.HrZone) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>{ run.RunType }</h1>
-        <button class="secondary"
-        onclick="history.back()">
-        ← Back
-        </button>
+        <h1>{ formatRunType(run.RunType) }</h1>
+        <div style="display: flex; gap: 0.5rem;">
+        if run.Completed {
+            <span style="color: var(--pico-primary); font-size: 0.85rem; align-self: center;">✓ Completed</span>
+        } else {
+            <a href={ templ.SafeURL(fmt.Sprintf("/runs/%d/log", run.ID)) }
+            role="button"
+                hx-get={ fmt.Sprintf("/runs/%d/log", run.ID) }
+            hx-target="main"
+                hx-push-url="true">
+                Log This Run
+                </a>
+        }
+    <button class="secondary" onclick="history.back()">← Back</button>
+        </div>
         </div>
 
         <p>
@@ -47,7 +57,7 @@ templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]d
 }
 
 templ RunDetail(run db.RunDay, segments []db.Segment, username string, zoneMap map[int32]db.HrZone) {
-    @layouts.Base(run.RunType, username) {
+    @layouts.Base(formatRunType(run.RunType), username) {
         @RunDetailContent(run, segments, zoneMap)
     }
 }
@@ -93,5 +103,5 @@ templ SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) {
             }
         }
     }
-</div>
+    </div>
 }
