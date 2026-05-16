@@ -195,7 +195,7 @@ func ActivityFormContent(planned db.RunDay, rpeOptions []struct {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "></label> <label>Duration (seconds) <input type=\"number\" name=\"duration\" placeholder=\"e.g. 3600 for 1hr\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "></label> <label>Duration <input type=\"text\" name=\"duration\" placeholder=\"e.g. 1:30:00 or 42:00\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -205,9 +205,9 @@ func ActivityFormContent(planned db.RunDay, rpeOptions []struct {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", planned.TotalDuration.Int64))
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(models.FormatDuration(int(planned.TotalDuration.Int64)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/activity.templ`, Line: 69, Col: 86}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/activity.templ`, Line: 69, Col: 95}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -218,7 +218,7 @@ func ActivityFormContent(planned db.RunDay, rpeOptions []struct {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "> <small>We'll calculate pace if you leave pace blank</small></label> <label>Pace (sec/mi) <input type=\"number\" name=\"pace\" placeholder=\"Optional — calculated if blank\"></label></div><label>Effort (RPE) <select name=\"rpe\"><option value=\"\">— select effort —</option> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "> <small>Format: H:MM:SS or MM:SS</small></label> <label>Pace <input type=\"text\" name=\"pace\" placeholder=\"e.g. 8:10 — calculated if blank\"></label></div><label>Effort (RPE) <select name=\"rpe\"><option value=\"\">— select effort —</option> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -754,7 +754,7 @@ func ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 83, "></label> <label>Duration (seconds) <input type=\"number\" name=\"duration\" placeholder=\"e.g. 3600 for 1hr\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 83, "></label> <label>Duration <input type=\"text\" name=\"duration\" placeholder=\"e.g. 1:30:00 or 42:00\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -764,9 +764,9 @@ func ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var27 string
-			templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", entry.Duration.Int32))
+			templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(models.FormatDuration(int(entry.Duration.Int32)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/activity.templ`, Line: 243, Col: 79}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/activity.templ`, Line: 243, Col: 88}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 			if templ_7745c5c3_Err != nil {
@@ -777,7 +777,7 @@ func ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 86, "> <small>We'll calculate pace if you leave pace blank</small></label> <label>Pace (sec/mi) <input type=\"number\" name=\"pace\" placeholder=\"Optional — calculated if blank\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 86, "> <small>Format: H:MM:SS or MM:SS</small></label> <label>Pace <input type=\"text\" name=\"pace\" placeholder=\"e.g. 8:10\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -787,9 +787,9 @@ func ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var28 string
-			templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", entry.Pace.Int32))
+			templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(models.FormatPaceInput(int(entry.Pace.Int32)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/activity.templ`, Line: 251, Col: 75}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/activity.templ`, Line: 251, Col: 85}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 			if templ_7745c5c3_Err != nil {

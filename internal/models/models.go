@@ -2,6 +2,8 @@ package models
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -196,4 +198,62 @@ func FormatDuration(seconds int) string {
 		return fmt.Sprintf("%d:%02d:%02d", h, m, s)
 	}
 	return fmt.Sprintf("%d:%02d", m, s)
+}
+
+// ParseDuration parses "H:MM:SS" or "MM:SS" into total seconds.
+// Returns 0 and an error if the format is invalid.
+func ParseDuration(s string) (int, error) {
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return 0, nil
+	}
+	parts := strings.Split(s, ":")
+	switch len(parts) {
+	case 2: // MM:SS
+		m, err1 := strconv.Atoi(parts[0])
+		sec, err2 := strconv.Atoi(parts[1])
+		if err1 != nil || err2 != nil {
+			return 0, fmt.Errorf("invalid duration format, use MM:SS or H:MM:SS")
+		}
+		return m*60 + sec, nil
+	case 3: // H:MM:SS
+		h, err1 := strconv.Atoi(parts[0])
+		m, err2 := strconv.Atoi(parts[1])
+		sec, err3 := strconv.Atoi(parts[2])
+		if err1 != nil || err2 != nil || err3 != nil {
+			return 0, fmt.Errorf("invalid duration format, use MM:SS or H:MM:SS")
+		}
+		return h*3600 + m*60 + sec, nil
+	default:
+		return 0, fmt.Errorf("invalid duration format, use MM:SS or H:MM:SS")
+	}
+}
+
+// ParsePace parses "M:SS" into seconds per mile.
+// Returns 0 and an error if the format is invalid.
+func ParsePace(s string) (int, error) {
+	s = strings.TrimSpace(s)
+	if s == "" {
+		return 0, nil
+	}
+	parts := strings.Split(s, ":")
+	if len(parts) != 2 {
+		return 0, fmt.Errorf("invalid pace format, use M:SS (e.g. 8:30)")
+	}
+	m, err1 := strconv.Atoi(parts[0])
+	sec, err2 := strconv.Atoi(parts[1])
+	if err1 != nil || err2 != nil {
+		return 0, fmt.Errorf("invalid pace format, use M:SS (e.g. 8:30)")
+	}
+	return m*60 + sec, nil
+}
+
+// FormatPaceInput formats pace in seconds as "M:SS" suitable for form inputs.
+func FormatPaceInput(paceSeconds int) string {
+	if paceSeconds == 0 {
+		return ""
+	}
+	mins := paceSeconds / 60
+	secs := paceSeconds % 60
+	return fmt.Sprintf("%d:%02d", mins, secs)
 }

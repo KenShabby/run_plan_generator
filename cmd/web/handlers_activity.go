@@ -248,7 +248,11 @@ func (app *application) parseActivityForm(r *http.Request, userID int32) (db.Cre
 
 	var duration pgtype.Int4
 	if v := r.FormValue("duration"); v != "" {
-		if d, err := strconv.Atoi(v); err == nil {
+		d, err := models.ParseDuration(v)
+		if err != nil {
+			return db.CreateActivityLogParams{}, fmt.Errorf("invalid duration: %w", err)
+		}
+		if d > 0 {
 			duration = pgtype.Int4{Int32: int32(d), Valid: true}
 		}
 	}
@@ -256,7 +260,11 @@ func (app *application) parseActivityForm(r *http.Request, userID int32) (db.Cre
 	// Calculate pace if not provided but distance and duration are
 	var pace pgtype.Int4
 	if v := r.FormValue("pace"); v != "" {
-		if p, err := strconv.Atoi(v); err == nil {
+		p, err := models.ParsePace(v)
+		if err != nil {
+			return db.CreateActivityLogParams{}, fmt.Errorf("invalid pace: %w", err)
+		}
+		if p > 0 {
 			pace = pgtype.Int4{Int32: int32(p), Valid: true}
 		}
 	} else if distance.Valid && duration.Valid {

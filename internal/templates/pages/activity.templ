@@ -63,16 +63,16 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
                             }>
                     </label>
                     <label>
-                        Duration (seconds)
-                        <input type="number" name="duration" placeholder="e.g. 3600 for 1hr"
+                        Duration
+                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 42:00"
                             if planned.TotalDuration.Valid {
-                                value={ fmt.Sprintf("%d", planned.TotalDuration.Int64) }
+                                value={ models.FormatDuration(int(planned.TotalDuration.Int64)) }
                             }>
-                        <small>We'll calculate pace if you leave pace blank</small>
+                        <small>Format: H:MM:SS or MM:SS</small>
                     </label>
                     <label>
-                        Pace (sec/mi)
-                        <input type="number" name="pace" placeholder="Optional — calculated if blank">
+                        Pace
+                        <input type="text" name="pace" placeholder="e.g. 8:10 — calculated if blank">
                     </label>
                 </div>
 
@@ -237,18 +237,18 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
                             }>
                     </label>
                     <label>
-                        Duration (seconds)
-                        <input type="number" name="duration" placeholder="e.g. 3600 for 1hr"
+                        Duration
+                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 42:00"
                             if entry.Duration.Valid {
-                                value={ fmt.Sprintf("%d", entry.Duration.Int32) }
+                                value={ models.FormatDuration(int(entry.Duration.Int32)) }
                             }>
-                        <small>We'll calculate pace if you leave pace blank</small>
+                        <small>Format: H:MM:SS or MM:SS</small>
                     </label>
                     <label>
-                        Pace (sec/mi)
-                        <input type="number" name="pace" placeholder="Optional — calculated if blank"
+                        Pace
+                        <input type="text" name="pace" placeholder="e.g. 8:10"
                             if entry.Pace.Valid {
-                                value={ fmt.Sprintf("%d", entry.Pace.Int32) }
+                                value={ models.FormatPaceInput(int(entry.Pace.Int32)) }
                             }>
                     </label>
                 </div>
