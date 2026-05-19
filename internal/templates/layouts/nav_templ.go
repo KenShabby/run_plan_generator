@@ -29,7 +29,7 @@ func Nav(username string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<header class=\"container\"><nav><ul><li><strong>Run Plan Generator</strong></li></ul><ul><li><a href=\"/\">Home</a></li><li><a href=\"/plans\" hx-get=\"/plans\" hx-target=\"main\" hx-push-url=\"true\">My Plans</a></li><li><a href=\"/templates\" hx-get=\"/templates\" hx-target=\"main\" hx-push-url=\"true\">Browse Templates</a></li>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<header class=\"container\"><nav><ul><li><strong>Run Plan Generator</strong></li></ul><ul><li><a href=\"/\">Home</a></li><li><a href=\"/plans\" hx-get=\"/plans\" hx-target=\"main\" hx-push-url=\"true\">My Plans</a></li><li><a href=\"/activity\" hx-get=\"/activity\" hx-target=\"main\" hx-push-url=\"true\">Activity</a></li><li><a href=\"/templates\" hx-get=\"/templates\" hx-target=\"main\" hx-push-url=\"true\">Browse Templates</a></li>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -41,7 +41,7 @@ func Nav(username string) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(username)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/layouts/nav.templ`, Line: 16, Col: 79}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/layouts/nav.templ`, Line: 17, Col: 79}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {

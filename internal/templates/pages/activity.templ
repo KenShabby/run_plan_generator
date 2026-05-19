@@ -110,7 +110,14 @@ templ ActivityForm(planned db.RunDay, rpeOptions []struct{ Value int; Label stri
 templ ActivityDetailContent(entry db.ActivityLog, username string) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>{ formatRunType(entry.RunType) }</h1>
-        <button class="secondary" onclick="history.back()">← Back</button>
+        <a href="/activity"
+        role="button"
+        class="secondary"
+        hx-get="/activity"
+        hx-target="main"
+        hx-push-url="true">
+        ← Back
+        </a>
     </div>
 
     <p><small>{ entry.Date.Time.Format("Monday, January 2, 2006") }</small></p>
@@ -186,7 +193,14 @@ templ ActivityDetail(entry db.ActivityLog, username string) {
 templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value int; Label string }, username string) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>Edit Activity</h1>
-        <button class="secondary" onclick="history.back()">← Back</button>
+        <a href={ templ.SafeURL(fmt.Sprintf("/activity/%d", entry.ID)) }
+        role="button"
+        class="secondary"
+        hx-get={ fmt.Sprintf("/activity/%d", entry.ID) }
+        hx-target="main"
+        hx-push-url="true">
+        ← Back
+        </a>
     </div>
 
     <div style="max-width: 560px;">
@@ -293,4 +307,82 @@ templ ActivityEditForm(entry db.ActivityLog, rpeOptions []struct{ Value int; Lab
     @layouts.Base("Edit Activity", username) {
         @ActivityEditFormContent(entry, rpeOptions, username)
     }
+}
+
+templ ActivityList(entries []db.ListActivityLogByUserPagedRow, hasMore bool, nextOffset int, username string) {
+    @layouts.Base("Activity Log", username) {
+        @ActivityListContent(entries, hasMore, nextOffset, username)
+    }
+}
+
+templ ActivityListContent(entries []db.ListActivityLogByUserPagedRow, hasMore bool, nextOffset int, username string) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Activity Log</h1>
+        <a href="/activity/new" role="button">+ Log Run</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Distance</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody id="activity-list-body">
+            @ActivityListRows(entries, hasMore, nextOffset, username)
+        </tbody>
+    </table>
+
+    if len(entries) == 0 {
+        <p style="color: var(--pico-muted-color); margin-top: 1rem;">
+            <small>No activities logged yet. <a href="/activity/new">Log your first run</a>.</small>
+        </p>
+    }
+}
+
+templ ActivityListRows(entries []db.ListActivityLogByUserPagedRow, hasMore bool, nextOffset int, username string) {
+    for i, entry := range entries {
+        // Last row gets the infinite scroll trigger
+        if i == len(entries) - 1 && hasMore {
+            <tr id={ fmt.Sprintf("activity-%d", entry.ID) }
+                hx-get={ fmt.Sprintf("/activity?offset=%d", nextOffset) }
+                hx-trigger="revealed"
+                hx-target="#activity-list-body"
+                hx-swap="beforeend">
+                @ActivityListRow(entry)
+            </tr>
+        } else {
+            <tr id={ fmt.Sprintf("activity-%d", entry.ID) }>
+                @ActivityListRow(entry)
+            </tr>
+        }
+    }
+}
+
+templ ActivityListRow(entry db.ListActivityLogByUserPagedRow) {
+    <td>{ entry.Date.Time.Format("Mon Jan 2, 2006") }</td>
+    <td>
+        <a href={ templ.SafeURL(fmt.Sprintf("/activity/%d", entry.ID)) }
+           hx-get={ fmt.Sprintf("/activity/%d", entry.ID) }
+           hx-target="main"
+           hx-push-url="true">
+            { formatRunType(entry.RunType) }
+        </a>
+    </td>
+    <td>
+        if entry.Distance.Valid {
+            { fmt.Sprintf("%.2f mi", entry.Distance.Float64) }
+        } else {
+            <span style="color: var(--pico-muted-color);">—</span>
+        }
+    </td>
+    <td>
+        if entry.Duration.Valid {
+            { models.FormatDuration(int(entry.Duration.Int32)) }
+        } else {
+            <span style="color: var(--pico-muted-color);">—</span>
+        }
+    </td>
 }

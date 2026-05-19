@@ -9,6 +9,7 @@ templ Nav(username string) {
             <ul>
                 <li><a href="/" >Home</a></li>
                 <li><a href="/plans" hx-get="/plans" hx-target="main" hx-push-url="true">My Plans</a></li>
+                <li><a href="/activity" hx-get="/activity" hx-target="main" hx-push-url="true">Activity</a></li>
                 <li><a href="/templates" hx-get="/templates" hx-target="main" hx-push-url="true">Browse Templates</a></li>
                 if username != "" {
                     <li>

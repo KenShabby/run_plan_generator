@@ -6,59 +6,77 @@ import (
         "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
        )
 
-templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db.HrZone) {
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>{ formatRunType(run.RunType) }</h1>
-        <div style="display: flex; gap: 0.5rem;">
-        if run.Completed {
-            <span style="color: var(--pico-primary); font-size: 0.85rem; align-self: center;">✓ Completed</span>
-        } else {
-            <a href={ templ.SafeURL(fmt.Sprintf("/runs/%d/log", run.ID)) }
-            role="button"
-                hx-get={ fmt.Sprintf("/runs/%d/log", run.ID) }
-            hx-target="main"
-                hx-push-url="true">
-                Log This Run
-                </a>
-        }
-    <button class="secondary" onclick="history.back()">← Back</button>
-        </div>
-        </div>
-
-        <p>
-        <small>{ run.Date.Time.Format("Monday, January 2, 2006") }</small>
-        </p>
-
-        if run.TotalDistance.Valid {
-            <p>{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } miles total</p>
-        }
-
-    if run.Notes.Valid {
-        <p>{ run.Notes.String }</p>
-    }
-
-    if len(segments) > 0 {
-        <h2>Workout Structure</h2>
-            for _, group := range GroupSegments(segments) {
-                <div style="border: 1px solid var(--pico-primary); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem;">
-                    if group.IsSet {
-                        <div style="font-size: 0.75rem; font-weight: 600; color: var(--pico-primary); margin-bottom: 0.5rem;">
-                        { fmt.Sprintf("Repeat %d×", group.Repetitions) }
-                        </div>
+templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db.HrZone, fromPlan int) {
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>{ formatRunType(run.RunType) }</h1>
+                <div style="display: flex; gap: 0.5rem;">
+                    if run.Completed {
+                        <span style="color: var(--pico-primary); font-size: 0.85rem; align-self: center;">✓ Completed</span>
+                    } else {
+                        <a href={ templ.SafeURL(fmt.Sprintf("/runs/%d/log", run.ID)) }
+                           role="button"
+                           hx-get={ fmt.Sprintf("/runs/%d/log", run.ID) }
+                           hx-target="main"
+                           hx-push-url="true">
+                            Log This Run
+                        </a>
                     }
-                for _, seg := range group.Segments {
-                    @SegmentRow(seg, zoneMap)
-                }
+                    if fromPlan > 0 {
+                        <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d", fromPlan)) }
+                           role="button"
+                           class="secondary"
+                           hx-get={ fmt.Sprintf("/plans/%d", fromPlan) }
+                           hx-target="main"
+                           hx-push-url="true">
+                            ← Back
+                        </a>
+                    } else {
+                        <a href="/plans"
+                           role="button"
+                           class="secondary"
+                           hx-get="/plans"
+                           hx-target="main"
+                           hx-push-url="true">
+                            ← Back
+                        </a>
+                    }
                 </div>
+            </div>
+
+            <p>
+            <small>{ run.Date.Time.Format("Monday, January 2, 2006") }</small>
+            </p>
+
+            if run.TotalDistance.Valid {
+                <p>{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } miles total</p>
             }
-    } else {
-        <p><small>No segments defined for this run.</small></p>
-    }
+
+        if run.Notes.Valid {
+            <p>{ run.Notes.String }</p>
+        }
+
+        if len(segments) > 0 {
+            <h2>Workout Structure</h2>
+                for _, group := range GroupSegments(segments) {
+                    <div style="border: 1px solid var(--pico-primary); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                        if group.IsSet {
+                            <div style="font-size: 0.75rem; font-weight: 600; color: var(--pico-primary); margin-bottom: 0.5rem;">
+                            { fmt.Sprintf("Repeat %d×", group.Repetitions) }
+                            </div>
+                        }
+                    for _, seg := range group.Segments {
+                        @SegmentRow(seg, zoneMap)
+                    }
+                    </div>
+                }
+        } else {
+            <p><small>No segments defined for this run.</small></p>
+        }
 }
 
-templ RunDetail(run db.RunDay, segments []db.Segment, username string, zoneMap map[int32]db.HrZone) {
+templ RunDetail(run db.RunDay, segments []db.Segment, username string, zoneMap map[int32]db.HrZone, fromPlan int) {
     @layouts.Base(formatRunType(run.RunType), username) {
-        @RunDetailContent(run, segments, zoneMap)
+        @RunDetailContent(run, segments, zoneMap, fromPlan)
     }
 }
 

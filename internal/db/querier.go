@@ -47,7 +47,7 @@ type Querier interface {
 	GetUserByUsername(ctx context.Context, username string) (User, error)
 	InsertHRHistory(ctx context.Context, arg InsertHRHistoryParams) error
 	ListActivityLogByUser(ctx context.Context, userID int32) ([]ActivityLog, error)
-	ListActivityLogByUserPaged(ctx context.Context, arg ListActivityLogByUserPagedParams) ([]ActivityLog, error)
+	ListActivityLogByUserPaged(ctx context.Context, arg ListActivityLogByUserPagedParams) ([]ListActivityLogByUserPagedRow, error)
 	ListRunDaysByPlan(ctx context.Context, planID int32) ([]RunDay, error)
 	ListSegmentsByRun(ctx context.Context, runID int32) ([]Segment, error)
 	ListTemplatePlans(ctx context.Context) ([]TemplatePlan, error)

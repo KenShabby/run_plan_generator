@@ -231,9 +231,12 @@ func (q *Queries) ListActivityLogByUser(ctx context.Context, userID int32) ([]Ac
 }
 
 const listActivityLogByUserPaged = `-- name: ListActivityLogByUserPaged :many
-SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at FROM activity_log
-WHERE user_id = $1
-ORDER BY date DESC
+SELECT 
+    a.id, a.user_id, a.run_day_id, a.date, a.run_type, a.distance, a.duration, a.pace, a.rpe, a.notes, a.logged_at,
+    COUNT(*) OVER() as total_count
+FROM activity_log a
+WHERE a.user_id = $1
+ORDER BY a.date DESC
 LIMIT $2 OFFSET $3
 `
 
@@ -243,15 +246,30 @@ type ListActivityLogByUserPagedParams struct {
 	Offset int32 `json:"offset"`
 }
 
-func (q *Queries) ListActivityLogByUserPaged(ctx context.Context, arg ListActivityLogByUserPagedParams) ([]ActivityLog, error) {
+type ListActivityLogByUserPagedRow struct {
+	ID         int32              `json:"id"`
+	UserID     int32              `json:"user_id"`
+	RunDayID   pgtype.Int4        `json:"run_day_id"`
+	Date       pgtype.Date        `json:"date"`
+	RunType    string             `json:"run_type"`
+	Distance   pgtype.Float8      `json:"distance"`
+	Duration   pgtype.Int4        `json:"duration"`
+	Pace       pgtype.Int4        `json:"pace"`
+	Rpe        pgtype.Int2        `json:"rpe"`
+	Notes      pgtype.Text        `json:"notes"`
+	LoggedAt   pgtype.Timestamptz `json:"logged_at"`
+	TotalCount int64              `json:"total_count"`
+}
+
+func (q *Queries) ListActivityLogByUserPaged(ctx context.Context, arg ListActivityLogByUserPagedParams) ([]ListActivityLogByUserPagedRow, error) {
 	rows, err := q.db.Query(ctx, listActivityLogByUserPaged, arg.UserID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []ActivityLog
+	var items []ListActivityLogByUserPagedRow
 	for rows.Next() {
-		var i ActivityLog
+		var i ListActivityLogByUserPagedRow
 		if err := rows.Scan(
 			&i.ID,
 			&i.UserID,
@@ -264,6 +282,7 @@ func (q *Queries) ListActivityLogByUserPaged(ctx context.Context, arg ListActivi
 			&i.Rpe,
 			&i.Notes,
 			&i.LoggedAt,
+			&i.TotalCount,
 		); err != nil {
 			return nil, err
 		}

@@ -14,6 +14,7 @@ import (
 )
 
 func (app *application) registerActivityRoutes(r chi.Router) {
+	r.Get("/activity", app.handleGetActivityList)
 	r.Get("/activity/new", app.handleGetActivityForm)
 	r.Post("/activity", app.handlePostActivity)
 	r.Get("/activity/{id}", app.handleGetActivity)
@@ -23,6 +24,51 @@ func (app *application) registerActivityRoutes(r chi.Router) {
 	// Log a specific planned run as complete
 	r.Get("/runs/{id}/log", app.handleGetLogRun)
 	r.Post("/runs/{id}/log", app.handlePostLogRun)
+}
+
+func (app *application) handleGetActivityList(w http.ResponseWriter, r *http.Request) {
+	userID, ok := app.getSessionUserID(r)
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	// Parse offset from query string, default to 0
+	offset := 0
+	if v := r.URL.Query().Get("offset"); v != "" {
+		if i, err := strconv.Atoi(v); err == nil && i >= 0 {
+			offset = i
+		}
+	}
+
+	const pageSize = 20
+
+	entries, err := app.queries.ListActivityLogByUserPaged(r.Context(), db.ListActivityLogByUserPagedParams{
+		UserID: userID,
+		Limit:  pageSize,
+		Offset: int32(offset),
+	})
+	if err != nil {
+		app.logger.Printf("error fetching activity log: %v", err)
+		http.Error(w, "failed to load activity log", http.StatusInternalServerError)
+		return
+	}
+
+	// Calculate whether there are more records
+	var totalCount int64
+	if len(entries) > 0 {
+		totalCount = entries[0].TotalCount
+	}
+	hasMore := int64(offset+pageSize) < totalCount
+	nextOffset := offset + pageSize
+
+	if r.Header.Get("HX-Request") == "true" {
+		// HTMX request — return just the rows
+		pages.ActivityListRows(entries, hasMore, nextOffset, app.username(r)).Render(r.Context(), w)
+	} else {
+		// Full page load
+		pages.ActivityList(entries, hasMore, nextOffset, app.username(r)).Render(r.Context(), w)
+	}
 }
 
 // handleGetLogRun shows the log form pre-populated from a planned run

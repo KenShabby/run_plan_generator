@@ -17,9 +17,12 @@ WHERE user_id = $1
 ORDER BY date DESC;
 
 -- name: ListActivityLogByUserPaged :many
-SELECT * FROM activity_log
-WHERE user_id = $1
-ORDER BY date DESC
+SELECT 
+    a.*,
+    COUNT(*) OVER() as total_count
+FROM activity_log a
+WHERE a.user_id = $1
+ORDER BY a.date DESC
 LIMIT $2 OFFSET $3;
 
 -- name: GetActivityLogByRunDay :one

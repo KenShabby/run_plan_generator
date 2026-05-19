@@ -93,9 +93,16 @@ func (app *application) handleGetRun(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:     run.CreatedAt,
 	}
 
+	fromPlan := 0
+	if v := r.URL.Query().Get("from_plan"); v != "" {
+		if i, err := strconv.Atoi(v); err == nil && i > 0 {
+			fromPlan = i
+		}
+	}
+
 	if r.Header.Get("HX-Request") == "true" {
-		pages.RunDetailContent(runDay, segments, zoneMap).Render(r.Context(), w)
+		pages.RunDetailContent(runDay, segments, zoneMap, fromPlan).Render(r.Context(), w)
 	} else {
-		pages.RunDetail(runDay, segments, username, zoneMap).Render(r.Context(), w)
+		pages.RunDetail(runDay, segments, username, zoneMap, fromPlan).Render(r.Context(), w)
 	}
 }
