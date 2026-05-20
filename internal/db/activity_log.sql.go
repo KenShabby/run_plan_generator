@@ -122,22 +122,22 @@ func (q *Queries) GetActivityLogByRunDay(ctx context.Context, runDayID pgtype.In
 
 const getActivitySummaryByUser = `-- name: GetActivitySummaryByUser :one
 SELECT
-    COUNT(*)                          AS total_runs,
-    COALESCE(SUM(distance), 0)        AS total_distance,
-    COALESCE(SUM(duration), 0)        AS total_duration,
-    COALESCE(AVG(rpe), 0)             AS avg_rpe,
-    COALESCE(AVG(distance), 0)        AS avg_distance
+    COUNT(*)                                  AS total_runs,
+    COALESCE(SUM(distance), 0)::float8        AS total_distance,
+    COALESCE(SUM(duration), 0)::bigint        AS total_duration,
+    COALESCE(AVG(rpe), 0)::float8             AS avg_rpe,
+    COALESCE(AVG(distance), 0)::float8        AS avg_distance
 FROM activity_log
 WHERE user_id = $1
 AND date >= CURRENT_DATE - INTERVAL '30 days'
 `
 
 type GetActivitySummaryByUserRow struct {
-	TotalRuns     int64       `json:"total_runs"`
-	TotalDistance interface{} `json:"total_distance"`
-	TotalDuration interface{} `json:"total_duration"`
-	AvgRpe        interface{} `json:"avg_rpe"`
-	AvgDistance   interface{} `json:"avg_distance"`
+	TotalRuns     int64   `json:"total_runs"`
+	TotalDistance float64 `json:"total_distance"`
+	TotalDuration int64   `json:"total_duration"`
+	AvgRpe        float64 `json:"avg_rpe"`
+	AvgDistance   float64 `json:"avg_distance"`
 }
 
 func (q *Queries) GetActivitySummaryByUser(ctx context.Context, userID int32) (GetActivitySummaryByUserRow, error) {

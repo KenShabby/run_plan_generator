@@ -45,9 +45,16 @@ func (app *application) handleHome(w http.ResponseWriter, r *http.Request) {
 	// Fetch upcoming runs this week
 	upcomingRuns, _ := app.queries.GetUpcomingRunsThisWeek(r.Context(), user.ID)
 
+	// Fetch activity summary
+	var activitySummary *db.GetActivitySummaryByUserRow
+	summary, err := app.queries.GetActivitySummaryByUser(r.Context(), user.ID)
+	if err == nil {
+		activitySummary = &summary
+	}
+
 	if r.Header.Get("HX-Request") == "true" {
-		pages.DashboardContent(hrProfile, hrZones, hrHistory, nextRace, upcomingRuns, app.username(r)).Render(r.Context(), w)
+		pages.DashboardContent(hrProfile, hrZones, hrHistory, nextRace, upcomingRuns, activitySummary, app.username(r)).Render(r.Context(), w)
 	} else {
-		pages.Dashboard(hrProfile, hrZones, hrHistory, nextRace, upcomingRuns, app.username(r)).Render(r.Context(), w)
+		pages.Dashboard(hrProfile, hrZones, hrHistory, nextRace, upcomingRuns, activitySummary, app.username(r)).Render(r.Context(), w)
 	}
 }

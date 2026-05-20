@@ -51,11 +51,11 @@ ORDER BY date DESC;
 
 -- name: GetActivitySummaryByUser :one
 SELECT
-    COUNT(*)                          AS total_runs,
-    COALESCE(SUM(distance), 0)        AS total_distance,
-    COALESCE(SUM(duration), 0)        AS total_duration,
-    COALESCE(AVG(rpe), 0)             AS avg_rpe,
-    COALESCE(AVG(distance), 0)        AS avg_distance
+    COUNT(*)                                  AS total_runs,
+    COALESCE(SUM(distance), 0)::float8        AS total_distance,
+    COALESCE(SUM(duration), 0)::bigint        AS total_duration,
+    COALESCE(AVG(rpe), 0)::float8             AS avg_rpe,
+    COALESCE(AVG(distance), 0)::float8        AS avg_distance
 FROM activity_log
 WHERE user_id = $1
 AND date >= CURRENT_DATE - INTERVAL '30 days';
