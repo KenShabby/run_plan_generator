@@ -171,6 +171,9 @@ func (app *application) handleTemplateInstantiate(w http.ResponseWriter, r *http
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	plans, _ := app.queries.ListTrainingPlansByUser(r.Context(), userID)
+	plans, err := app.queries.ListTrainingPlansByUser(r.Context(), userID)
+	if err != nil {
+		app.logger.Printf("error fetching plans after template instantiation: %v", err)
+	}
 	pages.PlansContent(plans).Render(r.Context(), w)
 }

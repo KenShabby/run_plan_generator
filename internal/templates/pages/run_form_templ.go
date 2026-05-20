@@ -44,20 +44,28 @@ func RunForm(planID int32) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#runs-list\" hx-swap=\"beforeend\" hx-on::after-request=\"this.reset()\"><div class=\"grid\"><label>Date <input type=\"date\" name=\"date\" required></label> <label>Run Type <select name=\"run_type\" required><option value=\"easy\">Easy</option> <option value=\"long_run\">Long Run</option> <option value=\"tempo\">Tempo</option> <option value=\"interval\">Interval</option> <option value=\"recovery\">Recovery</option> <option value=\"race_pace\">Race Pace</option> <option value=\"general_aerobic\">General Aerobic</option> <option value=\"medium_long\">Medium Long</option> <option value=\"foundation\">Foundation</option> <option value=\"vo2_max\">VO2 Max</option></select></label></div><div class=\"grid\"><label>Distance <input type=\"number\" name=\"total_distance\" step=\"0.1\" placeholder=\"e.g. 8.5\"></label> <label>Notes <input type=\"text\" name=\"notes\" placeholder=\"Optional\"></label></div><div class=\"grid\"><button type=\"submit\">Add Run</button> <button type=\"button\" class=\"secondary\" hx-get=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" hx-target=\"#runs-list\" hx-swap=\"beforeend\" hx-on::after-request=\"this.reset()\"><div class=\"grid\"><label>Date <input type=\"date\" name=\"date\" required></label> <label>Run Type")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = RunTypeSelect("").Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</label></div><div class=\"grid\"><label>Distance <input type=\"number\" name=\"total_distance\" step=\"0.1\" placeholder=\"e.g. 8.5\"></label> <label>Notes <input type=\"text\" name=\"notes\" placeholder=\"Optional\"></label></div><div class=\"grid\"><button type=\"submit\">Add Run</button> <button type=\"button\" class=\"secondary\" hx-get=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/plans/%d/runs/form/cancel", planID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_form.templ`, Line: 46, Col: 82}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_form.templ`, Line: 35, Col: 82}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" hx-target=\"#run-form-container\" hx-swap=\"innerHTML\">Cancel</button></div></form></article>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" hx-target=\"#run-form-container\" hx-swap=\"innerHTML\">Cancel</button></div></form></article>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -86,7 +94,7 @@ func RunFormEmpty() templ.Component {
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<!-- empty -->")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<!-- empty -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -31,8 +31,14 @@ func (app *application) handleHome(w http.ResponseWriter, r *http.Request) {
 	profile, err := app.queries.GetHRProfileByUser(r.Context(), user.ID)
 	if err == nil {
 		hrProfile = &profile
-		hrZones, _ = app.queries.GetHRZonesByUser(r.Context(), user.ID)
-		hrHistory, _ = app.queries.GetHRHistoryByUser(r.Context(), user.ID)
+		hrZones, err = app.queries.GetHRZonesByUser(r.Context(), user.ID)
+		if err != nil {
+			app.logger.Printf("error fetching hr zones: %v", err)
+		}
+		hrHistory, err = app.queries.GetHRHistoryByUser(r.Context(), user.ID)
+		if err != nil {
+			app.logger.Printf("error fetching hr history: %v", err)
+		}
 	}
 
 	// Fetch next race
@@ -43,7 +49,10 @@ func (app *application) handleHome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch upcoming runs this week
-	upcomingRuns, _ := app.queries.GetUpcomingRunsThisWeek(r.Context(), user.ID)
+	upcomingRuns, err := app.queries.GetUpcomingRunsThisWeek(r.Context(), user.ID)
+	if err != nil {
+		app.logger.Printf("error fetching upcoming runs: %v", err)
+	}
 
 	// Fetch activity summary
 	var activitySummary *db.GetActivitySummaryByUserRow

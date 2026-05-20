@@ -27,30 +27,7 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
                     </label>
                     <label>
                         Run Type
-                        <select name="run_type" required>
-                            <option value="easy"
-                                if planned.RunType == "easy" { selected } >Easy</option>
-                            <option value="long_run"
-                                if planned.RunType == "long_run" { selected }>Long Run</option>
-                            <option value="tempo"
-                                if planned.RunType == "tempo" { selected }>Tempo</option>
-                            <option value="interval"
-                                if planned.RunType == "interval" { selected }>Interval</option>
-                            <option value="recovery"
-                                if planned.RunType == "recovery" { selected }>Recovery</option>
-                            <option value="race_pace"
-                                if planned.RunType == "race_pace" { selected }>Race Pace</option>
-                            <option value="general_aerobic"
-                                if planned.RunType == "general_aerobic" { selected }>General Aerobic</option>
-                            <option value="medium_long"
-                                if planned.RunType == "medium_long" { selected }>Medium Long</option>
-                            <option value="foundation"
-                                if planned.RunType == "foundation" { selected }>Foundation</option>
-                            <option value="race"
-                                if planned.RunType == "race" { selected }>Race</option>
-                            <option value="other"
-                                if planned.RunType == "other" { selected }>Other</option>
-                        </select>
+                        @RunTypeSelect(planned.RunType)
                     </label>
                 </div>
 
@@ -215,30 +192,7 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
                     </label>
                     <label>
                         Run Type
-                        <select name="run_type" required>
-                            <option value="easy"
-                                if entry.RunType == "easy" { selected }>Easy</option>
-                            <option value="long_run"
-                                if entry.RunType == "long_run" { selected }>Long Run</option>
-                            <option value="tempo"
-                                if entry.RunType == "tempo" { selected }>Tempo</option>
-                            <option value="interval"
-                                if entry.RunType == "interval" { selected }>Interval</option>
-                            <option value="recovery"
-                                if entry.RunType == "recovery" { selected }>Recovery</option>
-                            <option value="race_pace"
-                                if entry.RunType == "race_pace" { selected }>Race Pace</option>
-                            <option value="general_aerobic"
-                                if entry.RunType == "general_aerobic" { selected }>General Aerobic</option>
-                            <option value="medium_long"
-                                if entry.RunType == "medium_long" { selected }>Medium Long</option>
-                            <option value="foundation"
-                                if entry.RunType == "foundation" { selected }>Foundation</option>
-                            <option value="race"
-                                if entry.RunType == "race" { selected }>Race</option>
-                            <option value="other"
-                                if entry.RunType == "other" { selected }>Other</option>
-                        </select>
+                        @RunTypeSelect(entry.RunType)
                     </label>
                 </div>
 

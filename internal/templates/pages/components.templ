@@ -1,0 +1,17 @@
+package pages
+
+import "github.com/KenShabby/run_plan_generator/internal/models"
+
+templ RunTypeSelect(selected string) {
+    <select name="run_type" required>
+        <option value="" if selected == "" { selected }>— select run type —</option>
+        for _, opt := range models.RunTypeOptions {
+            <option value={ opt.Value }
+                if selected == opt.Value {
+                    selected
+                }>
+                { opt.Label }
+            </option>
+        }
+    </select>
+}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -32,7 +31,7 @@ func (app *application) handleDeleteRun(w http.ResponseWriter, r *http.Request) 
 		ID:     int32(id),
 		UserID: userID,
 	}); err != nil {
-		log.Printf("error deleting run: %v", err)
+		app.logger.Printf("error deleting run: %v", err)
 		http.Error(w, "failed to delete run", http.StatusInternalServerError)
 		return
 	}
@@ -65,7 +64,7 @@ func (app *application) handleGetRun(w http.ResponseWriter, r *http.Request) {
 
 	segments, err := app.queries.ListSegmentsByRun(r.Context(), int32(id))
 	if err != nil {
-		log.Printf("error fetching segments: %v", err)
+		app.logger.Printf("error fetching segments: %v", err)
 		http.Error(w, "failed to load segments", http.StatusInternalServerError)
 		return
 	}
@@ -73,7 +72,7 @@ func (app *application) handleGetRun(w http.ResponseWriter, r *http.Request) {
 	// fetch user's HR zones and build a lookup map
 	hrrZones, err := app.queries.GetHRZonesByUser(r.Context(), userID)
 	if err != nil {
-		log.Printf("error fetching hr zones: %v", err)
+		app.logger.Printf("error fetching hr zones: %v", err)
 	}
 	zoneMap := make(map[int32]db.HrZone)
 	for _, z := range hrrZones {

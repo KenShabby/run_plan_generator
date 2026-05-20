@@ -16,18 +16,7 @@ templ RunForm(planID int32) {
                 </label>
                 <label>
                     Run Type
-                    <select name="run_type" required>
-                        <option value="easy">Easy</option>
-                        <option value="long_run">Long Run</option>
-                        <option value="tempo">Tempo</option>
-                        <option value="interval">Interval</option>
-                        <option value="recovery">Recovery</option>
-                        <option value="race_pace">Race Pace</option>
-                        <option value="general_aerobic">General Aerobic</option>
-                        <option value="medium_long">Medium Long</option>
-                        <option value="foundation">Foundation</option>
-                        <option value="vo2_max">VO2 Max</option>
-                    </select>
+                    @RunTypeSelect("")
                 </label>
             </div>
             <div class="grid">

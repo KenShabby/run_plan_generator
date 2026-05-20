@@ -137,13 +137,15 @@ func (app *application) handlePostAccountHr(w http.ResponseWriter, r *http.Reque
 	}
 
 	// Record HR history
-	app.queries.InsertHRHistory(r.Context(), db.InsertHRHistoryParams{
+	if err := app.queries.InsertHRHistory(r.Context(), db.InsertHRHistoryParams{
 		UserID:    user.ID,
 		MaxHr:     pgtype.Int4{Int32: int32(maxHR), Valid: true},
 		RestingHr: restingHRVal,
 		Lthr:      lthrVal,
 		Method:    method,
-	})
+	}); err != nil {
+		app.logger.Printf("error inserting hr history: %v", err)
+	}
 
 	// calculate and save zones
 	zones := calculateZones(maxHR, restingHR, lthr, method)

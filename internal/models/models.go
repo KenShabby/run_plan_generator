@@ -34,6 +34,7 @@ const (
 	LongRunFastFinish   RunType = "long_run_with_fast_finish"
 	LongRunSpeedPlay    RunType = "long_run_with_speed_play"
 	MediumLong          RunType = "medium_long"
+	Other               RunType = "other"
 	Race                RunType = "race"
 	RacePace            RunType = "race_pace"
 	Recovery            RunType = "recovery"
@@ -256,4 +257,33 @@ func FormatPaceInput(paceSeconds int) string {
 	mins := paceSeconds / 60
 	secs := paceSeconds % 60
 	return fmt.Sprintf("%d:%02d", mins, secs)
+}
+
+var RunTypeOptions = []struct {
+	Value string
+	Label string
+}{
+	{string(CruiseInterval), "Cruise Interval"},
+	{string(Easy), "Easy"},
+	{string(FastFinish), "Fast Finish"},
+	{string(Foundation), "Foundation"},
+	{string(GeneralAerobic), "General Aerobic"},
+	{string(GeneralAerobicSpeed), "General Aerobic Speed"},
+	{string(HillRepetitions), "Hill Repetitions"},
+	{string(Interval), "Interval"},
+	{string(LactateThreshold), "Lactate Threshold"},
+	{string(LongInterval), "Long Interval"},
+	{string(LongRun), "Long Run"},
+	{string(LongRunFastFinish), "Long Run Fast Finish"},
+	{string(LongRunSpeedPlay), "Long Run Speed Play"},
+	{string(MediumLong), "Medium Long"},
+	{string(Race), "Race"},
+	{string(RacePace), "Race Pace"},
+	{string(Recovery), "Recovery"},
+	{string(RecoverySpeed), "Recovery Speed"},
+	{string(ShortInterval), "Short Interval"},
+	{string(SpeedPlay), "Speed Play"},
+	{string(Tempo), "Tempo"},
+	{string(VO2Max), "VO2 Max"},
+	{string(Other), "Other"},
 }
