@@ -19,6 +19,7 @@ const (
 
 type RunType string
 
+// This is the source of truth for all run types
 const (
 	CruiseInterval      RunType = "cruise_interval"
 	Easy                RunType = "easy"
@@ -286,4 +287,23 @@ var RunTypeOptions = []struct {
 	{string(Tempo), "Tempo"},
 	{string(VO2Max), "VO2 Max"},
 	{string(Other), "Other"},
+}
+
+// SegmentInput represents a segment being constructed in the run builder
+// before it is persisted to the database.
+type SegmentInput struct {
+	Index          int
+	Description    string
+	EffortType     string
+	Distance       float64
+	Duration       int // seconds
+	HrZoneMin      int
+	HrZoneMax      int
+	SetIndex       int // 0 means standalone, >0 means part of a repeat block
+	SetRepetitions int // only meaningful when SetIndex > 0
+}
+
+// IsInSet returns true if this segment belongs to a repeat block
+func (s SegmentInput) IsInSet() bool {
+	return s.SetIndex > 0
 }

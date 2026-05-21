@@ -19,3 +19,6 @@ can also be done while checking planned runs as "complete"
 TODO:
 
 - Allow users to construct multi-segment runs with repeats etc.
+- Elevation changes
+- Calorie tracking
+- Favicon
