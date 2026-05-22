@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/KenShabby/run_plan_generator/internal/db"
+	"github.com/KenShabby/run_plan_generator/internal/models"
 	"github.com/KenShabby/run_plan_generator/internal/templates/pages"
 	"github.com/go-chi/chi/v5"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -25,6 +26,13 @@ func (app *application) registerPlanRoutes(r chi.Router) {
 	r.Post("/plans/{id}/runs", app.handlePostPlansByIdRuns)
 	r.Delete("/plans/{id}", app.handleDeletePlan)
 	r.Get("/plans/{id}/export.ics", app.handleExportPlan)
+	// Run builder routes
+	r.Post("/plans/{id}/runs/builder", app.handleRunBuilderAddSegment)
+	r.Post("/plans/{id}/runs/builder/repeat", app.handleRunBuilderAddRepeat)
+	r.Post("/plans/{id}/runs/builder/reorder", app.handleRunBuilderReorder)
+	r.Post("/plans/{id}/runs/builder/delete", app.handleRunBuilderDelete)
+	r.Post("/plans/{id}/runs/builder/add-to-block", app.handleRunBuilderAddToBlock)
+	r.Post("/plans/{id}/runs/builder/close-block", app.handleRunBuilderCloseBlock)
 }
 
 func (app *application) handleGetPlansNew(w http.ResponseWriter, r *http.Request) {
@@ -176,6 +184,43 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 		http.Error(w, "bad request", http.StatusBadRequest)
 		return
 	}
+	app.logger.Printf("DEBUG form values: %v", r.Form)
+
+	segments := parseSegmentInputs(r)
+	app.logger.Printf("DEBUG: parsed %d segments from form", len(segments))
+	for _, s := range segments {
+		app.logger.Printf("DEBUG: seg[%d] description=%s effortType=%s setIndex=%d",
+			s.Index, s.Description, s.EffortType, s.SetIndex)
+	}
+
+	// Check if there's a pending segment in the new_* fields
+	// If effort_type is filled in, the user has entered a segment but not hit Add Segment
+	if effortType := r.FormValue("new_effort_type"); effortType != "" {
+		dist, _ := strconv.ParseFloat(r.FormValue("new_distance"), 64)
+		dur, _ := models.ParseDuration(r.FormValue("new_duration"))
+		hrMin, _ := strconv.Atoi(r.FormValue("new_hr_zone_min"))
+		hrMax, _ := strconv.Atoi(r.FormValue("new_hr_zone_max"))
+
+		// Check if we're in an open block
+		openSetIndex, _ := strconv.Atoi(r.FormValue("open_set_index"))
+		openSetReps, _ := strconv.Atoi(r.FormValue("open_set_reps"))
+
+		pending := models.SegmentInput{
+			Index:          len(segments),
+			Description:    r.FormValue("new_description"),
+			EffortType:     effortType,
+			Distance:       dist,
+			Duration:       dur,
+			HrZoneMin:      hrMin,
+			HrZoneMax:      hrMax,
+			SetIndex:       openSetIndex,
+			SetRepetitions: openSetReps,
+		}
+		segments = append(segments, pending)
+		app.logger.Printf("DEBUG: pending segment appended, total segments now: %d", len(segments))
+		app.logger.Printf("DEBUG: pending seg: %+v", pending)
+		segments = reindexSegments(segments)
+	}
 
 	plan, err := app.queries.GetTrainingPlan(r.Context(), int32(planID))
 	if err != nil {
@@ -219,6 +264,56 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 		log.Printf("error creating run: %v", err)
 		http.Error(w, "failed to create run", http.StatusInternalServerError)
 		return
+	}
+
+	// After creating run, create any segments
+	app.logger.Printf("DEBUG: about to create %d segments for run %d", len(segments), run.ID)
+	segments = parseSegmentInputs(r)
+	for _, seg := range segments {
+		var dist pgtype.Float8
+		var dur pgtype.Int8
+		var hrMin, hrMax pgtype.Int4
+		var setIdx, setReps pgtype.Int4
+
+		if seg.Distance > 0 {
+			dist = pgtype.Float8{Float64: seg.Distance, Valid: true}
+		}
+		if seg.Duration > 0 {
+			dur = pgtype.Int8{Int64: int64(seg.Duration), Valid: true}
+		}
+		if seg.HrZoneMin > 0 {
+			hrMin = pgtype.Int4{Int32: int32(seg.HrZoneMin), Valid: true}
+		}
+		if seg.HrZoneMax > 0 {
+			hrMax = pgtype.Int4{Int32: int32(seg.HrZoneMax), Valid: true}
+		}
+		if seg.SetIndex > 0 {
+			setIdx = pgtype.Int4{Int32: int32(seg.SetIndex), Valid: true}
+			setReps = pgtype.Int4{Int32: int32(seg.SetRepetitions), Valid: true}
+		}
+
+		_, err := app.queries.CreateSegment(r.Context(), db.CreateSegmentParams{
+			RunID:      run.ID,
+			OrderIndex: int32(seg.Index),
+			Description: pgtype.Text{
+				String: seg.Description,
+				Valid:  seg.Description != "",
+			},
+			EffortType:     seg.EffortType,
+			Distance:       dist,
+			Duration:       dur,
+			Pace:           pgtype.Int8{Valid: false},
+			Repetitions:    1,
+			HrZoneMin:      hrMin,
+			HrZoneMax:      hrMax,
+			HrAbsMin:       pgtype.Int4{Valid: false},
+			HrAbsMax:       pgtype.Int4{Valid: false},
+			SetIndex:       setIdx,
+			SetRepetitions: setReps,
+		})
+		if err != nil {
+			app.logger.Printf("error creating segment for run %d: %v", run.ID, err)
+		}
 	}
 
 	pages.RunCard(run).Render(r.Context(), w)
@@ -296,4 +391,188 @@ func (app *application) handleExportPlan(w http.ResponseWriter, r *http.Request)
 	w.Header().Set("Content-Type", "text/calendar; charset=utf-8")
 	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%q", filename))
 	w.Write([]byte(ics))
+}
+
+// handleRunBuilderAddSegment adds a standalone segment to the in-progress run
+func (app *application) handleRunBuilderAddSegment(w http.ResponseWriter, r *http.Request) {
+	planID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	// Parse existing segments from hidden fields
+	segments := parseSegmentInputs(r)
+
+	// Parse the new segment from the "add segment" section
+	dist, _ := strconv.ParseFloat(r.FormValue("new_distance"), 64)
+	dur, _ := models.ParseDuration(r.FormValue("new_duration"))
+	hrMin, _ := strconv.Atoi(r.FormValue("new_hr_zone_min"))
+	hrMax, _ := strconv.Atoi(r.FormValue("new_hr_zone_max"))
+
+	newSeg := models.SegmentInput{
+		Index:       len(segments),
+		Description: r.FormValue("new_description"),
+		EffortType:  r.FormValue("new_effort_type"),
+		Distance:    dist,
+		Duration:    dur,
+		HrZoneMin:   hrMin,
+		HrZoneMax:   hrMax,
+	}
+	segments = append(segments, newSeg)
+	segments = reindexSegments(segments)
+
+	// Parse run basics to re-render the full form
+	runBasics := parseRunBasics(r)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+}
+
+// handleRunBuilderAddRepeat adds a repeat block with N repetitions
+func (app *application) handleRunBuilderAddRepeat(w http.ResponseWriter, r *http.Request) {
+	planID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	segments := parseSegmentInputs(r)
+	runBasics := parseRunBasics(r)
+
+	// Find the next available set index
+	maxSetIdx := 0
+	for _, s := range segments {
+		if s.SetIndex > maxSetIdx {
+			maxSetIdx = s.SetIndex
+		}
+	}
+
+	reps, _ := strconv.Atoi(r.FormValue("new_repeat_reps"))
+	if reps < 2 {
+		reps = 2
+	}
+
+	// Open a new block — don't add any segments yet
+	runBasics.OpenSetIndex = maxSetIdx + 1
+	runBasics.OpenSetReps = reps
+
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+}
+
+// handleRunBuilderReorder moves a segment up or down
+func (app *application) handleRunBuilderReorder(w http.ResponseWriter, r *http.Request) {
+	planID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	segments := parseSegmentInputs(r)
+	idx, _ := strconv.Atoi(r.FormValue("target_index"))
+	direction := r.FormValue("direction")
+	segments = moveSegment(segments, idx, direction)
+
+	runBasics := parseRunBasics(r)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+}
+
+// handleRunBuilderDelete removes a segment from the in-progress list
+func (app *application) handleRunBuilderDelete(w http.ResponseWriter, r *http.Request) {
+	planID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	segments := parseSegmentInputs(r)
+	idx, _ := strconv.Atoi(r.FormValue("target_index"))
+	segments = deleteSegment(segments, idx)
+
+	runBasics := parseRunBasics(r)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+}
+
+// handleRunBuilderAddToBlock adds a segment to the currently open repeat block
+func (app *application) handleRunBuilderAddToBlock(w http.ResponseWriter, r *http.Request) {
+	planID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	segments := parseSegmentInputs(r)
+	runBasics := parseRunBasics(r)
+
+	dist, _ := strconv.ParseFloat(r.FormValue("new_distance"), 64)
+	dur, _ := models.ParseDuration(r.FormValue("new_duration"))
+	hrMin, _ := strconv.Atoi(r.FormValue("new_hr_zone_min"))
+	hrMax, _ := strconv.Atoi(r.FormValue("new_hr_zone_max"))
+
+	newSeg := models.SegmentInput{
+		Index:          len(segments),
+		Description:    r.FormValue("new_description"),
+		EffortType:     r.FormValue("new_effort_type"),
+		Distance:       dist,
+		Duration:       dur,
+		HrZoneMin:      hrMin,
+		HrZoneMax:      hrMax,
+		SetIndex:       runBasics.OpenSetIndex,
+		SetRepetitions: runBasics.OpenSetReps,
+	}
+	segments = append(segments, newSeg)
+	segments = reindexSegments(segments)
+
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+}
+
+// handleRunBuilderCloseBlock closes the currently open repeat block
+func (app *application) handleRunBuilderCloseBlock(w http.ResponseWriter, r *http.Request) {
+	planID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	segments := parseSegmentInputs(r)
+	runBasics := parseRunBasics(r)
+
+	// Check that the block has at least one segment
+	hasSegments := false
+	for _, s := range segments {
+		if s.SetIndex == runBasics.OpenSetIndex {
+			hasSegments = true
+			break
+		}
+	}
+
+	// Only close if there's at least one segment in the block
+	if hasSegments {
+		runBasics.OpenSetIndex = 0
+		runBasics.OpenSetReps = 0
+	}
+
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
 }

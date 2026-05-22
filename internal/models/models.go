@@ -307,3 +307,17 @@ type SegmentInput struct {
 func (s SegmentInput) IsInSet() bool {
 	return s.SetIndex > 0
 }
+
+func (s SegmentInput) FormattedDuration() string {
+	return FormatDuration(s.Duration)
+}
+
+// RunBasics holds the top-level run fields during the builder flow
+type RunBasics struct {
+	Date          string
+	RunType       string
+	TotalDistance string
+	Notes         string
+	OpenSetIndex  int
+	OpenSetReps   int
+}

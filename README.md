@@ -19,6 +19,9 @@ can also be done while checking planned runs as "complete"
 TODO:
 
 - Allow users to construct multi-segment runs with repeats etc.
+- Stop runs to the right of a deleted run in a plan from "falling" left on the calendar
+- Allow users to edit saved runs
+- Add meters for short sprints
 - Elevation changes
 - Calorie tracking
 - Favicon

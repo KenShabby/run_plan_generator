@@ -1,45 +1,264 @@
 package pages
 
-import "fmt"
+import (
+    "fmt"
+    "github.com/KenShabby/run_plan_generator/internal/models"
+)
 
 templ RunForm(planID int32) {
     <article>
         <header><strong>Add Run</strong></header>
-        <form hx-post={ fmt.Sprintf("/plans/%d/runs", planID) }
-              hx-target="#runs-list"
-              hx-swap="beforeend"
-              hx-on::after-request="this.reset()">
-            <div class="grid">
-                <label>
-                    Date
-                    <input type="date" name="date" required>
-                </label>
-                <label>
-                    Run Type
-                    @RunTypeSelect("")
-                </label>
+        @RunFormWithBuilder(planID, models.RunBasics{}, nil)
+    </article>
+}
+
+templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []models.SegmentInput) {
+    <form id="run-builder-form">
+        <!-- Run basics -->
+        <div class="grid">
+            <label>
+                Date
+                <input type="date" name="date" required
+                    if basics.Date != "" {
+                        value={ basics.Date }
+                    }>
+            </label>
+            <label>
+                Run Type
+                @RunTypeSelect(basics.RunType)
+            </label>
+        </div>
+        <div class="grid">
+            <label>
+                Distance (mi)
+                <input type="number" name="total_distance" step="0.1" placeholder="e.g. 8.5"
+                    if basics.TotalDistance != "" {
+                        value={ basics.TotalDistance }
+                    }>
+            </label>
+            <label>
+                Notes
+                <input type="text" name="notes" placeholder="Optional"
+                    if basics.Notes != "" {
+                        value={ basics.Notes }
+                    }>
+            </label>
+        </div>
+
+        <!-- Hidden fields for open block state -->
+        <input type="hidden" name="open_set_index" value={ fmt.Sprintf("%d", basics.OpenSetIndex) }>
+        <input type="hidden" name="open_set_reps" value={ fmt.Sprintf("%d", basics.OpenSetReps) }>
+
+        <!-- Hidden fields for existing segments -->
+        for _, seg := range segments {
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][description]", seg.Index) } value={ seg.Description }>
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][effort_type]", seg.Index) } value={ seg.EffortType }>
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][distance]", seg.Index) } value={ fmt.Sprintf("%g", seg.Distance) }>
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][duration]", seg.Index) } value={ seg.FormattedDuration() }>
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][hr_zone_min]", seg.Index) } value={ fmt.Sprintf("%d", seg.HrZoneMin) }>
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][hr_zone_max]", seg.Index) } value={ fmt.Sprintf("%d", seg.HrZoneMax) }>
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][set_index]", seg.Index) } value={ fmt.Sprintf("%d", seg.SetIndex) }>
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][set_repetitions]", seg.Index) } value={ fmt.Sprintf("%d", seg.SetRepetitions) }>
+        }
+
+        <!-- Segment list display -->
+        if len(segments) > 0 {
+            <hr>
+            <strong style="font-size: 0.85rem;">Workout Structure</strong>
+            <div style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                @SegmentInputList(planID, segments)
             </div>
-            <div class="grid">
-                <label>
-                    Distance
-                    <input type="number" name="total_distance" step="0.1" placeholder="e.g. 8.5">
-                </label>
-                <label>
-                    Notes
-                    <input type="text" name="notes" placeholder="Optional">
-                </label>
-            </div>
-            <div class="grid">
-                <button type="submit">Add Run</button>
-                <button type="button" class="secondary"
-                        hx-get={ fmt.Sprintf("/plans/%d/runs/form/cancel", planID) }
+            <hr>
+        }
+
+        <!-- Open block indicator -->
+        if basics.OpenSetIndex > 0 {
+            <div style="border: 2px solid var(--pico-primary); border-radius: 6px; padding: 0.75rem; margin-bottom: 0.75rem;">
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--pico-primary); margin-bottom: 0.75rem;">
+                    { fmt.Sprintf("Building Repeat Block × %d — add segments below", basics.OpenSetReps) }
+                </div>
+                @SegmentInputFields()
+                <div class="grid">
+                    <button type="submit"
+                        hx-post={ fmt.Sprintf("/plans/%d/runs/builder/add-to-block", planID) }
                         hx-target="#run-form-container"
-                        hx-swap="innerHTML">
+                        hx-swap="innerHTML"
+                        hx-include="#run-builder-form">
+                        + Add to Block
+                    </button>
+                    <button type="submit" class="secondary"
+                        hx-post={ fmt.Sprintf("/plans/%d/runs/builder/close-block", planID) }
+                        hx-target="#run-form-container"
+                        hx-swap="innerHTML"
+                        hx-include="#run-builder-form">
+                        ✓ Done with Block
+                    </button>
+                </div>
+            </div>
+        } else {
+            <!-- Add segment section -->
+            <details style="margin-bottom: 0.75rem;">
+                <summary style="font-size: 0.85rem; cursor: pointer;">+ Add Segment</summary>
+                <div style="margin-top: 0.75rem;">
+                    @SegmentInputFields()
+                    <button type="submit"
+                        hx-post={ fmt.Sprintf("/plans/%d/runs/builder", planID) }
+                        hx-target="#run-form-container"
+                        hx-swap="innerHTML"
+                        hx-include="#run-builder-form">
+                        Add Segment
+                    </button>
+                </div>
+            </details>
+
+            <!-- Add repeat block section -->
+            <details style="margin-bottom: 0.75rem;">
+                <summary style="font-size: 0.85rem; cursor: pointer;">+ Add Repeat Block</summary>
+                <div style="margin-top: 0.75rem;">
+                    <label>
+                        Repetitions
+                        <input type="number" name="new_repeat_reps" min="2" max="50" placeholder="e.g. 8">
+                    </label>
+                    <button type="submit"
+                        hx-post={ fmt.Sprintf("/plans/%d/runs/builder/repeat", planID) }
+                        hx-target="#run-form-container"
+                        hx-swap="innerHTML"
+                        hx-include="#run-builder-form">
+                        Start Repeat Block
+                    </button>
+                </div>
+            </details>
+        }
+
+        <!-- Save / Cancel -->
+        <div class="grid">
+                <button type="submit"
+                    hx-post={ fmt.Sprintf("/plans/%d/runs", planID) }
+                    hx-target="#runs-list"
+                    hx-swap="beforeend"
+                    hx-include="#run-builder-form"
+                    hx-on::after-request="document.getElementById('run-form-container').innerHTML=''">
+                    Save Run
+                </button>
+                <button type="button" class="secondary"
+                    hx-get={ fmt.Sprintf("/plans/%d/runs/form/cancel", planID) }
+                    hx-target="#run-form-container"
+                    hx-swap="innerHTML">
                     Cancel
                 </button>
+        </div>
+    </form>
+}
+
+templ SegmentInputList(planID int32, segments []models.SegmentInput) {
+    for _, seg := range segments {
+        <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; padding: 0.4rem; background: var(--pico-card-background-color); border: 1px solid var(--pico-card-border-color); border-radius: 4px;">
+            <div style="flex: 1;">
+                if seg.IsInSet() {
+                    <span style="color: var(--pico-primary); font-size: 0.7rem;">↻ { fmt.Sprintf("%d×", seg.SetRepetitions) }</span>
+                }
+                if seg.Description != "" {
+                    <span style="font-weight: 500;">{ seg.Description }</span>
+                }
+                if seg.Distance > 0 {
+                    <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" %.2f mi", seg.Distance) }</span>
+                }
+                if seg.Duration > 0 {
+                    <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" %s", seg.FormattedDuration()) }</span>
+                }
+                if seg.HrZoneMin > 0 {
+                    <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" Z%d", seg.HrZoneMin) }
+                        if seg.HrZoneMax > seg.HrZoneMin {
+                            { fmt.Sprintf("–Z%d", seg.HrZoneMax) }
+                        }
+                    </span>
+                }
             </div>
-        </form>
-    </article>
+
+            <!-- Reorder buttons -->
+            <button type="submit" class="secondary outline"
+                style="font-size: 0.6rem; padding: 2px 6px; margin: 0;"
+                formaction={ fmt.Sprintf("/plans/%d/runs/builder/reorder", planID) }
+                hx-post={ fmt.Sprintf("/plans/%d/runs/builder/reorder", planID) }
+                hx-target="#run-form-container"
+                hx-swap="innerHTML"
+                hx-include="#run-builder-form"
+                hx-vals={ fmt.Sprintf(`{"target_index": "%d", "direction": "up"}`, seg.Index) }>
+                ↑
+            </button>
+            <button type="submit" class="secondary outline"
+                style="font-size: 0.6rem; padding: 2px 6px; margin: 0;"
+                formaction={ fmt.Sprintf("/plans/%d/runs/builder/reorder", planID) }
+                hx-post={ fmt.Sprintf("/plans/%d/runs/builder/reorder", planID) }
+                hx-target="#run-form-container"
+                hx-swap="innerHTML"
+                hx-include="#run-builder-form"
+                hx-vals={ fmt.Sprintf(`{"target_index": "%d", "direction": "down"}`, seg.Index) }>
+                ↓
+            </button>
+            <button type="submit" class="secondary outline"
+                style="font-size: 0.6rem; padding: 2px 6px; margin: 0; color: var(--pico-del-color);"
+                formaction={ fmt.Sprintf("/plans/%d/runs/builder/delete", planID) }
+                hx-post={ fmt.Sprintf("/plans/%d/runs/builder/delete", planID) }
+                hx-target="#run-form-container"
+                hx-swap="innerHTML"
+                hx-include="#run-builder-form"
+                hx-vals={ fmt.Sprintf(`{"target_index": "%d"}`, seg.Index) }>
+                ✕
+            </button>
+        </div>
+    }
+}
+
+templ SegmentInputFields() {
+    <div class="grid">
+        <label>
+            Description
+            <input type="text" name="new_description" placeholder="e.g. Warmup, 400m repeat, Recovery jog">
+        </label>
+        <label>
+            Effort Type
+            <select name="new_effort_type" required>
+                <option value="">— select —</option>
+                <option value="distance">Distance</option>
+                <option value="time">Time</option>
+            </select>
+        </label>
+    </div>
+    <div class="grid">
+        <label>
+            Distance (mi)
+            <input type="number" name="new_distance" step="0.01" placeholder="e.g. 0.25">
+        </label>
+        <label>
+            Duration
+            <input type="text" name="new_duration" placeholder="e.g. 1:30 or 45:00">
+        </label>
+    </div>
+    <div class="grid">
+        <label>
+            HR Zone Min
+            <select name="new_hr_zone_min">
+                <option value="0">— none —</option>
+                <option value="1">Zone 1</option>
+                <option value="2">Zone 2</option>
+                <option value="3">Zone 3</option>
+                <option value="4">Zone 4</option>
+                <option value="5">Zone 5</option>
+            </select>
+        </label>
+        <label>
+            HR Zone Max
+            <select name="new_hr_zone_max">
+                <option value="0">— none —</option>
+                <option value="1">Zone 1</option>
+                <option value="2">Zone 2</option>
+                <option value="3">Zone 3</option>
+                <option value="4">Zone 4</option>
+                <option value="5">Zone 5</option>
+            </select>
+        </label>
+    </div>
 }
 
 templ RunFormEmpty() {
