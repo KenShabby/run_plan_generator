@@ -17,10 +17,14 @@ of the week. --> seems to be fixed now; off-by-one error.
 can also be done while checking planned runs as "complete"
 - Allow users to construct multi-segment runs with repeats etc.
 
-TODO:
+05-23-2026
 
 - Stop runs to the right of a deleted run in a plan from "falling" left on the calendar
+
+TODO:
+
 - Allow users to edit saved runs
+- Allow multiple runs in a single day
 - Add meters for short sprints
 - Elevation changes
 - Calorie tracking

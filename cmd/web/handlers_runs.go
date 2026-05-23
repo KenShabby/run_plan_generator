@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -36,6 +37,10 @@ func (app *application) handleDeleteRun(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+
+	// Return an empty day cell to preserve grid position
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprintf(w, `<div class="day-cell empty" id="run-%d"></div>`, id)
 }
 
 func (app *application) handleGetRun(w http.ResponseWriter, r *http.Request) {

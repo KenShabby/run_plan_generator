@@ -14,6 +14,8 @@ func newServer(app *application) http.Handler {
 	app.registerMiscRoutes(r)
 	app.registerAuthRoutes(r)
 
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
 	// Protected groups - auth required
 	r.Group(func(r chi.Router) {
 		r.Use(app.requireAuth)
