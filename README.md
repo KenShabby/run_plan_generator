@@ -15,10 +15,10 @@ of the week. --> seems to be fixed now; off-by-one error.
 - Makefile and other installation instructions.
 - Allow users to log runs to track basic stats like milage, time, pace, etc. This
 can also be done while checking planned runs as "complete"
+- Allow users to construct multi-segment runs with repeats etc.
 
 TODO:
 
-- Allow users to construct multi-segment runs with repeats etc.
 - Stop runs to the right of a deleted run in a plan from "falling" left on the calendar
 - Allow users to edit saved runs
 - Add meters for short sprints

@@ -184,14 +184,8 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 		http.Error(w, "bad request", http.StatusBadRequest)
 		return
 	}
-	app.logger.Printf("DEBUG form values: %v", r.Form)
 
 	segments := parseSegmentInputs(r)
-	app.logger.Printf("DEBUG: parsed %d segments from form", len(segments))
-	for _, s := range segments {
-		app.logger.Printf("DEBUG: seg[%d] description=%s effortType=%s setIndex=%d",
-			s.Index, s.Description, s.EffortType, s.SetIndex)
-	}
 
 	// Check if there's a pending segment in the new_* fields
 	// If effort_type is filled in, the user has entered a segment but not hit Add Segment
@@ -217,8 +211,6 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 			SetRepetitions: openSetReps,
 		}
 		segments = append(segments, pending)
-		app.logger.Printf("DEBUG: pending segment appended, total segments now: %d", len(segments))
-		app.logger.Printf("DEBUG: pending seg: %+v", pending)
 		segments = reindexSegments(segments)
 	}
 
@@ -267,7 +259,6 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 	}
 
 	// After creating run, create any segments
-	app.logger.Printf("DEBUG: about to create %d segments for run %d", len(segments), run.ID)
 	segments = parseSegmentInputs(r)
 	for _, seg := range segments {
 		var dist pgtype.Float8
@@ -312,7 +303,7 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 			SetRepetitions: setReps,
 		})
 		if err != nil {
-			app.logger.Printf("error creating segment for run %d: %v", run.ID, err)
+			app.logger.Printf("ERROR creating segment for run %d: %v", run.ID, err)
 		}
 	}
 
