@@ -13,6 +13,17 @@ import (
 func (app *application) registerRunRoutes(r chi.Router) {
 	r.Delete("/runs/{id}", app.handleDeleteRun)
 	r.Get("/runs/{id}", app.handleGetRun)
+	r.Get("/runs/{id}/log", app.handleGetLogRun)
+	r.Post("/runs/{id}/log", app.handlePostLogRun)
+	// edit routes
+	r.Get("/runs/{id}/edit", app.handleGetEditRun)
+	r.Post("/runs/{id}/edit", app.handlePostEditRun)
+	r.Post("/runs/{id}/builder", app.handleRunEditBuilderAddSegment)
+	r.Post("/runs/{id}/builder/repeat", app.handleRunEditBuilderAddRepeat)
+	r.Post("/runs/{id}/builder/add-to-block", app.handleRunEditBuilderAddToBlock)
+	r.Post("/runs/{id}/builder/close-block", app.handleRunEditBuilderCloseBlock)
+	r.Post("/runs/{id}/builder/reorder", app.handleRunEditBuilderReorder)
+	r.Post("/runs/{id}/builder/delete", app.handleRunEditBuilderDelete)
 }
 
 func (app *application) handleDeleteRun(w http.ResponseWriter, r *http.Request) {

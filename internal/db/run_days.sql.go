@@ -285,3 +285,45 @@ func (q *Queries) MarkRunDayCompleted(ctx context.Context, id int32) error {
 	_, err := q.db.Exec(ctx, markRunDayCompleted, id)
 	return err
 }
+
+const updateRunDay = `-- name: UpdateRunDay :one
+UPDATE run_days
+SET date           = $2,
+    run_type       = $3,
+    total_distance = $4,
+    notes          = $5
+WHERE id = $1
+RETURNING id, plan_id, date, run_type, total_distance, total_duration, completed, notes, created_at, is_goal_race
+`
+
+type UpdateRunDayParams struct {
+	ID            int32         `json:"id"`
+	Date          pgtype.Date   `json:"date"`
+	RunType       string        `json:"run_type"`
+	TotalDistance pgtype.Float8 `json:"total_distance"`
+	Notes         pgtype.Text   `json:"notes"`
+}
+
+func (q *Queries) UpdateRunDay(ctx context.Context, arg UpdateRunDayParams) (RunDay, error) {
+	row := q.db.QueryRow(ctx, updateRunDay,
+		arg.ID,
+		arg.Date,
+		arg.RunType,
+		arg.TotalDistance,
+		arg.Notes,
+	)
+	var i RunDay
+	err := row.Scan(
+		&i.ID,
+		&i.PlanID,
+		&i.Date,
+		&i.RunType,
+		&i.TotalDistance,
+		&i.TotalDuration,
+		&i.Completed,
+		&i.Notes,
+		&i.CreatedAt,
+		&i.IsGoalRace,
+	)
+	return i, err
+}

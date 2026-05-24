@@ -46,3 +46,12 @@ ORDER BY rd.date ASC;
 
 -- name: MarkRunDayCompleted :exec
 UPDATE run_days SET completed = true WHERE id = $1;
+
+-- name: UpdateRunDay :one
+UPDATE run_days
+SET date           = $2,
+    run_type       = $3,
+    total_distance = $4,
+    notes          = $5
+WHERE id = $1
+RETURNING *;

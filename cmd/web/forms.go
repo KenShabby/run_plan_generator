@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/KenShabby/run_plan_generator/internal/models"
 )
@@ -15,10 +16,22 @@ func parseSegmentInputs(r *http.Request) []models.SegmentInput {
 	var segments []models.SegmentInput
 	for i := 0; ; i++ {
 		prefix := fmt.Sprintf("seg[%d]", i)
+
+		// Check if this index exists at all by looking for description OR effort_type
+		description := r.FormValue(prefix + "[description]")
 		effortType := r.FormValue(prefix + "[effort_type]")
-		if effortType == "" {
+		setIndex := r.FormValue(prefix + "[set_index]")
+
+		// If all three are empty and there's no set_index, we're done
+		if description == "" && effortType == "" && setIndex == "" {
 			break
 		}
+
+		// Default effort_type if missing
+		if effortType == "" {
+			effortType = "distance"
+		}
+
 		dist, _ := strconv.ParseFloat(r.FormValue(prefix+"[distance]"), 64)
 		dur, _ := models.ParseDuration(r.FormValue(prefix + "[duration]"))
 		hrMin, _ := strconv.Atoi(r.FormValue(prefix + "[hr_zone_min]"))
@@ -28,7 +41,7 @@ func parseSegmentInputs(r *http.Request) []models.SegmentInput {
 
 		segments = append(segments, models.SegmentInput{
 			Index:          i,
-			Description:    r.FormValue(prefix + "[description]"),
+			Description:    description,
 			EffortType:     effortType,
 			Distance:       dist,
 			Duration:       dur,
@@ -87,4 +100,8 @@ func parseRunBasics(r *http.Request) models.RunBasics {
 		OpenSetIndex:  openSetIndex,
 		OpenSetReps:   openSetReps,
 	}
+}
+
+func parseDate(s string) (time.Time, error) {
+	return time.Parse("2006-01-02", s)
 }

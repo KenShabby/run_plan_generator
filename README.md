@@ -21,9 +21,12 @@ can also be done while checking planned runs as "complete"
 
 - Stop runs to the right of a deleted run in a plan from "falling" left on the calendar
 
-TODO:
+05-24-2026
 
 - Allow users to edit saved runs
+
+TODO:
+
 - Allow multiple runs in a single day
 - Add meters for short sprints
 - Elevation changes

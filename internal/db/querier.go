@@ -25,6 +25,7 @@ type Querier interface {
 	DeleteHRZonesByProfile(ctx context.Context, profileID int32) error
 	DeleteRunDay(ctx context.Context, id int32) error
 	DeleteRunDayIfOwner(ctx context.Context, arg DeleteRunDayIfOwnerParams) error
+	DeleteSegmentsByRun(ctx context.Context, runID int32) error
 	DeleteTrainingPlan(ctx context.Context, id int32) error
 	DeleteTrainingPlanIfOwner(ctx context.Context, arg DeleteTrainingPlanIfOwnerParams) error
 	DeleteUser(ctx context.Context, id int32) error
@@ -60,6 +61,7 @@ type Querier interface {
 	UpdateEmail(ctx context.Context, arg UpdateEmailParams) (User, error)
 	UpdateHRProfile(ctx context.Context, arg UpdateHRProfileParams) (UserHrProfile, error)
 	UpdatePassword(ctx context.Context, arg UpdatePasswordParams) error
+	UpdateRunDay(ctx context.Context, arg UpdateRunDayParams) (RunDay, error)
 	UpdateTrainingPlan(ctx context.Context, arg UpdateTrainingPlanParams) (TrainingPlan, error)
 	UpdateUsername(ctx context.Context, arg UpdateUsernameParams) (User, error)
 }

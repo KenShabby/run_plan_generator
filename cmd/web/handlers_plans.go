@@ -513,6 +513,11 @@ func (app *application) handleRunBuilderAddToBlock(w http.ResponseWriter, r *htt
 	segments := parseSegmentInputs(r)
 	runBasics := parseRunBasics(r)
 
+	effortType := r.FormValue("new_effort_type")
+	if effortType == "" {
+		effortType = "distance" // sensible default
+	}
+
 	dist, _ := strconv.ParseFloat(r.FormValue("new_distance"), 64)
 	dur, _ := models.ParseDuration(r.FormValue("new_duration"))
 	hrMin, _ := strconv.Atoi(r.FormValue("new_hr_zone_min"))

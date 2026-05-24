@@ -73,6 +73,15 @@ func (q *Queries) CreateSegment(ctx context.Context, arg CreateSegmentParams) (S
 	return i, err
 }
 
+const deleteSegmentsByRun = `-- name: DeleteSegmentsByRun :exec
+DELETE FROM segments WHERE run_id = $1
+`
+
+func (q *Queries) DeleteSegmentsByRun(ctx context.Context, runID int32) error {
+	_, err := q.db.Exec(ctx, deleteSegmentsByRun, runID)
+	return err
+}
+
 const listSegmentsByRun = `-- name: ListSegmentsByRun :many
 SELECT id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at, set_index, set_repetitions FROM segments
 WHERE run_id = $1
