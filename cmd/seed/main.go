@@ -14,6 +14,24 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type TemplatePlanYAML struct {
+	Name              string       `yaml:"name"`
+	Description       string       `yaml:"description"`
+	PlanType          string       `yaml:"plan_type"`
+	DistanceUnit      string       `yaml:"distance_unit"`
+	TotalWeeks        int          `yaml:"total_weeks"`
+	PeakWeeklyMileage float64      `yaml:"peak_weekly_mileage"`
+	Runs              []RunDayYAML `yaml:"runs"`
+}
+
+type RunDayYAML struct {
+	DayOffset int           `yaml:"day_offset"`
+	RunType   string        `yaml:"run_type"`
+	Distance  float64       `yaml:"distance"`
+	Notes     string        `yaml:"notes"`
+	Segments  []SegmentYAML `yaml:"segments"`
+}
+
 type SegmentYAML struct {
 	OrderIndex     int     `yaml:"order_index"` // Order in the run
 	Description    string  `yaml:"description"`
@@ -25,24 +43,6 @@ type SegmentYAML struct {
 	HrZoneMax      int     `yaml:"hr_zone_max"`
 	SetIndex       int     `yaml:"set_index"` // Order in the repetitions
 	SetRepetitions int     `yaml:"set_repetitions"`
-}
-
-type RunDayYAML struct {
-	DayOffset int           `yaml:"day_offset"`
-	RunType   string        `yaml:"run_type"`
-	Distance  float64       `yaml:"distance"`
-	Notes     string        `yaml:"notes"`
-	Segments  []SegmentYAML `yaml:"segments"`
-}
-
-type TemplatePlanYAML struct {
-	Name              string       `yaml:"name"`
-	Description       string       `yaml:"description"`
-	PlanType          string       `yaml:"plan_type"`
-	DistanceUnit      string       `yaml:"distance_unit"`
-	TotalWeeks        int          `yaml:"total_weeks"`
-	PeakWeeklyMileage float64      `yaml:"peak_weekly_mileage"`
-	Runs              []RunDayYAML `yaml:"runs"`
 }
 
 func main() {
