@@ -22,7 +22,6 @@ func (app *application) registerPlanRoutes(r chi.Router) {
 	r.Post("/plans", app.handlePostPlans)
 	r.Get("/plans/{id}", app.handleGetPlansById)
 	r.Get("/plans/{id}/runs/new", app.handleGetPlansByIdRunsNew)
-	r.Get("/plans/{id}/runs/form/cancel", app.handleGetPlansByIdRunsFormCancel)
 	r.Post("/plans/{id}/runs", app.handlePostPlansByIdRuns)
 	r.Delete("/plans/{id}", app.handleDeletePlan)
 	r.Get("/plans/{id}/export.ics", app.handleExportPlan)
@@ -166,12 +165,8 @@ func (app *application) handleGetPlansByIdRunsNew(w http.ResponseWriter, r *http
 		http.Error(w, "forbidden", http.StatusForbidden)
 		return
 	}
-	pages.RunForm(int32(id)).Render(r.Context(), w)
+	pages.RunForm(int32(id), app.username(r)).Render(r.Context(), w)
 
-}
-
-func (app *application) handleGetPlansByIdRunsFormCancel(w http.ResponseWriter, r *http.Request) {
-	pages.RunFormEmpty().Render(r.Context(), w)
 }
 
 func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.Request) {
@@ -307,7 +302,8 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 		}
 	}
 
-	pages.RunCard(run).Render(r.Context(), w)
+	w.Header().Set("HX-Redirect", fmt.Sprintf("/plans/%d", planID))
+	w.WriteHeader(http.StatusOK)
 }
 
 func (app *application) handleDeletePlan(w http.ResponseWriter, r *http.Request) {

@@ -109,14 +109,11 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
            style="font-size: 0.8rem; padding: 4px 12px;">
             Export to Calendar
         </a>
-        <button
-            hx-get={ fmt.Sprintf("/plans/%d/runs/new", plan.ID) }
-            hx-target="#run-form-container"
-            hx-swap="innerHTML">
+        <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d/runs/new", plan.ID)) }
+           role="button">
             + Add Run
-        </button>
+        </a>
     </div>
-    <div id="run-form-container"></div>
 
     <!-- Day of week headers -->
     <div class="week-grid">
