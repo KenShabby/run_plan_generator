@@ -37,8 +37,7 @@ templ RunFormPage(planID int32) {
 templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []models.SegmentInput) {
     <form id="run-builder-form"
         method="POST"
-        action={ templ.SafeURL(fmt.Sprintf("/plans/%d/runs", planID)) }
-        data-hx-disable>
+        action={ templ.SafeURL(fmt.Sprintf("/plans/%d/runs", planID)) }>
         <!-- Run basics -->
         <div class="grid">
             <label>
@@ -126,7 +125,7 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
                 <summary style="font-size: 0.85rem; cursor: pointer;">+ Add Segment</summary>
                 <div style="margin-top: 0.75rem;">
                     @SegmentInputFields()
-                    <button type="submit"
+                    <button type="button"
                         hx-post={ fmt.Sprintf("/plans/%d/runs/builder", planID) }
                         hx-target="#run-builder-container"
                         hx-swap="innerHTML"
@@ -144,7 +143,7 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
                         Repetitions
                         <input type="number" name="new_repeat_reps" min="2" max="50" placeholder="e.g. 8">
                     </label>
-                    <button type="submit"
+                    <button type="button"
                         hx-post={ fmt.Sprintf("/plans/%d/runs/builder/repeat", planID) }
                         hx-target="#run-builder-container"
                         hx-swap="innerHTML"
@@ -157,9 +156,7 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
 
         <!-- Save / Cancel -->
         <div class="grid">
-            <button type="submit" 
-                hx-post={ fmt.Sprintf("/plans/%d/runs", planID) }
-                hx-include="#run-builder-form">
+            <button type="submit">
                 Save Run
             </button>
             <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d", planID)) }
@@ -236,7 +233,7 @@ templ SegmentInputFields() {
         </label>
         <label>
             Effort Type
-            <select name="new_effort_type" required>
+            <select name="new_effort_type">
                 <option value="">— select —</option>
                 <option value="distance">Distance</option>
                 <option value="time">Time</option>
@@ -366,16 +363,14 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                         </div>
                         @SegmentInputFields()
                         <div class="grid">
-                            <button type="submit"
-                                formaction={ fmt.Sprintf("/runs/%d/builder/add-to-block", runID) }
+                            <button type="button"
                                 hx-post={ fmt.Sprintf("/runs/%d/builder/add-to-block", runID) }
                                 hx-target="#run-edit-container"
                                 hx-swap="innerHTML"
                                 hx-include="#run-edit-form">
                                 + Add to Block
                             </button>
-                            <button type="submit" class="secondary"
-                                formaction={ fmt.Sprintf("/runs/%d/builder/close-block", runID) }
+                            <button type="button" class="secondary"
                                 hx-post={ fmt.Sprintf("/runs/%d/builder/close-block", runID) }
                                 hx-target="#run-edit-container"
                                 hx-swap="innerHTML"
@@ -473,9 +468,8 @@ templ EditSegmentInputList(runID int32, segments []models.SegmentInput) {
                     </span>
                 }
             </div>
-            <button type="submit" class="secondary outline"
+            <button type="button" class="secondary outline"
                 style="font-size: 0.6rem; padding: 2px 6px; margin: 0;"
-                formaction={ fmt.Sprintf("/runs/%d/builder/reorder", runID) }
                 hx-post={ fmt.Sprintf("/runs/%d/builder/reorder", runID) }
                 hx-target="#run-edit-container"
                 hx-swap="innerHTML"
@@ -483,9 +477,8 @@ templ EditSegmentInputList(runID int32, segments []models.SegmentInput) {
                 hx-vals={ fmt.Sprintf(`{"target_index": "%d", "direction": "up"}`, seg.Index) }>
                 ↑
             </button>
-            <button type="submit" class="secondary outline"
+            <button type="button" class="secondary outline"
                 style="font-size: 0.6rem; padding: 2px 6px; margin: 0;"
-                formaction={ fmt.Sprintf("/runs/%d/builder/reorder", runID) }
                 hx-post={ fmt.Sprintf("/runs/%d/builder/reorder", runID) }
                 hx-target="#run-edit-container"
                 hx-swap="innerHTML"
@@ -493,9 +486,8 @@ templ EditSegmentInputList(runID int32, segments []models.SegmentInput) {
                 hx-vals={ fmt.Sprintf(`{"target_index": "%d", "direction": "down"}`, seg.Index) }>
                 ↓
             </button>
-            <button type="submit" class="secondary outline"
+            <button type="button" class="secondary outline"
                 style="font-size: 0.6rem; padding: 2px 6px; margin: 0; color: var(--pico-del-color);"
-                formaction={ fmt.Sprintf("/runs/%d/builder/delete", runID) }
                 hx-post={ fmt.Sprintf("/runs/%d/builder/delete", runID) }
                 hx-target="#run-edit-container"
                 hx-swap="innerHTML"
