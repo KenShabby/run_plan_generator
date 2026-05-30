@@ -135,9 +135,13 @@ templ RunCalendar(runs []db.RunDay) {
     for _, week := range GroupRunsByWeek(runs) {
         <div class="week-label">Week { fmt.Sprintf("%d", week.WeekNum) }</div>
         <div class="week-grid">
-            for _, run := range week.Days {
-                if run != nil {
-                    @CompactRunCard(*run)
+            for _, dayRuns := range week.Days {
+                if len(dayRuns) > 0 {
+                     <div class="day-cell" style="display: flex; flex-direction: column; gap: 4px;">
+                        for _, run := range dayRuns {
+                            @CompactRunCard(*run)
+                        }
+                    </div>
                 } else {
                     <div class="day-cell empty"></div>
                 }

@@ -11,7 +11,7 @@ import (
 // WeekRow holds 7 day slots (Mon-Sun). A nil entry means no run that day.
 type WeekRow struct {
 	WeekNum int
-	Days    [7]*db.RunDay // index 0=Mon, 6=Sun
+	Days    [7][]*db.RunDay // index 0=Mon, 6=Sun
 }
 
 type SegmentGroup struct {
@@ -79,6 +79,10 @@ func GroupRunsByWeek(runs []db.RunDay) []WeekRow {
 	rows := make([]WeekRow, totalWeeks)
 	for w := range rows {
 		rows[w].WeekNum = w + 1
+		// Initialize each days as an empty slice
+		for d := range rows[w].Days {
+			rows[w].Days[d] = []*db.RunDay{}
+		}
 	}
 
 	for i := range runs {
@@ -87,7 +91,7 @@ func GroupRunsByWeek(runs []db.RunDay) []WeekRow {
 		week := diff / 7
 		day := diff % 7
 		if week >= 0 && week < totalWeeks && day >= 0 && day < 7 {
-			rows[week].Days[day] = r
+			rows[week].Days[day] = append(rows[week].Days[day], r)
 		}
 	}
 	return rows
