@@ -12,9 +12,9 @@ import (
 )
 
 const createSegment = `-- name: CreateSegment :one
-INSERT INTO segments (run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, set_index, set_repetitions)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-RETURNING id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at, set_index, set_repetitions
+INSERT INTO segments (run_id, order_index, description, effort_type, distance, distance_unit, duration, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, set_index, set_repetitions)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+RETURNING id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at, set_index, set_repetitions, distance_unit
 `
 
 type CreateSegmentParams struct {
@@ -23,6 +23,7 @@ type CreateSegmentParams struct {
 	Description    pgtype.Text   `json:"description"`
 	EffortType     string        `json:"effort_type"`
 	Distance       pgtype.Float8 `json:"distance"`
+	DistanceUnit   string        `json:"distance_unit"`
 	Duration       pgtype.Int8   `json:"duration"`
 	Pace           pgtype.Int8   `json:"pace"`
 	Repetitions    int32         `json:"repetitions"`
@@ -41,6 +42,7 @@ func (q *Queries) CreateSegment(ctx context.Context, arg CreateSegmentParams) (S
 		arg.Description,
 		arg.EffortType,
 		arg.Distance,
+		arg.DistanceUnit,
 		arg.Duration,
 		arg.Pace,
 		arg.Repetitions,
@@ -69,6 +71,7 @@ func (q *Queries) CreateSegment(ctx context.Context, arg CreateSegmentParams) (S
 		&i.CreatedAt,
 		&i.SetIndex,
 		&i.SetRepetitions,
+		&i.DistanceUnit,
 	)
 	return i, err
 }
@@ -83,7 +86,7 @@ func (q *Queries) DeleteSegmentsByRun(ctx context.Context, runID int32) error {
 }
 
 const listSegmentsByRun = `-- name: ListSegmentsByRun :many
-SELECT id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at, set_index, set_repetitions FROM segments
+SELECT id, run_id, order_index, description, effort_type, duration, distance, pace, repetitions, hr_zone_min, hr_zone_max, hr_abs_min, hr_abs_max, created_at, set_index, set_repetitions, distance_unit FROM segments
 WHERE run_id = $1
 ORDER BY order_index ASC
 `
@@ -114,6 +117,7 @@ func (q *Queries) ListSegmentsByRun(ctx context.Context, runID int32) ([]Segment
 			&i.CreatedAt,
 			&i.SetIndex,
 			&i.SetRepetitions,
+			&i.DistanceUnit,
 		); err != nil {
 			return nil, err
 		}

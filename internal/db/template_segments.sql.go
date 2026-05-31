@@ -14,7 +14,7 @@ import (
 const createTemplateSegment = `-- name: CreateTemplateSegment :one
 INSERT INTO template_segments (run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, set_index, set_repetitions)
 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-RETURNING id, run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, created_at, set_index, set_repetitions
+RETURNING id, run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, created_at, set_index, set_repetitions, distance_unit
 `
 
 type CreateTemplateSegmentParams struct {
@@ -63,12 +63,13 @@ func (q *Queries) CreateTemplateSegment(ctx context.Context, arg CreateTemplateS
 		&i.CreatedAt,
 		&i.SetIndex,
 		&i.SetRepetitions,
+		&i.DistanceUnit,
 	)
 	return i, err
 }
 
 const listTemplateSegmentsByRun = `-- name: ListTemplateSegmentsByRun :many
-SELECT id, run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, created_at, set_index, set_repetitions FROM template_segments
+SELECT id, run_id, order_index, description, effort_type, distance, duration, pace, repetitions, hr_zone_min, hr_zone_max, created_at, set_index, set_repetitions, distance_unit FROM template_segments
 WHERE run_id = $1
 ORDER BY order_index ASC
 `
@@ -97,6 +98,7 @@ func (q *Queries) ListTemplateSegmentsByRun(ctx context.Context, runID int32) ([
 			&i.CreatedAt,
 			&i.SetIndex,
 			&i.SetRepetitions,
+			&i.DistanceUnit,
 		); err != nil {
 			return nil, err
 		}

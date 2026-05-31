@@ -287,6 +287,7 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 			},
 			EffortType:     seg.EffortType,
 			Distance:       dist,
+			DistanceUnit:   seg.DistanceUnit,
 			Duration:       dur,
 			Pace:           pgtype.Int8{Valid: false},
 			Repetitions:    1,
@@ -414,10 +415,7 @@ func (app *application) handleRunBuilderAddSegment(w http.ResponseWriter, r *htt
 
 	// Parse run basics to re-render the full form
 	runBasics := parseRunBasics(r)
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, `<div id="run-builder-container">`)
 	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
-	fmt.Fprintf(w, `</div>`)
 }
 
 // handleRunBuilderAddRepeat adds a repeat block with N repetitions
@@ -452,10 +450,7 @@ func (app *application) handleRunBuilderAddRepeat(w http.ResponseWriter, r *http
 	runBasics.OpenSetIndex = maxSetIdx + 1
 	runBasics.OpenSetReps = reps
 
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, `<div id="run-builder-container">`)
 	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
-	fmt.Fprintf(w, `</div>`)
 
 }
 
@@ -477,10 +472,7 @@ func (app *application) handleRunBuilderReorder(w http.ResponseWriter, r *http.R
 	segments = moveSegment(segments, idx, direction)
 
 	runBasics := parseRunBasics(r)
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, `<div id="run-builder-container">`)
 	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
-	fmt.Fprintf(w, `</div>`)
 }
 
 // handleRunBuilderDelete removes a segment from the in-progress list
@@ -500,10 +492,7 @@ func (app *application) handleRunBuilderDelete(w http.ResponseWriter, r *http.Re
 	segments = deleteSegment(segments, idx)
 
 	runBasics := parseRunBasics(r)
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, `<div id="run-builder-container">`)
 	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
-	fmt.Fprintf(w, `</div>`)
 }
 
 // handleRunBuilderAddToBlock adds a segment to the currently open repeat block
@@ -545,10 +534,7 @@ func (app *application) handleRunBuilderAddToBlock(w http.ResponseWriter, r *htt
 	segments = append(segments, newSeg)
 	segments = reindexSegments(segments)
 
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, `<div id="run-builder-container">`)
 	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
-	fmt.Fprintf(w, `</div>`)
 }
 
 // handleRunBuilderCloseBlock closes the currently open repeat block
@@ -581,8 +567,5 @@ func (app *application) handleRunBuilderCloseBlock(w http.ResponseWriter, r *htt
 		runBasics.OpenSetReps = 0
 	}
 
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprintf(w, `<div id="run-builder-container">`)
 	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
-	fmt.Fprintf(w, `</div>`)
 }

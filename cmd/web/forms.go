@@ -33,6 +33,10 @@ func parseSegmentInputs(r *http.Request) []models.SegmentInput {
 		}
 
 		dist, _ := strconv.ParseFloat(r.FormValue(prefix+"[distance]"), 64)
+		distanceUnit := r.FormValue(prefix + "[distance_unit]")
+		if distanceUnit == "" {
+			distanceUnit = "miles"
+		}
 		dur, _ := models.ParseDuration(r.FormValue(prefix + "[duration]"))
 		hrMin, _ := strconv.Atoi(r.FormValue(prefix + "[hr_zone_min]"))
 		hrMax, _ := strconv.Atoi(r.FormValue(prefix + "[hr_zone_max]"))
@@ -44,6 +48,7 @@ func parseSegmentInputs(r *http.Request) []models.SegmentInput {
 			Description:    description,
 			EffortType:     effortType,
 			Distance:       dist,
+			DistanceUnit:   distanceUnit,
 			Duration:       dur,
 			HrZoneMin:      hrMin,
 			HrZoneMax:      hrMax,

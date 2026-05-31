@@ -4,6 +4,7 @@ import (
         "fmt"
         "github.com/KenShabby/run_plan_generator/internal/db"
         "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
+        "github.com/KenShabby/run_plan_generator/internal/models"
        )
 
 templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db.HrZone, fromPlan int) {
@@ -102,7 +103,7 @@ templ SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) {
         }
     <span style="color: var(--pico-muted-color);">{ seg.EffortType }</span>
         if seg.Distance.Valid {
-            <span>{ fmt.Sprintf("%.2f mi", seg.Distance.Float64) }</span>
+            <span>{ models.FormatDistance(seg.Distance.Float64, seg.DistanceUnit) }</span>
         }
     if seg.Duration.Valid {
         <span>{ fmt.Sprintf("%d:%02d", seg.Duration.Int64/60, seg.Duration.Int64%60) }</span>

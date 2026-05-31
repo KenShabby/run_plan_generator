@@ -8,6 +8,7 @@ import (
 	"unicode"
 
 	"github.com/KenShabby/run_plan_generator/internal/db"
+	"github.com/KenShabby/run_plan_generator/internal/models"
 )
 
 func formatRunType(runType string) string {
@@ -55,7 +56,7 @@ func formatSegmentLine(seg db.Segment) string {
 		parts = append(parts, seg.Description.String)
 	}
 	if seg.Distance.Valid {
-		parts = append(parts, fmt.Sprintf("%.2f mi", seg.Distance.Float64))
+		parts = append(parts, models.FormatDistance(seg.Distance.Float64, seg.DistanceUnit))
 	}
 	if seg.Duration.Valid {
 		secs := seg.Duration.Int64

@@ -14,7 +14,7 @@ templ RunForm(planID int32, username string) {
 }
 
 templ RunFormPage(planID int32) {
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>Add Run</h1>
         <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d", planID)) }
            role="button"
@@ -78,6 +78,7 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
             <input type="hidden" name={ fmt.Sprintf("seg[%d][description]", seg.Index) } value={ seg.Description }>
             <input type="hidden" name={ fmt.Sprintf("seg[%d][effort_type]", seg.Index) } value={ seg.EffortType }>
             <input type="hidden" name={ fmt.Sprintf("seg[%d][distance]", seg.Index) } value={ fmt.Sprintf("%g", seg.Distance) }>
+            <input type="hidden" name={ fmt.Sprintf("seg[%d][distance_unit]", seg.Index) } value={ seg.DistanceUnit }>
             <input type="hidden" name={ fmt.Sprintf("seg[%d][duration]", seg.Index) } value={ seg.FormattedDuration() }>
             <input type="hidden" name={ fmt.Sprintf("seg[%d][hr_zone_min]", seg.Index) } value={ fmt.Sprintf("%d", seg.HrZoneMin) }>
             <input type="hidden" name={ fmt.Sprintf("seg[%d][hr_zone_max]", seg.Index) } value={ fmt.Sprintf("%d", seg.HrZoneMax) }>
@@ -182,7 +183,7 @@ templ SegmentInputList(planID int32, segments []models.SegmentInput) {
                     <span style="font-weight: 500;">{ seg.Description }</span>
                 }
                 if seg.Distance > 0 {
-                    <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" %.2f mi", seg.Distance) }</span>
+                    <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" %s", models.FormatDistance(seg.Distance, seg.DistanceUnit)) }</span>
                 }
                 if seg.Duration > 0 {
                     <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" %s", seg.FormattedDuration()) }</span>
@@ -242,12 +243,26 @@ templ SegmentInputFields() {
     </div>
     <div class="grid">
         <label>
-            Distance (mi)
-            <input type="number" name="new_distance" step="0.01" placeholder="e.g. 0.25">
+            Distance
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="number" name="new_distance" step="0.01" placeholder="e.g. 0.25"
+                    style="flex: 1;">
+                <select name="new_distance_unit" style="width: auto;">
+                    for _, opt := range models.DistanceUnitOptions {
+                        <option value={ opt.Value }
+                            if opt.Value == "miles" {
+                                selected
+                            }>
+                            { opt.Label }
+                        </option>
+                    }
+                </select>
+            </div>
         </label>
         <label>
             Duration
             <input type="text" name="new_duration" placeholder="e.g. 1:30 or 45:00">
+            <small>Format: H:MM:SS or MM:SS</small>
         </label>
     </div>
     <div class="grid">
@@ -338,6 +353,7 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                     <input type="hidden" name={ fmt.Sprintf("seg[%d][description]", seg.Index) } value={ seg.Description }>
                     <input type="hidden" name={ fmt.Sprintf("seg[%d][effort_type]", seg.Index) } value={ seg.EffortType }>
                     <input type="hidden" name={ fmt.Sprintf("seg[%d][distance]", seg.Index) } value={ fmt.Sprintf("%g", seg.Distance) }>
+                    <input type="hidden" name={ fmt.Sprintf("seg[%d][distance_unit]", seg.Index) } value={ seg.DistanceUnit }>
                     <input type="hidden" name={ fmt.Sprintf("seg[%d][duration]", seg.Index) } value={ seg.FormattedDuration() }>
                     <input type="hidden" name={ fmt.Sprintf("seg[%d][hr_zone_min]", seg.Index) } value={ fmt.Sprintf("%d", seg.HrZoneMin) }>
                     <input type="hidden" name={ fmt.Sprintf("seg[%d][hr_zone_max]", seg.Index) } value={ fmt.Sprintf("%d", seg.HrZoneMax) }>
@@ -455,7 +471,7 @@ templ EditSegmentInputList(runID int32, segments []models.SegmentInput) {
                     <span style="font-weight: 500;">{ seg.Description }</span>
                 }
                 if seg.Distance > 0 {
-                    <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" %.2f mi", seg.Distance) }</span>
+                    <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" %s", models.FormatDistance(seg.Distance, seg.DistanceUnit)) }</span>
                 }
                 if seg.Duration > 0 {
                     <span style="color: var(--pico-muted-color);">{ fmt.Sprintf(" %s", seg.FormattedDuration()) }</span>

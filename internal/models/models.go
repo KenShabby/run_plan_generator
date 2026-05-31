@@ -296,6 +296,7 @@ type SegmentInput struct {
 	Description    string
 	EffortType     string
 	Distance       float64
+	DistanceUnit   string
 	Duration       int // seconds
 	HrZoneMin      int
 	HrZoneMax      int
@@ -320,4 +321,37 @@ type RunBasics struct {
 	Notes         string
 	OpenSetIndex  int
 	OpenSetReps   int
+}
+
+const (
+	UnitMiles      DistanceUnit = "miles"
+	UnitKilometers DistanceUnit = "kilometers"
+	UnitMeters     DistanceUnit = "meters"
+	UnitYards      DistanceUnit = "yards"
+)
+
+var DistanceUnitOptions = []struct {
+	Value string
+	Label string
+}{
+	{string(UnitMiles), "Miles"},
+	{string(UnitKilometers), "Kilometers"},
+	{string(UnitMeters), "Meters"},
+	{string(UnitYards), "Yards"},
+}
+
+func FormatDistance(distance float64, unit string) string {
+	if distance == 0 {
+		return ""
+	}
+	switch unit {
+	case string(UnitMeters):
+		return fmt.Sprintf("%.0fm", distance)
+	case string(UnitYards):
+		return fmt.Sprintf("%.0fyd", distance)
+	case string(UnitKilometers):
+		return fmt.Sprintf("%.2fkm", distance)
+	default: // miles
+		return fmt.Sprintf("%.2fmi", distance)
+	}
 }

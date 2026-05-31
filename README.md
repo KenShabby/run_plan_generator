@@ -25,10 +25,14 @@ can also be done while checking planned runs as "complete"
 
 - Allow users to edit saved runs
 
-TODO:
+05-28-2026
 
 - Allow multiple runs in a single day
+
+TODO:
+
 - Add meters for short sprints
+- Make miles/km default a user preference option
 - Elevation changes
 - Calorie tracking
 - Favicon

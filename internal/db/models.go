@@ -63,6 +63,7 @@ type Segment struct {
 	CreatedAt      pgtype.Timestamp `json:"created_at"`
 	SetIndex       pgtype.Int4      `json:"set_index"`
 	SetRepetitions pgtype.Int4      `json:"set_repetitions"`
+	DistanceUnit   string           `json:"distance_unit"`
 }
 
 type TemplatePlan struct {
@@ -101,6 +102,7 @@ type TemplateSegment struct {
 	CreatedAt      pgtype.Timestamp `json:"created_at"`
 	SetIndex       pgtype.Int4      `json:"set_index"`
 	SetRepetitions pgtype.Int4      `json:"set_repetitions"`
+	DistanceUnit   string           `json:"distance_unit"`
 }
 
 type TrainingPlan struct {

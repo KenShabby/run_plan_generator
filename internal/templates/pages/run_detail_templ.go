@@ -11,6 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 	"github.com/KenShabby/run_plan_generator/internal/db"
+	"github.com/KenShabby/run_plan_generator/internal/models"
 	"github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
 
@@ -52,7 +53,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 			var templ_7745c5c3_Var2 templ.SafeURL
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(fmt.Sprintf("/runs/%d/log", run.ID)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 14, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 15, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -65,7 +66,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/runs/%d/log", run.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 16, Col: 60}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 17, Col: 60}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -83,7 +84,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 		var templ_7745c5c3_Var4 templ.SafeURL
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(fmt.Sprintf("/runs/%d/edit", run.ID)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 22, Col: 65}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 23, Col: 65}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -96,7 +97,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/runs/%d/edit", run.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 25, Col: 53}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 26, Col: 53}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -114,7 +115,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 			var templ_7745c5c3_Var6 templ.SafeURL
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(fmt.Sprintf("/plans/%d", fromPlan)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 31, Col: 71}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 32, Col: 71}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -127,7 +128,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/plans/%d", fromPlan))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 34, Col: 59}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 35, Col: 59}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -150,7 +151,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(run.Date.Time.Format("Monday, January 2, 2006"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 52, Col: 64}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 53, Col: 64}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -168,7 +169,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.1f", run.TotalDistance.Float64))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 56, Col: 63}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 57, Col: 63}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -187,7 +188,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 			var templ_7745c5c3_Var10 string
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(run.Notes.String)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 60, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 61, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
@@ -216,7 +217,7 @@ func RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]db
 					var templ_7745c5c3_Var11 string
 					templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Repeat %d×", group.Repetitions))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 69, Col: 71}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 70, Col: 71}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 					if templ_7745c5c3_Err != nil {
@@ -328,7 +329,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 			var templ_7745c5c3_Var15 string
 			templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(seg.Description.String)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 91, Col: 77}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 92, Col: 77}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 			if templ_7745c5c3_Err != nil {
@@ -348,7 +349,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 					var templ_7745c5c3_Var16 string
 					templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Z%d–Z%d (%d–%d bpm)", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32, zMin.HrMin, zMax.HrMax))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 95, Col: 132}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 96, Col: 132}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 					if templ_7745c5c3_Err != nil {
@@ -366,7 +367,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 					var templ_7745c5c3_Var17 string
 					templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 97, Col: 94}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 98, Col: 94}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 					if templ_7745c5c3_Err != nil {
@@ -385,7 +386,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 				var templ_7745c5c3_Var18 string
 				templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 100, Col: 90}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 101, Col: 90}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 				if templ_7745c5c3_Err != nil {
@@ -404,7 +405,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(seg.EffortType)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 103, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 104, Col: 66}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
@@ -420,9 +421,9 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var20 string
-			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%.2f mi", seg.Distance.Float64))
+			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(models.FormatDistance(seg.Distance.Float64, seg.DistanceUnit))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 105, Col: 64}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 106, Col: 81}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 			if templ_7745c5c3_Err != nil {
@@ -441,7 +442,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 			var templ_7745c5c3_Var21 string
 			templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d:%02d", seg.Duration.Int64/60, seg.Duration.Int64%60))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 108, Col: 84}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 109, Col: 84}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 			if templ_7745c5c3_Err != nil {
@@ -462,7 +463,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 					var templ_7745c5c3_Var22 string
 					templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Z%d (%d–%d bpm)", seg.HrZoneMin.Int32, zone.HrMin, zone.HrMax))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 113, Col: 101}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 114, Col: 101}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 					if templ_7745c5c3_Err != nil {
@@ -480,7 +481,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 					var templ_7745c5c3_Var23 string
 					templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Z%d", seg.HrZoneMin.Int32))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 115, Col: 63}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 116, Col: 63}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 					if templ_7745c5c3_Err != nil {
@@ -501,7 +502,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 						var templ_7745c5c3_Var24 string
 						templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Z%d–Z%d (%d–%d bpm)", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32, zMin.HrMin, zMax.HrMax))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 120, Col: 132}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 121, Col: 132}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 						if templ_7745c5c3_Err != nil {
@@ -519,7 +520,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 						var templ_7745c5c3_Var25 string
 						templ_7745c5c3_Var25, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32))
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 122, Col: 94}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 123, Col: 94}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var25))
 						if templ_7745c5c3_Err != nil {
@@ -538,7 +539,7 @@ func SegmentRow(seg db.Segment, zoneMap map[int32]db.HrZone) templ.Component {
 					var templ_7745c5c3_Var26 string
 					templ_7745c5c3_Var26, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("Z%d–Z%d", seg.HrZoneMin.Int32, seg.HrZoneMax.Int32))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 125, Col: 90}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/run_detail.templ`, Line: 126, Col: 90}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var26))
 					if templ_7745c5c3_Err != nil {
