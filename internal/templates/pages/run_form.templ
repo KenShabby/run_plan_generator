@@ -27,14 +27,13 @@ templ RunFormPage(planID int32) {
     </div>
     <div style="max-width: 760px;">
         <article>
-            <div id="run-builder-container">
-                @RunFormWithBuilder(planID, models.RunBasics{}, nil)
-            </div>
+            @RunFormWithBuilder(planID, models.RunBasics{}, nil)
         </article>
     </div>
 }
 
 templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []models.SegmentInput) {
+    <div id="run-builder-container">
     <form id="run-builder-form"
         method="POST"
         action={ templ.SafeURL(fmt.Sprintf("/plans/%d/runs", planID)) }>
@@ -107,14 +106,14 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
                     <button type="button"
                         hx-post={ fmt.Sprintf("/plans/%d/runs/builder/add-to-block", planID) }
                         hx-target="#run-builder-container"
-                        hx-swap="innerHTML"
+                        hx-swap="outerHTML"
                         hx-include="#run-builder-form">
                         + Add to Block
                     </button>
                     <button type="button" class="secondary"
                         hx-post={ fmt.Sprintf("/plans/%d/runs/builder/close-block", planID) }
                         hx-target="#run-builder-container"
-                        hx-swap="innerHTML"
+                        hx-swap="outerHTML"
                         hx-include="#run-builder-form">
                         ✓ Done with Block
                     </button>
@@ -129,12 +128,13 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
                     <button type="button"
                         hx-post={ fmt.Sprintf("/plans/%d/runs/builder", planID) }
                         hx-target="#run-builder-container"
-                        hx-swap="innerHTML"
+                        hx-swap="outerHTML"
                         hx-include="#run-builder-form">
                         Add Segment
                     </button>
                 </div>
             </details>
+
 
             <!-- Add repeat block section -->
             <details style="margin-bottom: 0.75rem;">
@@ -145,10 +145,10 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
                         <input type="number" name="new_repeat_reps" min="2" max="50" placeholder="e.g. 8">
                     </label>
                     <button type="button"
-                        hx-post={ fmt.Sprintf("/plans/%d/runs/builder/repeat", planID) }
-                        hx-target="#run-builder-container"
-                        hx-swap="innerHTML"
-                        hx-include="#run-builder-form">
+                        hx-post={ fmt.Sprintf("/runs/%d/builder/repeat", runID) }
+                        hx-target="#run-edit-container"
+                        hx-swap="outerHTML"
+                        hx-include="#run-edit-form">
                         Start Repeat Block
                     </button>
                 </div>
@@ -170,6 +170,7 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
             </a>
         </div>
     </form>
+    </div>
 }
 
 templ SegmentInputList(planID int32, segments []models.SegmentInput) {
@@ -201,7 +202,7 @@ templ SegmentInputList(planID int32, segments []models.SegmentInput) {
             <button type="button" class="secondary outline"
                 hx-post={ fmt.Sprintf("/plans/%d/runs/builder/reorder", planID) }
                 hx-target="#run-builder-container"
-                hx-swap="innerHTML"
+                hx-swap="outerHTML"
                 hx-include="#run-builder-form"
                 hx-vals={ fmt.Sprintf(`{"target_index": "%d", "direction": "up"}`, seg.Index) }>
                 ↑
@@ -209,7 +210,7 @@ templ SegmentInputList(planID int32, segments []models.SegmentInput) {
             <button type="button" class="secondary outline"
                 hx-post={ fmt.Sprintf("/plans/%d/runs/builder/reorder", planID) }
                 hx-target="#run-builder-container"
-                hx-swap="innerHTML"
+                hx-swap="outerHTML"
                 hx-include="#run-builder-form"
                 hx-vals={ fmt.Sprintf(`{"target_index": "%d", "direction": "down"}`, seg.Index) }>
                 ↓
@@ -217,7 +218,7 @@ templ SegmentInputList(planID int32, segments []models.SegmentInput) {
             <button type="button" class="secondary outline"
                 hx-post={ fmt.Sprintf("/plans/%d/runs/builder/delete", planID) }
                 hx-target="#run-builder-container"
-                hx-swap="innerHTML"
+                hx-swap="outerHTML"
                 hx-include="#run-builder-form"
                 hx-vals={ fmt.Sprintf(`{"target_index": "%d"}`, seg.Index) }>
                 ✕
@@ -377,19 +378,19 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                         <div style="font-size: 0.8rem; font-weight: 600; color: var(--pico-primary); margin-bottom: 0.75rem;">
                             { fmt.Sprintf("Building Repeat Block × %d — add segments below", basics.OpenSetReps) }
                         </div>
-                        @SegmentInputFields()
+                        @EditSegmentInputFields(runID)
                         <div class="grid">
                             <button type="button"
                                 hx-post={ fmt.Sprintf("/runs/%d/builder/add-to-block", runID) }
                                 hx-target="#run-edit-container"
-                                hx-swap="innerHTML"
+                                hx-swap="outerHTML"
                                 hx-include="#run-edit-form">
                                 + Add to Block
                             </button>
                             <button type="button" class="secondary"
                                 hx-post={ fmt.Sprintf("/runs/%d/builder/close-block", runID) }
                                 hx-target="#run-edit-container"
-                                hx-swap="innerHTML"
+                                hx-swap="outerHTML"
                                 hx-include="#run-edit-form">
                                 ✓ Done with Block
                             </button>
@@ -400,11 +401,11 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                     <details style="margin-bottom: 0.75rem;">
                         <summary style="font-size: 0.85rem; cursor: pointer;">+ Add Segment</summary>
                         <div style="margin-top: 0.75rem;">
-                            @SegmentInputFields()
+                            @SegmentInputFields(runID)
                             <button type="button"
                                 hx-post={ fmt.Sprintf("/plans/%d/runs/builder", planID) }
                                 hx-target="#run-builder-container"
-                                hx-swap="innerHTML"
+                                hx-swap="outerHTML"
                                 hx-include="#run-builder-form">
                                 Add Segment
                             </button>
@@ -422,7 +423,7 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                             <button type="button"
                                 hx-post={ fmt.Sprintf("/plans/%d/runs/builder/repeat", planID) }
                                 hx-target="#run-builder-container"
-                                hx-swap="innerHTML"
+                                hx-swap="outerHTML"
                                 hx-include="#run-builder-form">
                                 Start Repeat Block
                             </button>
@@ -435,7 +436,7 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                     <button type="submit"
                         hx-post={ fmt.Sprintf("/runs/%d/edit", runID) }
                         hx-target="#run-edit-container"
-                        hx-swap="innerHTML"
+                        hx-swap="outerHTML"
                         hx-include="#run-edit-form">
                         Save Changes
                     </button>
@@ -444,7 +445,7 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                        class="secondary"
                        hx-get={ fmt.Sprintf("/runs/%d", runID) }
                        hx-target="#run-edit-container"
-                       hx-swap="innerHTML">
+                       hx-swap="outerHTML">
                         Cancel
                     </a>
                 </div>
@@ -488,7 +489,7 @@ templ EditSegmentInputList(runID int32, segments []models.SegmentInput) {
                 style="font-size: 0.6rem; padding: 2px 6px; margin: 0;"
                 hx-post={ fmt.Sprintf("/runs/%d/builder/reorder", runID) }
                 hx-target="#run-edit-container"
-                hx-swap="innerHTML"
+                hx-swap="outerHTML"
                 hx-include="#run-edit-form"
                 hx-vals={ fmt.Sprintf(`{"target_index": "%d", "direction": "up"}`, seg.Index) }>
                 ↑
@@ -497,7 +498,7 @@ templ EditSegmentInputList(runID int32, segments []models.SegmentInput) {
                 style="font-size: 0.6rem; padding: 2px 6px; margin: 0;"
                 hx-post={ fmt.Sprintf("/runs/%d/builder/reorder", runID) }
                 hx-target="#run-edit-container"
-                hx-swap="innerHTML"
+                hx-swap="outerHTML"
                 hx-include="#run-edit-form"
                 hx-vals={ fmt.Sprintf(`{"target_index": "%d", "direction": "down"}`, seg.Index) }>
                 ↓
@@ -506,11 +507,76 @@ templ EditSegmentInputList(runID int32, segments []models.SegmentInput) {
                 style="font-size: 0.6rem; padding: 2px 6px; margin: 0; color: var(--pico-del-color);"
                 hx-post={ fmt.Sprintf("/runs/%d/builder/delete", runID) }
                 hx-target="#run-edit-container"
-                hx-swap="innerHTML"
+                hx-swap="outerHTML"
                 hx-include="#run-edit-form"
                 hx-vals={ fmt.Sprintf(`{"target_index": "%d"}`, seg.Index) }>
                 ✕
             </button>
         </div>
     }
+}
+
+templ EditSegmentInputFields(runID int32) {
+    <div class="grid">
+        <label>
+            Description
+            <input type="text" name="new_description" placeholder="e.g. Warmup, 400m repeat, Recovery jog">
+        </label>
+        <label>
+            Effort Type
+            <select name="new_effort_type">
+                <option value="">— select —</option>
+                <option value="distance">Distance</option>
+                <option value="time">Time</option>
+            </select>
+        </label>
+    </div>
+    <div class="grid">
+        <label>
+            Distance
+            <div style="display: flex; gap: 0.5rem;">
+                <input type="number" name="new_distance" step="0.01" placeholder="e.g. 0.25"
+                    style="flex: 1;">
+                <select name="new_distance_unit" style="width: auto;">
+                    for _, opt := range models.DistanceUnitOptions {
+                        <option value={ opt.Value }
+                            if opt.Value == "miles" {
+                                selected
+                            }>
+                            { opt.Label }
+                        </option>
+                    }
+                </select>
+            </div>
+        </label>
+        <label>
+            Duration
+            <input type="text" name="new_duration" placeholder="e.g. 1:30 or 45:00">
+            <small>Format: H:MM:SS or MM:SS</small>
+        </label>
+    </div>
+    <div class="grid">
+        <label>
+            HR Zone Min
+            <select name="new_hr_zone_min">
+                <option value="0">— none —</option>
+                <option value="1">Zone 1</option>
+                <option value="2">Zone 2</option>
+                <option value="3">Zone 3</option>
+                <option value="4">Zone 4</option>
+                <option value="5">Zone 5</option>
+            </select>
+        </label>
+        <label>
+            HR Zone Max
+            <select name="new_hr_zone_max">
+                <option value="0">— none —</option>
+                <option value="1">Zone 1</option>
+                <option value="2">Zone 2</option>
+                <option value="3">Zone 3</option>
+                <option value="4">Zone 4</option>
+                <option value="5">Zone 5</option>
+            </select>
+        </label>
+    </div>
 }

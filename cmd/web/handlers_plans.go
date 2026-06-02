@@ -401,14 +401,19 @@ func (app *application) handleRunBuilderAddSegment(w http.ResponseWriter, r *htt
 	hrMin, _ := strconv.Atoi(r.FormValue("new_hr_zone_min"))
 	hrMax, _ := strconv.Atoi(r.FormValue("new_hr_zone_max"))
 
+	distanceUnit := r.FormValue("new_distance_unit")
+	if distanceUnit == "" {
+		distanceUnit = "miles"
+	}
 	newSeg := models.SegmentInput{
-		Index:       len(segments),
-		Description: r.FormValue("new_description"),
-		EffortType:  r.FormValue("new_effort_type"),
-		Distance:    dist,
-		Duration:    dur,
-		HrZoneMin:   hrMin,
-		HrZoneMax:   hrMax,
+		Index:        len(segments),
+		Description:  r.FormValue("new_description"),
+		EffortType:   r.FormValue("new_effort_type"),
+		Distance:     dist,
+		DistanceUnit: distanceUnit,
+		Duration:     dur,
+		HrZoneMin:    hrMin,
+		HrZoneMax:    hrMax,
 	}
 	segments = append(segments, newSeg)
 	segments = reindexSegments(segments)
@@ -520,11 +525,17 @@ func (app *application) handleRunBuilderAddToBlock(w http.ResponseWriter, r *htt
 	hrMin, _ := strconv.Atoi(r.FormValue("new_hr_zone_min"))
 	hrMax, _ := strconv.Atoi(r.FormValue("new_hr_zone_max"))
 
+	distanceUnit := r.FormValue("new_distance_unit")
+	if distanceUnit == "" {
+		distanceUnit = "miles"
+	}
+
 	newSeg := models.SegmentInput{
 		Index:          len(segments),
 		Description:    r.FormValue("new_description"),
 		EffortType:     r.FormValue("new_effort_type"),
 		Distance:       dist,
+		DistanceUnit:   distanceUnit,
 		Duration:       dur,
 		HrZoneMin:      hrMin,
 		HrZoneMax:      hrMax,
