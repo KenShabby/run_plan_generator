@@ -21,12 +21,10 @@ templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]d
                 </a>
         }
     <a href={ templ.SafeURL(fmt.Sprintf("/runs/%d/edit", run.ID)) }
-    role="button"
+        role="button"
         class="secondary"
-        hx-get={ fmt.Sprintf("/runs/%d/edit", run.ID) }
-    hx-target="main"
-        hx-push-url="true">
-        Edit
+        hx-boost="false">
+            Edit
         </a>
         if fromPlan > 0 {
             <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d", fromPlan)) }

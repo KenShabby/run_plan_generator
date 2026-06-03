@@ -145,10 +145,10 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
                         <input type="number" name="new_repeat_reps" min="2" max="50" placeholder="e.g. 8">
                     </label>
                     <button type="button"
-                        hx-post={ fmt.Sprintf("/runs/%d/builder/repeat", runID) }
-                        hx-target="#run-edit-container"
+                        hx-post={ fmt.Sprintf("/plans/%d/runs/builder/repeat", planID) }
+                        hx-target="#run-builder-container"
                         hx-swap="outerHTML"
-                        hx-include="#run-edit-form">
+                        hx-include="#run-builder-form">
                         Start Repeat Block
                     </button>
                 </div>
@@ -297,7 +297,7 @@ templ RunFormEmpty() {
 }
 
 templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, segments []models.SegmentInput, username string) {
-        <div id="run-edit-container">
+    <div id="run-edit-container">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1>Edit Run</h1>
             <a href={ templ.SafeURL(fmt.Sprintf("/runs/%d", runID)) }
@@ -313,7 +313,8 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
             <article>
                 <form id="run-edit-form"
                       method="POST"
-                      action={ templ.SafeURL(fmt.Sprintf("/runs/%d/edit", runID)) }>
+                      action={ templ.SafeURL(fmt.Sprintf("/runs/%d/edit", runID)) }
+                      hx-boost="false">
                 <!-- Run basics -->
                 <div class="grid">
                     <label>
@@ -401,12 +402,12 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                     <details style="margin-bottom: 0.75rem;">
                         <summary style="font-size: 0.85rem; cursor: pointer;">+ Add Segment</summary>
                         <div style="margin-top: 0.75rem;">
-                            @SegmentInputFields(runID)
+                            @EditSegmentInputFields(runID)
                             <button type="button"
-                                hx-post={ fmt.Sprintf("/plans/%d/runs/builder", planID) }
-                                hx-target="#run-builder-container"
+                                hx-post={ fmt.Sprintf("/runs/%d/builder", runID) }
+                                hx-target="#run-edit-container"
                                 hx-swap="outerHTML"
-                                hx-include="#run-builder-form">
+                                hx-include="#run-edit-form">
                                 Add Segment
                             </button>
                         </div>
@@ -421,10 +422,10 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                                 <input type="number" name="new_repeat_reps" min="2" max="50" placeholder="e.g. 8">
                             </label>
                             <button type="button"
-                                hx-post={ fmt.Sprintf("/plans/%d/runs/builder/repeat", planID) }
-                                hx-target="#run-builder-container"
+                                hx-post={ fmt.Sprintf("/runs/%d/builder/repeat", runID) }
+                                hx-target="#run-edit-container"
                                 hx-swap="outerHTML"
-                                hx-include="#run-builder-form">
+                                hx-include="#run-edit-form">
                                 Start Repeat Block
                             </button>
                         </div>
@@ -433,13 +434,7 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
 
                 <!-- Save / Cancel -->
                 <div class="grid">
-                    <button type="submit"
-                        hx-post={ fmt.Sprintf("/runs/%d/edit", runID) }
-                        hx-target="#run-edit-container"
-                        hx-swap="outerHTML"
-                        hx-include="#run-edit-form">
-                        Save Changes
-                    </button>
+                    <button type="submit">Save Changes</button>
                     <a href={ templ.SafeURL(fmt.Sprintf("/runs/%d", runID)) }
                        role="button"
                        class="secondary"

@@ -208,30 +208,7 @@ func (app *application) handlePostEditRun(w http.ResponseWriter, r *http.Request
 		}
 	}
 
-	updatedRun, err := app.queries.GetRunDayWithPlanOwner(r.Context(), int32(id))
-	if err != nil {
-		http.Error(w, "run not found", http.StatusNotFound)
-		return
-	}
-
-	updatedSegs, _ := app.queries.ListSegmentsByRun(r.Context(), int32(id))
-	hrzones, _ := app.queries.GetHRZonesByUser(r.Context(), userID)
-	zoneMap := make(map[int32]db.HrZone)
-	for _, z := range hrzones {
-		zoneMap[z.ZoneNumber] = z
-	}
-	runDay := db.RunDay{
-		ID:            updatedRun.ID,
-		PlanID:        updatedRun.PlanID,
-		Date:          updatedRun.Date,
-		RunType:       updatedRun.RunType,
-		TotalDistance: updatedRun.TotalDistance,
-		TotalDuration: updatedRun.TotalDuration,
-		Completed:     updatedRun.Completed,
-		Notes:         updatedRun.Notes,
-		CreatedAt:     updatedRun.CreatedAt,
-	}
-	pages.RunDetailContent(runDay, updatedSegs, zoneMap, int(updatedRun.PlanID)).Render(r.Context(), w)
+	http.Redirect(w, r, fmt.Sprintf("/runs/%d?from_plan=%d", id, run.PlanID), http.StatusSeeOther)
 }
 
 // handleRunEditBuilderAddSegment adds a standalone segment in the edit flow

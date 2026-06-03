@@ -29,9 +29,12 @@ can also be done while checking planned runs as "complete"
 
 - Allow multiple runs in a single day
 
-TODO:
+06-02-2026
 
 - Add meters for short sprints
+
+TODO:
+
 - Make miles/km default a user preference option
 - Elevation changes
 - Calorie tracking
