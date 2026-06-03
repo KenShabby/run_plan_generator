@@ -1,6 +1,170 @@
 # Run Plan Generator
 
-Allow users to use canned training plans for upcoming races or create their own.
+A web application for creating and tracking running training plans.
+
+## Features
+
+- Create custom training plans with a race date target
+- Use pre-built plan templates for 5K, 10K, half marathon, marathon, and ultra
+- Build multi-segment workouts with repeat blocks
+- Track heart rate zones using max HR, HRR, or LTHR methods
+- Log completed runs with distance, duration, pace, and RPE
+- Export plans to Google Calendar or any calendar app via ICS
+- Dashboard with race countdown and 30-day activity summary
+
+## Tech Stack
+
+- **Backend:** Go 1.25, chi router, pgx/v5
+- **Database:** PostgreSQL
+- **Templates:** templ
+- **Frontend:** HTMX, Pico CSS
+- **DB migrations:** goose
+- **DB codegen:** sqlc
+
+## Prerequisites
+
+- Go 1.25+
+- PostgreSQL 14+
+- [templ](https://templ.guide) — `go install github.com/a-h/templ/cmd/templ@latest`
+- [sqlc](https://sqlc.dev) — `go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest`
+- [goose](https://github.com/pressly/goose) — `go install github.com/pressly/goose/v3/cmd/goose@latest`
+
+## Local Development Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/KenShabby/run_plan_generator.git
+cd run_plan_generator
+```
+
+### 2. Create the database
+
+```bash
+createdb run_plan_generator
+```
+
+### 3. Set up environment variables
+
+Create a `.envrc` file in the project root (used by direnv):
+
+```bash
+DATABASE_URL=postgres:///run_plan_generator?sslmode=disable
+SESSION_SECRET=your-random-secret-here
+```
+
+If you use direnv, run `direnv allow` after creating the file.
+If you don't use direnv, export the variables manually or add them to your shell profile.
+
+Generate a secure session secret:
+
+```bash
+openssl rand -hex 32
+```
+
+### 4. Run migrations
+
+```bash
+make migrate
+```
+
+### Note on migrations
+
+`migrate_up.sh` uses a hardcoded local connection string. If your PostgreSQL
+setup differs, edit `migrate_up.sh` directly or run goose manually:
+
+```bash
+goose -dir migrations postgres "your-connection-string" up
+```
+
+### 5. Seed template plans
+
+```bash
+make seed
+```
+
+### 6. Build and run
+
+```bash
+make run
+```
+
+The app will be available at `http://localhost:8080`.
+
+## Docker Setup
+
+### 1. Start everything with Docker Compose
+
+```bash
+docker compose up -d
+```
+
+### 2. Run migrations
+
+```bash
+make docker-migrate
+```
+
+### 3. Seed template plans
+
+```bash
+make docker-seed
+```
+
+The app will be available at `http://localhost:8080`.
+
+## Development
+
+### Common commands
+
+| Command | Description |
+|---------|-------------|
+| `make build` | Build the binary |
+| `make run` | Build and run the development server |
+| `make dev` | Run with hot reloading (requires air) |
+| `make generate` | Regenerate templ and sqlc code |
+| `make migrate` | Run pending migrations |
+| `make migrate-down` | Roll back last migration |
+| `make seed` | Seed template plans |
+| `make rebuild` | Full rebuild (generate + migrate + build) |
+| `make clean` | Remove build artifacts |
+
+### After changing .templ files
+
+```bash
+templ generate
+go build ./...
+```
+
+### After changing .sql query files
+
+```bash
+sqlc generate
+go build ./...
+```
+
+### After adding a migration
+
+```bash
+make migrate
+```
+
+## Project Structure
+
+.
+├── cmd/
+│   ├── web/          # Main web application
+│   └── seed/         # Template seeding tool
+├── internal/
+│   ├── db/           # sqlc generated database code
+│   ├── hrutil/       # Heart rate utilities
+│   ├── models/       # Domain models
+│   └── templates/    # templ templates
+│       ├── layouts/  # Base layouts
+│       └── pages/    # Page templates
+├── migrations/       # goose migrations
+├── seeds/            # YAML template plan definitions
+└── static/           # Static assets (favicon etc.)
 
 Now implemented:
 
@@ -33,9 +197,11 @@ can also be done while checking planned runs as "complete"
 
 - Add meters for short sprints
 
-TODO:
+## TODO
 
-- Make miles/km default a user preference option
-- Elevation changes
+- Allow users to edit saved runs
 - Calorie tracking
-- Favicon
+- Planned vs actual side by side on run detail
+- Progress charts
+- User preference for default distance unit
+- Elevation changes (manual entry)
