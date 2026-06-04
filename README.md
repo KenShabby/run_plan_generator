@@ -151,6 +151,7 @@ make migrate
 
 ## Project Structure
 
+```text
 .
 ├── cmd/
 │   ├── web/          # Main web application
@@ -165,6 +166,7 @@ make migrate
 ├── migrations/       # goose migrations
 ├── seeds/            # YAML template plan definitions
 └── static/           # Static assets (favicon etc.)
+```
 
 Now implemented:
 
