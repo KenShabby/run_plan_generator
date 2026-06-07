@@ -70,7 +70,7 @@ func ActivityFormContent(planned db.RunDay, rpeOptions []struct {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</label></div><div class=\"grid\"><label>Distance<div style=\"display: flex; gap: 0.5rem;\"><input type=\"number\" name=\"distance\" step=\"0.01\" placeholder=\"e.g. 8.5\" style=\"flex: 1;\"> <select name=\"distance_unit\" style=\"width: 130px;\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</label></div><div class=\"grid\"><label>Distance<div style=\"display: flex; gap: 0.5rem;\"><input type=\"number\" name=\"distance\" step=\"0.01\" placeholder=\"e.g. 8.5\" style=\"flex: 1;\"> <select name=\"distance_unit\" style=\"width: 160px; flex-shrink: 0;\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
