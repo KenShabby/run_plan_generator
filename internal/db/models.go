@@ -9,17 +9,18 @@ import (
 )
 
 type ActivityLog struct {
-	ID       int32              `json:"id"`
-	UserID   int32              `json:"user_id"`
-	RunDayID pgtype.Int4        `json:"run_day_id"`
-	Date     pgtype.Date        `json:"date"`
-	RunType  string             `json:"run_type"`
-	Distance pgtype.Float8      `json:"distance"`
-	Duration pgtype.Int4        `json:"duration"`
-	Pace     pgtype.Int4        `json:"pace"`
-	Rpe      pgtype.Int2        `json:"rpe"`
-	Notes    pgtype.Text        `json:"notes"`
-	LoggedAt pgtype.Timestamptz `json:"logged_at"`
+	ID           int32              `json:"id"`
+	UserID       int32              `json:"user_id"`
+	RunDayID     pgtype.Int4        `json:"run_day_id"`
+	Date         pgtype.Date        `json:"date"`
+	RunType      string             `json:"run_type"`
+	Distance     pgtype.Float8      `json:"distance"`
+	Duration     pgtype.Int4        `json:"duration"`
+	Pace         pgtype.Int4        `json:"pace"`
+	Rpe          pgtype.Int2        `json:"rpe"`
+	Notes        pgtype.Text        `json:"notes"`
+	LoggedAt     pgtype.Timestamptz `json:"logged_at"`
+	DistanceUnit string             `json:"distance_unit"`
 }
 
 type HrZone struct {

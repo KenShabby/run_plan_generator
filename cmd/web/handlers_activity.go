@@ -103,6 +103,11 @@ func (app *application) handleGetLogRun(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	distanceUnit := r.FormValue("distance_unit")
+	if "" == distanceUnit {
+		distanceUnit = "miles"
+	}
+
 	// Pre-populate from planned run
 	runDay := db.RunDay{
 		ID:            run.ID,
@@ -115,9 +120,9 @@ func (app *application) handleGetLogRun(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if r.Header.Get("HX-Request") == "true" {
-		pages.ActivityFormContent(runDay, models.RPEOptions, app.username(r)).Render(r.Context(), w)
+		pages.ActivityFormContent(runDay, models.RPEOptions, distanceUnit, app.username(r)).Render(r.Context(), w)
 	} else {
-		pages.ActivityForm(runDay, models.RPEOptions, app.username(r)).Render(r.Context(), w)
+		pages.ActivityForm(runDay, models.RPEOptions, distanceUnit, app.username(r)).Render(r.Context(), w)
 	}
 }
 
@@ -175,11 +180,17 @@ func (app *application) handlePostLogRun(w http.ResponseWriter, r *http.Request)
 
 // handleGetActivityForm shows a blank form for logging an unscheduled run
 func (app *application) handleGetActivityForm(w http.ResponseWriter, r *http.Request) {
+	userID, ok := app.getSessionUserID(r)
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+	prefs := app.getUserPrefs(r.Context(), userID)
 	empty := db.RunDay{}
 	if r.Header.Get("HX-Request") == "true" {
-		pages.ActivityFormContent(empty, models.RPEOptions, app.username(r)).Render(r.Context(), w)
+		pages.ActivityFormContent(empty, models.RPEOptions, prefs.DistanceUnit, app.username(r)).Render(r.Context(), w)
 	} else {
-		pages.ActivityForm(empty, models.RPEOptions, app.username(r)).Render(r.Context(), w)
+		pages.ActivityForm(empty, models.RPEOptions, prefs.DistanceUnit, app.username(r)).Render(r.Context(), w)
 	}
 }
 
@@ -197,6 +208,7 @@ func (app *application) handlePostActivity(w http.ResponseWriter, r *http.Reques
 	}
 
 	params, err := app.parseActivityForm(r, userID)
+	app.logger.Printf("DEBUG: activity params distanceUnit=%s", params.DistanceUnit)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -332,15 +344,21 @@ func (app *application) parseActivityForm(r *http.Request, userID int32) (db.Cre
 		notes = pgtype.Text{String: v, Valid: true}
 	}
 
+	distanceUnit := r.FormValue("distance_unit")
+	if distanceUnit == "" {
+		distanceUnit = "miles"
+	}
+
 	return db.CreateActivityLogParams{
-		UserID:   userID,
-		Date:     pgtype.Date{Time: date, Valid: true},
-		RunType:  r.FormValue("run_type"),
-		Distance: distance,
-		Duration: duration,
-		Pace:     pace,
-		Rpe:      rpe,
-		Notes:    notes,
+		UserID:       userID,
+		Date:         pgtype.Date{Time: date, Valid: true},
+		RunType:      r.FormValue("run_type"),
+		Distance:     distance,
+		DistanceUnit: distanceUnit,
+		Duration:     duration,
+		Pace:         pace,
+		Rpe:          rpe,
+		Notes:        notes,
 	}, nil
 }
 
@@ -356,6 +374,7 @@ func (app *application) handleGetEditActivity(w http.ResponseWriter, r *http.Req
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
+	prefs := app.getUserPrefs(r.Context(), userID)
 
 	entry, err := app.queries.GetActivityLogByID(r.Context(), int32(id))
 	if err != nil {
@@ -368,9 +387,9 @@ func (app *application) handleGetEditActivity(w http.ResponseWriter, r *http.Req
 	}
 
 	if r.Header.Get("HX-Request") == "true" {
-		pages.ActivityEditFormContent(entry, models.RPEOptions, app.username(r)).Render(r.Context(), w)
+		pages.ActivityEditFormContent(entry, models.RPEOptions, prefs.DistanceUnit, app.username(r)).Render(r.Context(), w)
 	} else {
-		pages.ActivityEditForm(entry, models.RPEOptions, app.username(r)).Render(r.Context(), w)
+		pages.ActivityEditForm(entry, models.RPEOptions, prefs.DistanceUnit, app.username(r)).Render(r.Context(), w)
 	}
 }
 
@@ -409,13 +428,18 @@ func (app *application) handlePostEditActivity(w http.ResponseWriter, r *http.Re
 		return
 	}
 
+	distanceUnit := r.FormValue("distance_unit")
+	if distanceUnit == "" {
+		distanceUnit = "miles"
+	}
 	_, err = app.queries.UpdateActivityLog(r.Context(), db.UpdateActivityLogParams{
-		ID:       int32(id),
-		Distance: parsed.Distance,
-		Duration: parsed.Duration,
-		Pace:     parsed.Pace,
-		Rpe:      parsed.Rpe,
-		Notes:    parsed.Notes,
+		ID:           int32(id),
+		Distance:     parsed.Distance,
+		DistanceUnit: distanceUnit,
+		Duration:     parsed.Duration,
+		Pace:         parsed.Pace,
+		Rpe:          parsed.Rpe,
+		Notes:        parsed.Notes,
 	})
 	if err != nil {
 		app.logger.Printf("error updating activity: %v", err)

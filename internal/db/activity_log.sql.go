@@ -14,23 +14,24 @@ import (
 const createActivityLog = `-- name: CreateActivityLog :one
 INSERT INTO activity_log (
     user_id, run_day_id, date, run_type,
-    distance, duration, pace, rpe, notes
+    distance, distance_unit, duration, pace, rpe, notes
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
 )
-RETURNING id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at
+RETURNING id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at, distance_unit
 `
 
 type CreateActivityLogParams struct {
-	UserID   int32         `json:"user_id"`
-	RunDayID pgtype.Int4   `json:"run_day_id"`
-	Date     pgtype.Date   `json:"date"`
-	RunType  string        `json:"run_type"`
-	Distance pgtype.Float8 `json:"distance"`
-	Duration pgtype.Int4   `json:"duration"`
-	Pace     pgtype.Int4   `json:"pace"`
-	Rpe      pgtype.Int2   `json:"rpe"`
-	Notes    pgtype.Text   `json:"notes"`
+	UserID       int32         `json:"user_id"`
+	RunDayID     pgtype.Int4   `json:"run_day_id"`
+	Date         pgtype.Date   `json:"date"`
+	RunType      string        `json:"run_type"`
+	Distance     pgtype.Float8 `json:"distance"`
+	DistanceUnit string        `json:"distance_unit"`
+	Duration     pgtype.Int4   `json:"duration"`
+	Pace         pgtype.Int4   `json:"pace"`
+	Rpe          pgtype.Int2   `json:"rpe"`
+	Notes        pgtype.Text   `json:"notes"`
 }
 
 func (q *Queries) CreateActivityLog(ctx context.Context, arg CreateActivityLogParams) (ActivityLog, error) {
@@ -40,6 +41,7 @@ func (q *Queries) CreateActivityLog(ctx context.Context, arg CreateActivityLogPa
 		arg.Date,
 		arg.RunType,
 		arg.Distance,
+		arg.DistanceUnit,
 		arg.Duration,
 		arg.Pace,
 		arg.Rpe,
@@ -58,6 +60,7 @@ func (q *Queries) CreateActivityLog(ctx context.Context, arg CreateActivityLogPa
 		&i.Rpe,
 		&i.Notes,
 		&i.LoggedAt,
+		&i.DistanceUnit,
 	)
 	return i, err
 }
@@ -72,7 +75,7 @@ func (q *Queries) DeleteActivityLog(ctx context.Context, id int32) error {
 }
 
 const getActivityLogByID = `-- name: GetActivityLogByID :one
-SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at FROM activity_log
+SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at, distance_unit FROM activity_log
 WHERE id = $1
 `
 
@@ -91,12 +94,13 @@ func (q *Queries) GetActivityLogByID(ctx context.Context, id int32) (ActivityLog
 		&i.Rpe,
 		&i.Notes,
 		&i.LoggedAt,
+		&i.DistanceUnit,
 	)
 	return i, err
 }
 
 const getActivityLogByRunDay = `-- name: GetActivityLogByRunDay :one
-SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at FROM activity_log
+SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at, distance_unit FROM activity_log
 WHERE run_day_id = $1
 LIMIT 1
 `
@@ -116,6 +120,7 @@ func (q *Queries) GetActivityLogByRunDay(ctx context.Context, runDayID pgtype.In
 		&i.Rpe,
 		&i.Notes,
 		&i.LoggedAt,
+		&i.DistanceUnit,
 	)
 	return i, err
 }
@@ -154,7 +159,7 @@ func (q *Queries) GetActivitySummaryByUser(ctx context.Context, userID int32) (G
 }
 
 const getRecentActivityByUser = `-- name: GetRecentActivityByUser :many
-SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at FROM activity_log
+SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at, distance_unit FROM activity_log
 WHERE user_id = $1
 AND date >= CURRENT_DATE - INTERVAL '30 days'
 ORDER BY date DESC
@@ -181,6 +186,7 @@ func (q *Queries) GetRecentActivityByUser(ctx context.Context, userID int32) ([]
 			&i.Rpe,
 			&i.Notes,
 			&i.LoggedAt,
+			&i.DistanceUnit,
 		); err != nil {
 			return nil, err
 		}
@@ -193,7 +199,7 @@ func (q *Queries) GetRecentActivityByUser(ctx context.Context, userID int32) ([]
 }
 
 const listActivityLogByUser = `-- name: ListActivityLogByUser :many
-SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at FROM activity_log
+SELECT id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at, distance_unit FROM activity_log
 WHERE user_id = $1
 ORDER BY date DESC
 `
@@ -219,6 +225,7 @@ func (q *Queries) ListActivityLogByUser(ctx context.Context, userID int32) ([]Ac
 			&i.Rpe,
 			&i.Notes,
 			&i.LoggedAt,
+			&i.DistanceUnit,
 		); err != nil {
 			return nil, err
 		}
@@ -232,7 +239,7 @@ func (q *Queries) ListActivityLogByUser(ctx context.Context, userID int32) ([]Ac
 
 const listActivityLogByUserPaged = `-- name: ListActivityLogByUserPaged :many
 SELECT 
-    a.id, a.user_id, a.run_day_id, a.date, a.run_type, a.distance, a.duration, a.pace, a.rpe, a.notes, a.logged_at,
+    a.id, a.user_id, a.run_day_id, a.date, a.run_type, a.distance, a.duration, a.pace, a.rpe, a.notes, a.logged_at, a.distance_unit,
     COUNT(*) OVER() as total_count
 FROM activity_log a
 WHERE a.user_id = $1
@@ -247,18 +254,19 @@ type ListActivityLogByUserPagedParams struct {
 }
 
 type ListActivityLogByUserPagedRow struct {
-	ID         int32              `json:"id"`
-	UserID     int32              `json:"user_id"`
-	RunDayID   pgtype.Int4        `json:"run_day_id"`
-	Date       pgtype.Date        `json:"date"`
-	RunType    string             `json:"run_type"`
-	Distance   pgtype.Float8      `json:"distance"`
-	Duration   pgtype.Int4        `json:"duration"`
-	Pace       pgtype.Int4        `json:"pace"`
-	Rpe        pgtype.Int2        `json:"rpe"`
-	Notes      pgtype.Text        `json:"notes"`
-	LoggedAt   pgtype.Timestamptz `json:"logged_at"`
-	TotalCount int64              `json:"total_count"`
+	ID           int32              `json:"id"`
+	UserID       int32              `json:"user_id"`
+	RunDayID     pgtype.Int4        `json:"run_day_id"`
+	Date         pgtype.Date        `json:"date"`
+	RunType      string             `json:"run_type"`
+	Distance     pgtype.Float8      `json:"distance"`
+	Duration     pgtype.Int4        `json:"duration"`
+	Pace         pgtype.Int4        `json:"pace"`
+	Rpe          pgtype.Int2        `json:"rpe"`
+	Notes        pgtype.Text        `json:"notes"`
+	LoggedAt     pgtype.Timestamptz `json:"logged_at"`
+	DistanceUnit string             `json:"distance_unit"`
+	TotalCount   int64              `json:"total_count"`
 }
 
 func (q *Queries) ListActivityLogByUserPaged(ctx context.Context, arg ListActivityLogByUserPagedParams) ([]ListActivityLogByUserPagedRow, error) {
@@ -282,6 +290,7 @@ func (q *Queries) ListActivityLogByUserPaged(ctx context.Context, arg ListActivi
 			&i.Rpe,
 			&i.Notes,
 			&i.LoggedAt,
+			&i.DistanceUnit,
 			&i.TotalCount,
 		); err != nil {
 			return nil, err
@@ -297,27 +306,30 @@ func (q *Queries) ListActivityLogByUserPaged(ctx context.Context, arg ListActivi
 const updateActivityLog = `-- name: UpdateActivityLog :one
 UPDATE activity_log
 SET distance = $2,
-    duration = $3,
-    pace     = $4,
-    rpe      = $5,
-    notes    = $6
+    distance_unit = $3,
+    duration = $4,
+    pace     = $5,
+    rpe      = $6,
+    notes    = $7
 WHERE id = $1
-RETURNING id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at
+RETURNING id, user_id, run_day_id, date, run_type, distance, duration, pace, rpe, notes, logged_at, distance_unit
 `
 
 type UpdateActivityLogParams struct {
-	ID       int32         `json:"id"`
-	Distance pgtype.Float8 `json:"distance"`
-	Duration pgtype.Int4   `json:"duration"`
-	Pace     pgtype.Int4   `json:"pace"`
-	Rpe      pgtype.Int2   `json:"rpe"`
-	Notes    pgtype.Text   `json:"notes"`
+	ID           int32         `json:"id"`
+	Distance     pgtype.Float8 `json:"distance"`
+	DistanceUnit string        `json:"distance_unit"`
+	Duration     pgtype.Int4   `json:"duration"`
+	Pace         pgtype.Int4   `json:"pace"`
+	Rpe          pgtype.Int2   `json:"rpe"`
+	Notes        pgtype.Text   `json:"notes"`
 }
 
 func (q *Queries) UpdateActivityLog(ctx context.Context, arg UpdateActivityLogParams) (ActivityLog, error) {
 	row := q.db.QueryRow(ctx, updateActivityLog,
 		arg.ID,
 		arg.Distance,
+		arg.DistanceUnit,
 		arg.Duration,
 		arg.Pace,
 		arg.Rpe,
@@ -336,6 +348,7 @@ func (q *Queries) UpdateActivityLog(ctx context.Context, arg UpdateActivityLogPa
 		&i.Rpe,
 		&i.Notes,
 		&i.LoggedAt,
+		&i.DistanceUnit,
 	)
 	return i, err
 }

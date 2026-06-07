@@ -7,7 +7,7 @@ import (
     "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
 
-templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Label string }, username string) {
+templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Label string }, defaultUnit string, username string) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>Log Run</h1>
         <button class="secondary" onclick="history.back()">← Back</button>
@@ -33,23 +33,32 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
 
                 <div class="grid">
                     <label>
-                        Distance (mi)
-                        <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
-                            if planned.TotalDistance.Valid {
-                                value={ fmt.Sprintf("%.2f", planned.TotalDistance.Float64) }
-                            }>
+                        Distance
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
+                                style="flex: 1;">
+                            <select name="distance_unit" style="width: 130px;">
+                                for _, opt := range models.DistanceUnitOptions {
+                                    <option value={ opt.Value }
+                                        if opt.Value == defaultUnit {
+                                            selected
+                                        }>
+                                        { opt.Label }
+                                    </option>
+                                }
+                            </select>
+                        </div>
                     </label>
+                </div>
+                <div class="grid">
                     <label>
                         Duration
-                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 42:00"
-                            if planned.TotalDuration.Valid {
-                                value={ models.FormatDuration(int(planned.TotalDuration.Int64)) }
-                            }>
+                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 45:00">
                         <small>Format: H:MM:SS or MM:SS</small>
                     </label>
                     <label>
-                        Pace
-                        <input type="text" name="pace" placeholder="e.g. 8:10 — calculated if blank">
+                        Pace (per mi)
+                        <input type="text" name="pace" placeholder="e.g. 8:30 — calculated if blank">
                     </label>
                 </div>
 
@@ -78,9 +87,9 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
     </div>
 }
 
-templ ActivityForm(planned db.RunDay, rpeOptions []struct{ Value int; Label string }, username string) {
+templ ActivityForm(planned db.RunDay, rpeOptions []struct{ Value int; Label string }, defaultUnit string, username string) {
     @layouts.Base("Log Run", username) {
-        @ActivityFormContent(planned, rpeOptions, username)
+        @ActivityFormContent(planned, rpeOptions, defaultUnit, username)
     }
 }
 
@@ -102,12 +111,10 @@ templ ActivityDetailContent(entry db.ActivityLog, username string) {
     <article>
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
             if entry.Distance.Valid {
-                <div>
-                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--pico-primary);">
-                        { fmt.Sprintf("%.2f", entry.Distance.Float64) }
-                    </div>
-                    <div style="font-size: 0.75rem; color: var(--pico-muted-color);">miles</div>
+                <div style="font-size: 1.5rem; font-weight: 700; color: var(--pico-primary);">
+                    { fmt.Sprintf("%.2f", entry.Distance.Float64) }
                 </div>
+                <div style="font-size: 0.75rem; color: var(--pico-muted-color);">{ entry.DistanceUnit }</div>
             }
             if entry.Duration.Valid {
                 <div>
@@ -167,7 +174,7 @@ templ ActivityDetail(entry db.ActivityLog, username string) {
     }
 }
 
-templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value int; Label string }, username string) {
+templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value int; Label string }, defaultUnit string, username string) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>Edit Activity</h1>
         <a href={ templ.SafeURL(fmt.Sprintf("/activity/%d", entry.ID)) }
@@ -198,11 +205,24 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
 
                 <div class="grid">
                     <label>
-                        Distance (mi)
-                        <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
-                            if entry.Distance.Valid {
-                                value={ fmt.Sprintf("%.2f", entry.Distance.Float64) }
-                            }>
+                        Distance
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
+                                style="flex: 1; min-width: 100px;"
+                                if entry.Distance.Valid {
+                                    value={ fmt.Sprintf("%.2f", entry.Distance.Float64) }
+                                }>
+                            <select name="distance_unit" style="width: auto;">
+                                for _, opt := range models.DistanceUnitOptions {
+                                    <option value={ opt.Value }
+                                        if opt.Value == defaultUnit {
+                                            selected
+                                        }>
+                                        { opt.Label }
+                                    </option>
+                                }
+                            </select>
+                        </div>
                     </label>
                     <label>
                         Duration
@@ -257,9 +277,9 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
     </div>
 }
 
-templ ActivityEditForm(entry db.ActivityLog, rpeOptions []struct{ Value int; Label string }, username string) {
+templ ActivityEditForm(entry db.ActivityLog, rpeOptions []struct{ Value int; Label string }, defaultUnit string, username string) {
     @layouts.Base("Edit Activity", username) {
-        @ActivityEditFormContent(entry, rpeOptions, username)
+        @ActivityEditFormContent(entry, rpeOptions, defaultUnit, username)
     }
 }
 
@@ -327,7 +347,7 @@ templ ActivityListRow(entry db.ListActivityLogByUserPagedRow) {
     </td>
     <td>
         if entry.Distance.Valid {
-            { fmt.Sprintf("%.2f mi", entry.Distance.Float64) }
+            { models.FormatDistance(entry.Distance.Float64, entry.DistanceUnit) }
         } else {
             <span style="color: var(--pico-muted-color);">—</span>
         }

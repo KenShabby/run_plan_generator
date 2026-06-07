@@ -1,9 +1,9 @@
 -- name: CreateActivityLog :one
 INSERT INTO activity_log (
     user_id, run_day_id, date, run_type,
-    distance, duration, pace, rpe, notes
+    distance, distance_unit, duration, pace, rpe, notes
 ) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
+    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
 )
 RETURNING *;
 
@@ -33,10 +33,11 @@ LIMIT 1;
 -- name: UpdateActivityLog :one
 UPDATE activity_log
 SET distance = $2,
-    duration = $3,
-    pace     = $4,
-    rpe      = $5,
-    notes    = $6
+    distance_unit = $3,
+    duration = $4,
+    pace     = $5,
+    rpe      = $6,
+    notes    = $7
 WHERE id = $1
 RETURNING *;
 

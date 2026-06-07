@@ -421,7 +421,7 @@ func (app *application) handleRunBuilderAddSegment(w http.ResponseWriter, r *htt
 
 	// Parse run basics to re-render the full form
 	runBasics := parseRunBasics(r)
-	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments, runBasics.DefaultUnit).Render(r.Context(), w)
 }
 
 // handleRunBuilderAddRepeat adds a repeat block with N repetitions
@@ -456,7 +456,7 @@ func (app *application) handleRunBuilderAddRepeat(w http.ResponseWriter, r *http
 	runBasics.OpenSetIndex = maxSetIdx + 1
 	runBasics.OpenSetReps = reps
 
-	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments, runBasics.DefaultUnit).Render(r.Context(), w)
 
 }
 
@@ -478,7 +478,7 @@ func (app *application) handleRunBuilderReorder(w http.ResponseWriter, r *http.R
 	segments = moveSegment(segments, idx, direction)
 
 	runBasics := parseRunBasics(r)
-	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments, runBasics.DefaultUnit).Render(r.Context(), w)
 }
 
 // handleRunBuilderDelete removes a segment from the in-progress list
@@ -498,7 +498,7 @@ func (app *application) handleRunBuilderDelete(w http.ResponseWriter, r *http.Re
 	segments = deleteSegment(segments, idx)
 
 	runBasics := parseRunBasics(r)
-	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments, runBasics.DefaultUnit).Render(r.Context(), w)
 }
 
 // handleRunBuilderAddToBlock adds a segment to the currently open repeat block
@@ -546,7 +546,7 @@ func (app *application) handleRunBuilderAddToBlock(w http.ResponseWriter, r *htt
 	segments = append(segments, newSeg)
 	segments = reindexSegments(segments)
 
-	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments, runBasics.DefaultUnit).Render(r.Context(), w)
 }
 
 // handleRunBuilderCloseBlock closes the currently open repeat block
@@ -579,5 +579,5 @@ func (app *application) handleRunBuilderCloseBlock(w http.ResponseWriter, r *htt
 		runBasics.OpenSetReps = 0
 	}
 
-	pages.RunFormWithBuilder(int32(planID), runBasics, segments).Render(r.Context(), w)
+	pages.RunFormWithBuilder(int32(planID), runBasics, segments, runBasics.DefaultUnit).Render(r.Context(), w)
 }
