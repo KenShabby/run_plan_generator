@@ -145,3 +145,11 @@ type UserHrProfile struct {
 	CalculationMethod  string           `json:"calculation_method"`
 	CreatedAt          pgtype.Timestamp `json:"created_at"`
 }
+
+type UserPreference struct {
+	ID           int32              `json:"id"`
+	UserID       int32              `json:"user_id"`
+	DistanceUnit string             `json:"distance_unit"`
+	CreatedAt    pgtype.Timestamptz `json:"created_at"`
+	UpdatedAt    pgtype.Timestamptz `json:"updated_at"`
+}

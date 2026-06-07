@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strconv"
@@ -22,15 +23,17 @@ func (app *application) registerAccountRoutes(r chi.Router) {
 	r.Post("/account/email", app.handlePostAccountEmail)
 	r.Post("/account/password", app.handlePostAccountPassword)
 	r.Post("/account/delete", app.handlePostAccountDelete)
+	r.Post("/account/preferences", app.handlePostAccountPreferences)
 }
 
 func (app *application) handleGetAccount(w http.ResponseWriter, r *http.Request) {
 	user, ok := userFromContext(r.Context())
+	prefs := app.getUserPrefs(r.Context(), user.ID)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	pages.Account(user, "", "", "", app.username(r)).Render(r.Context(), w)
+	pages.Account(user, "", "", "", prefs, app.username(r)).Render(r.Context(), w)
 }
 
 func (app *application) handleGetAccountHr(w http.ResponseWriter, r *http.Request) {
@@ -168,6 +171,7 @@ func (app *application) handlePostAccountHr(w http.ResponseWriter, r *http.Reque
 
 func (app *application) handlePostAccountUsername(w http.ResponseWriter, r *http.Request) {
 	user, ok := userFromContext(r.Context())
+	prefs := app.getUserPrefs(r.Context(), user.ID)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -178,7 +182,7 @@ func (app *application) handlePostAccountUsername(w http.ResponseWriter, r *http
 	}
 	newUsername := strings.TrimSpace(r.FormValue("username"))
 	if newUsername == "" {
-		pages.Account(user, "Username cannot be empty.", "", "", app.username(r)).Render(r.Context(), w)
+		pages.Account(user, "Username cannot be empty.", "", "", prefs, app.username(r)).Render(r.Context(), w)
 		return
 	}
 	updated, err := app.queries.UpdateUsername(r.Context(), db.UpdateUsernameParams{
@@ -187,18 +191,19 @@ func (app *application) handlePostAccountUsername(w http.ResponseWriter, r *http
 	})
 	if err != nil {
 		if strings.Contains(err.Error(), "23505") {
-			pages.Account(user, "That username is already taken.", "", "", app.username(r)).Render(r.Context(), w)
+			pages.Account(user, "That username is already taken.", "", "", prefs, app.username(r)).Render(r.Context(), w)
 			return
 		}
 		log.Printf("error updating username: %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	pages.Account(updated, "", "", "", updated.Username).Render(r.Context(), w)
+	pages.Account(updated, "", "", "", prefs, updated.Username).Render(r.Context(), w)
 }
 
 func (app *application) handlePostAccountEmail(w http.ResponseWriter, r *http.Request) {
 	user, ok := userFromContext(r.Context())
+	prefs := app.getUserPrefs(r.Context(), user.ID)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -209,7 +214,7 @@ func (app *application) handlePostAccountEmail(w http.ResponseWriter, r *http.Re
 	}
 	newEmail := strings.TrimSpace(r.FormValue("email"))
 	if newEmail == "" {
-		pages.Account(user, "", "Email cannot be empty.", "", app.username(r)).Render(r.Context(), w)
+		pages.Account(user, "", "Email cannot be empty.", "", prefs, app.username(r)).Render(r.Context(), w)
 		return
 	}
 	updated, err := app.queries.UpdateEmail(r.Context(), db.UpdateEmailParams{
@@ -218,18 +223,19 @@ func (app *application) handlePostAccountEmail(w http.ResponseWriter, r *http.Re
 	})
 	if err != nil {
 		if strings.Contains(err.Error(), "23505") {
-			pages.Account(user, "", "That email is already taken.", "", app.username(r)).Render(r.Context(), w)
+			pages.Account(user, "", "That email is already taken.", "", prefs, app.username(r)).Render(r.Context(), w)
 			return
 		}
 		log.Printf("error updating email: %v", err)
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	pages.Account(updated, "", "", "", updated.Username).Render(r.Context(), w)
+	pages.Account(updated, "", "", "", prefs, updated.Username).Render(r.Context(), w)
 }
 
 func (app *application) handlePostAccountPassword(w http.ResponseWriter, r *http.Request) {
 	user, ok := userFromContext(r.Context())
+	prefs := app.getUserPrefs(r.Context(), user.ID)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -243,15 +249,15 @@ func (app *application) handlePostAccountPassword(w http.ResponseWriter, r *http
 	confirm := r.FormValue("confirm_password")
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(currentPassword)); err != nil {
-		pages.Account(user, "", "", "Current password is incorrect.", app.username(r)).Render(r.Context(), w)
+		pages.Account(user, "", "", "Current password is incorrect.", prefs, app.username(r)).Render(r.Context(), w)
 		return
 	}
 	if newPassword != confirm {
-		pages.Account(user, "", "", "Passwords do not match.", app.username(r)).Render(r.Context(), w)
+		pages.Account(user, "", "", "Passwords do not match.", prefs, app.username(r)).Render(r.Context(), w)
 		return
 	}
 	if len(newPassword) < 8 {
-		pages.Account(user, "", "", "Password must be at least 8 characters.", app.username(r)).Render(r.Context(), w)
+		pages.Account(user, "", "", "Password must be at least 8 characters.", prefs, app.username(r)).Render(r.Context(), w)
 		return
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
@@ -268,7 +274,7 @@ func (app *application) handlePostAccountPassword(w http.ResponseWriter, r *http
 		http.Error(w, "internal error", http.StatusInternalServerError)
 		return
 	}
-	pages.Account(user, "", "", "", app.username(r)).Render(r.Context(), w)
+	pages.Account(user, "", "", "", prefs, app.username(r)).Render(r.Context(), w)
 }
 
 func (app *application) handlePostAccountDelete(w http.ResponseWriter, r *http.Request) {
@@ -289,4 +295,60 @@ func (app *application) handlePostAccountDelete(w http.ResponseWriter, r *http.R
 	}
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (app *application) handleGetAccountPreferences(w http.ResponseWriter, r *http.Request) {
+	user, ok := userFromContext(r.Context())
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	prefs, err := app.queries.GetUserPreferences(r.Context(), user.ID)
+	if err != nil {
+		// no preferences yet — use defaults
+		prefs = db.UserPreference{
+			DistanceUnit: "miles",
+		}
+	}
+
+	pages.Account(user, "", "", "", prefs, app.username(r)).Render(r.Context(), w)
+}
+
+func (app *application) handlePostAccountPreferences(w http.ResponseWriter, r *http.Request) {
+	user, ok := userFromContext(r.Context())
+	if !ok {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	distanceUnit := r.FormValue("distance_unit")
+	if distanceUnit == "" {
+		distanceUnit = "miles"
+	}
+
+	prefs, err := app.queries.UpsertUserPreferences(r.Context(), db.UpsertUserPreferencesParams{
+		UserID:       user.ID,
+		DistanceUnit: distanceUnit,
+	})
+	if err != nil {
+		app.logger.Printf("error upserting user preferences: %v", err)
+		http.Error(w, "failed to save preferences", http.StatusInternalServerError)
+		return
+	}
+
+	pages.Account(user, "", "", "", prefs, app.username(r)).Render(r.Context(), w)
+}
+
+func (app *application) getUserPrefs(ctx context.Context, userID int32) db.UserPreference {
+	prefs, err := app.queries.GetUserPreferences(ctx, userID)
+	if err != nil {
+		return db.UserPreference{DistanceUnit: "miles"}
+	}
+	return prefs
 }

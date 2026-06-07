@@ -201,9 +201,9 @@ can also be done while checking planned runs as "complete"
 
 ## TODO
 
+- User preference for default distance unit
 - Allow users to edit saved runs
 - Calorie tracking
 - Planned vs actual side by side on run detail
 - Progress charts
-- User preference for default distance unit
 - Elevation changes (manual entry)

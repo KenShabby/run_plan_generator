@@ -157,6 +157,7 @@ func (app *application) handleGetPlansByIdRunsNew(w http.ResponseWriter, r *http
 		return
 	}
 	userID, ok := app.getSessionUserID(r)
+	prefs := app.getUserPrefs(r.Context(), userID)
 	if !ok {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -165,7 +166,7 @@ func (app *application) handleGetPlansByIdRunsNew(w http.ResponseWriter, r *http
 		http.Error(w, "forbidden", http.StatusForbidden)
 		return
 	}
-	pages.RunForm(int32(id), app.username(r)).Render(r.Context(), w)
+	pages.RunForm(int32(id), app.username(r), prefs.DistanceUnit).Render(r.Context(), w)
 
 }
 

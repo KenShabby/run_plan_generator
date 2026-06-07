@@ -2,10 +2,11 @@ package pages
 
 import (
     "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/models"
     "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
 
-templ AccountContent(user db.User, usernameErr string, emailErr string, passwordErr string) {
+templ AccountContent(user db.User, usernameErr string, emailErr string, passwordErr string, prefs db.UserPreference) {
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
         <h1 style="margin: 0;">Account Settings</h1>
         <a href="/account/hr" role="button" class="secondary">
@@ -66,6 +67,26 @@ templ AccountContent(user db.User, usernameErr string, emailErr string, password
         </article>
 
         <article>
+            <header><strong>Preferences</strong></header>
+            <form method="POST" action="/account/preferences">
+                <label>
+                    Default Distance Unit
+                    <select name="distance_unit">
+                        for _, opt := range models.DistanceUnitOptions {
+                            <option value={ opt.Value }
+                                if opt.Value == prefs.DistanceUnit {
+                                    selected
+                                }>
+                                { opt.Label }
+                            </option>
+                        }
+                    </select>
+                </label>
+                <button type="submit">Save Preferences</button>
+            </form>
+        </article>
+
+        <article>
             <header><strong style="color: var(--pico-del-color);">Danger Zone</strong></header>
             <p><small>Permanently delete your account and all associated training plans. This cannot be undone.</small></p>
             <form method="POST" action="/account/delete"
@@ -79,8 +100,8 @@ templ AccountContent(user db.User, usernameErr string, emailErr string, password
     </div>
 }
 
-templ Account(user db.User, usernameErr string, emailErr string, passwordErr string, username string) {
+templ Account(user db.User, usernameErr string, emailErr string, passwordErr string, prefs db.UserPreference, username string) {
     @layouts.Base("Account Settings", username) {
-        @AccountContent(user, usernameErr, emailErr, passwordErr)
+        @AccountContent(user, usernameErr, emailErr, passwordErr, prefs)
     }
 }

@@ -7,13 +7,13 @@ import (
     "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
 
-templ RunForm(planID int32, username string) {
+templ RunForm(planID int32, username string, defaultUnit string) {
     @layouts.Base("Add Run", username) {
-        @RunFormPage(planID)
+        @RunFormPage(planID, defaultUnit)
     }
 }
 
-templ RunFormPage(planID int32) {
+templ RunFormPage(planID int32, defaultUnit string) {
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>Add Run</h1>
         <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d", planID)) }
@@ -27,12 +27,12 @@ templ RunFormPage(planID int32) {
     </div>
     <div style="max-width: 760px;">
         <article>
-            @RunFormWithBuilder(planID, models.RunBasics{}, nil)
+            @RunFormWithBuilder(planID, models.RunBasics{DefaultUnit: defaultUnit}, nil, defaultUnit)
         </article>
     </div>
 }
 
-templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []models.SegmentInput) {
+templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []models.SegmentInput, defaultUnit string) {
     <div id="run-builder-container">
     <form id="run-builder-form"
         method="POST"
@@ -68,6 +68,8 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
             </label>
         </div>
 
+        <input type="hidden" name="default_unit" value={ basics.DefaultUnit }>
+
         <!-- Hidden fields for open block state -->
         <input type="hidden" name="open_set_index" value={ fmt.Sprintf("%d", basics.OpenSetIndex) }>
         <input type="hidden" name="open_set_reps" value={ fmt.Sprintf("%d", basics.OpenSetReps) }>
@@ -101,7 +103,7 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
                 <div style="font-size: 0.8rem; font-weight: 600; color: var(--pico-primary); margin-bottom: 0.75rem;">
                     { fmt.Sprintf("Building Repeat Block × %d — add segments below", basics.OpenSetReps) }
                 </div>
-                @SegmentInputFields()
+                @SegmentInputFields(defaultUnit)
                 <div class="grid">
                     <button type="button"
                         hx-post={ fmt.Sprintf("/plans/%d/runs/builder/add-to-block", planID) }
@@ -124,7 +126,7 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
             <details style="margin-bottom: 0.75rem;">
                 <summary style="font-size: 0.85rem; cursor: pointer;">+ Add Segment</summary>
                 <div style="margin-top: 0.75rem;">
-                    @SegmentInputFields()
+                    @SegmentInputFields(defaultUnit)
                     <button type="button"
                         hx-post={ fmt.Sprintf("/plans/%d/runs/builder", planID) }
                         hx-target="#run-builder-container"
@@ -227,7 +229,7 @@ templ SegmentInputList(planID int32, segments []models.SegmentInput) {
     }
 }
 
-templ SegmentInputFields() {
+templ SegmentInputFields(defaultUnit string) {
     <div class="grid">
         <label>
             Description
@@ -251,7 +253,7 @@ templ SegmentInputFields() {
                 <select name="new_distance_unit" style="width: auto;">
                     for _, opt := range models.DistanceUnitOptions {
                         <option value={ opt.Value }
-                            if opt.Value == "miles" {
+                            if opt.Value == defaultUnit {
                                 selected
                             }>
                             { opt.Label }

@@ -321,6 +321,7 @@ type RunBasics struct {
 	Notes         string
 	OpenSetIndex  int
 	OpenSetReps   int
+	DefaultUnit   string
 }
 
 const (

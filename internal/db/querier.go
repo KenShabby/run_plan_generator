@@ -46,6 +46,7 @@ type Querier interface {
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUserByID(ctx context.Context, id int32) (User, error)
 	GetUserByUsername(ctx context.Context, username string) (User, error)
+	GetUserPreferences(ctx context.Context, userID int32) (UserPreference, error)
 	InsertHRHistory(ctx context.Context, arg InsertHRHistoryParams) error
 	ListActivityLogByUser(ctx context.Context, userID int32) ([]ActivityLog, error)
 	ListActivityLogByUserPaged(ctx context.Context, arg ListActivityLogByUserPagedParams) ([]ListActivityLogByUserPagedRow, error)
@@ -64,6 +65,7 @@ type Querier interface {
 	UpdateRunDay(ctx context.Context, arg UpdateRunDayParams) (RunDay, error)
 	UpdateTrainingPlan(ctx context.Context, arg UpdateTrainingPlanParams) (TrainingPlan, error)
 	UpdateUsername(ctx context.Context, arg UpdateUsernameParams) (User, error)
+	UpsertUserPreferences(ctx context.Context, arg UpsertUserPreferencesParams) (UserPreference, error)
 }
 
 var _ Querier = (*Queries)(nil)

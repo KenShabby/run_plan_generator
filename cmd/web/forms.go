@@ -97,6 +97,10 @@ type RunBasics struct {
 func parseRunBasics(r *http.Request) models.RunBasics {
 	openSetIndex, _ := strconv.Atoi(r.FormValue("open_set_index"))
 	openSetReps, _ := strconv.Atoi(r.FormValue("open_set_reps"))
+	defaultUnit := r.FormValue("default_unit")
+	if defaultUnit == "" {
+		defaultUnit = "miles"
+	}
 	return models.RunBasics{
 		Date:          r.FormValue("date"),
 		RunType:       r.FormValue("run_type"),
@@ -104,6 +108,7 @@ func parseRunBasics(r *http.Request) models.RunBasics {
 		Notes:         r.FormValue("notes"),
 		OpenSetIndex:  openSetIndex,
 		OpenSetReps:   openSetReps,
+		DefaultUnit:   defaultUnit,
 	}
 }
 
