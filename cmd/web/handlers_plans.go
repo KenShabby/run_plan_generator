@@ -244,6 +244,7 @@ func (app *application) handlePostPlansByIdRuns(w http.ResponseWriter, r *http.R
 		Date:          pgtype.Date{Time: date, Valid: true},
 		RunType:       r.FormValue("run_type"),
 		TotalDistance: dist,
+		DistanceUnit:  r.FormValue("total_distance_unit"),
 		TotalDuration: pgtype.Int8{Valid: false},
 		Notes:         pgtype.Text{String: r.FormValue("notes"), Valid: r.FormValue("notes") != ""},
 		IsGoalRace:    false,

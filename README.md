@@ -199,9 +199,12 @@ can also be done while checking planned runs as "complete"
 
 - Add meters for short sprints
 
-## TODO
+06-07-2026
 
 - User preference for default distance unit
+
+## TODO
+
 - Allow users to edit saved runs
 - Calorie tracking
 - Planned vs actual side by side on run detail

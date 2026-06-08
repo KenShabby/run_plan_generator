@@ -52,7 +52,7 @@ templ RunDetailContent(run db.RunDay, segments []db.Segment, zoneMap map[int32]d
         </p>
 
         if run.TotalDistance.Valid {
-            <p>{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } miles total</p>
+                <p>{ models.FormatDistance(run.TotalDistance.Float64, run.DistanceUnit) } total</p>
         }
 
     if run.Notes.Valid {

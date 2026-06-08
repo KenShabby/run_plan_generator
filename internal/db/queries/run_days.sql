@@ -4,8 +4,8 @@ WHERE plan_id = $1
 ORDER BY date ASC;
 
 -- name: CreateRunDay :one
-INSERT INTO run_days (plan_id, date, run_type, total_distance, total_duration, notes, is_goal_race)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+INSERT INTO run_days (plan_id, date, run_type, total_distance, distance_unit, total_duration, notes, is_goal_race)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 RETURNING *;
 
 -- name: DeleteRunDay :exec
@@ -52,6 +52,7 @@ UPDATE run_days
 SET date           = $2,
     run_type       = $3,
     total_distance = $4,
-    notes          = $5
+    distance_unit  = $5,
+    notes          = $6
 WHERE id = $1
 RETURNING *;

@@ -19,20 +19,6 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
             <form method="POST" action="/activity">
                 <div class="grid">
                     <label>
-                        Date
-                        <input type="date" name="date" required
-                            if planned.Date.Valid {
-                                value={ planned.Date.Time.Format("2006-01-02") }
-                            }>
-                    </label>
-                    <label>
-                        Run Type
-                        @RunTypeSelect(planned.RunType)
-                    </label>
-                </div>
-
-                <div class="grid">
-                    <label>
                         Distance
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
@@ -40,7 +26,7 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
                             <select name="distance_unit" style="width: 160px; flex-shrink: 0;">
                                 for _, opt := range models.DistanceUnitOptions {
                                     <option value={ opt.Value }
-                                        if opt.Value == defaultUnit {
+                                    if opt.Value == defaultUnit {
                                             selected
                                         }>
                                         { opt.Label }
@@ -48,6 +34,20 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
                                 }
                             </select>
                         </div>
+                    </label>
+                </div>
+                <div class="grid">
+                    <label>
+                        Duration
+                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 45:00"
+                            if planned.TotalDuration.Valid {
+                                value={ models.FormatDuration(int(planned.TotalDuration.Int64)) }
+                            }>
+                        <small>Format: H:MM:SS or MM:SS</small>
+                    </label>
+                    <label>
+                        Pace (per mi)
+                        <input type="text" name="pace" placeholder="e.g. 8:30">
                     </label>
                 </div>
                 <div class="grid">
@@ -208,14 +208,11 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
                         Distance
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
-                                style="flex: 1; min-width: 100px;"
-                                if entry.Distance.Valid {
-                                    value={ fmt.Sprintf("%.2f", entry.Distance.Float64) }
-                                }>
-                            <select name="distance_unit" style="width: auto;">
+                                style="flex: 1;">
+                            <select name="distance_unit" style="width: 160px; flex-shrink: 0;">
                                 for _, opt := range models.DistanceUnitOptions {
                                     <option value={ opt.Value }
-                                        if opt.Value == defaultUnit {
+                                        if entry.DistanceUnit == opt.Value {
                                             selected
                                         }>
                                         { opt.Label }
@@ -224,23 +221,24 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
                             </select>
                         </div>
                     </label>
+                </div>
+                <div class="grid">
                     <label>
                         Duration
-                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 42:00"
+                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 45:00"
                             if entry.Duration.Valid {
                                 value={ models.FormatDuration(int(entry.Duration.Int32)) }
                             }>
                         <small>Format: H:MM:SS or MM:SS</small>
                     </label>
                     <label>
-                        Pace
-                        <input type="text" name="pace" placeholder="e.g. 8:10"
+                        Pace (per mi)
+                        <input type="text" name="pace" placeholder="e.g. 8:30"
                             if entry.Pace.Valid {
                                 value={ models.FormatPaceInput(int(entry.Pace.Int32)) }
                             }>
                     </label>
                 </div>
-
                 <label>
                     Effort (RPE)
                     <select name="rpe">

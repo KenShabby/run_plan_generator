@@ -3,6 +3,7 @@ package pages
 import (
     "fmt"
     "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/models"
 )
 
 templ RunCard(run db.RunDay) {
@@ -14,7 +15,7 @@ templ RunCard(run db.RunDay) {
             </div>
         </header>
         if run.TotalDistance.Valid {
-            <p>{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } miles</p>
+            <p>{ models.FormatDistance(run.TotalDistance.Float64, run.DistanceUnit) }</p>
         }
         if run.Notes.Valid {
             <p><small>{ run.Notes.String }</small></p>

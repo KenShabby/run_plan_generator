@@ -45,6 +45,7 @@ type RunDay struct {
 	Notes         pgtype.Text      `json:"notes"`
 	CreatedAt     pgtype.Timestamp `json:"created_at"`
 	IsGoalRace    bool             `json:"is_goal_race"`
+	DistanceUnit  string           `json:"distance_unit"`
 }
 
 type Segment struct {

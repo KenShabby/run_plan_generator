@@ -315,13 +315,14 @@ func (s SegmentInput) FormattedDuration() string {
 
 // RunBasics holds the top-level run fields during the builder flow
 type RunBasics struct {
-	Date          string
-	RunType       string
-	TotalDistance string
-	Notes         string
-	OpenSetIndex  int
-	OpenSetReps   int
-	DefaultUnit   string
+	Date              string
+	RunType           string
+	TotalDistance     string
+	TotalDistanceUnit string
+	Notes             string
+	OpenSetIndex      int
+	OpenSetReps       int
+	DefaultUnit       string
 }
 
 const (

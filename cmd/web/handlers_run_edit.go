@@ -121,6 +121,7 @@ func (app *application) handlePostEditRun(w http.ResponseWriter, r *http.Request
 		Date:          pgtype.Date{Time: date, Valid: true},
 		RunType:       r.FormValue("run_type"),
 		TotalDistance: dist,
+		DistanceUnit:  r.FormValue("total_distance_unit"),
 		Notes:         notes,
 	})
 	if err != nil {
