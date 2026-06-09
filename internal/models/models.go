@@ -353,7 +353,7 @@ func FormatDistance(distance float64, unit string) string {
 		return fmt.Sprintf("%.0fyd", distance)
 	case string(UnitKilometers):
 		return fmt.Sprintf("%.2fkm", distance)
-	default: // miles
+	default: // miles and empty string
 		return fmt.Sprintf("%.2fmi", distance)
 	}
 }

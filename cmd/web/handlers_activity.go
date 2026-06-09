@@ -208,7 +208,6 @@ func (app *application) handlePostActivity(w http.ResponseWriter, r *http.Reques
 	}
 
 	params, err := app.parseActivityForm(r, userID)
-	app.logger.Printf("DEBUG: activity params distanceUnit=%s", params.DistanceUnit)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

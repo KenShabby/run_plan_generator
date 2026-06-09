@@ -3,6 +3,7 @@ package pages
 import (
     "fmt"
     "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/models"
     "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
 
@@ -162,7 +163,7 @@ templ CompactRunCard(run db.RunDay) {
               { formatRunType(run.RunType) }
             </a>
             if run.TotalDistance.Valid {
-                <span class="run-dist">{ fmt.Sprintf("%.1f", run.TotalDistance.Float64) } mi</span>
+                <span class="run-dist">{ models.FormatDistance(run.TotalDistance.Float64, run.DistanceUnit) }</span>
             }
             if run.Notes.Valid {
                 <span class="run-date">{ run.Notes.String }</span>
