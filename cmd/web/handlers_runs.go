@@ -47,10 +47,8 @@ func (app *application) handleDeleteRun(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "failed to delete run", http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-
-	// Return an empty day cell to preserve grid position
 	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, `<div class="day-cell empty" id="run-%d"></div>`, id)
 }
 
