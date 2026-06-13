@@ -138,11 +138,9 @@ templ RunCalendar(runs []db.RunDay) {
         <div class="week-grid">
             for _, dayRuns := range week.Days {
                 if len(dayRuns) > 0 {
-                     <div class="day-cell" style="display: flex; flex-direction: column; gap: 4px;">
                         for _, run := range dayRuns {
                             @CompactRunCard(*run)
                         }
-                    </div>
                 } else {
                     <div class="day-cell empty"></div>
                 }
@@ -152,7 +150,7 @@ templ RunCalendar(runs []db.RunDay) {
 }
 
 templ CompactRunCard(run db.RunDay) {
-    <div class="day-cell" id={ fmt.Sprintf("run-%d", run.ID) }>
+    <div class="day-cell" id={ fmt.Sprintf("run-%d", run.ID) } style="display: flex; flex-direction: column; gap: 4px;">
         <div class="run-chip">
             <span class="run-date">{ run.Date.Time.Format("Jan 2") }</span>
             <a class="run-type"
