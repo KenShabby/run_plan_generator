@@ -47,10 +47,11 @@ func (app *application) handleGetEditRun(w http.ResponseWriter, r *http.Request)
 
 	// Build RunBasics from existing run
 	basics := models.RunBasics{
-		Date:          run.Date.Time.Format("2006-01-02"),
-		RunType:       run.RunType,
-		TotalDistance: "",
-		Notes:         "",
+		Date:              run.Date.Time.Format("2006-01-02"),
+		RunType:           run.RunType,
+		TotalDistance:     "",
+		TotalDistanceUnit: run.DistanceUnit,
+		Notes:             "",
 	}
 	if run.TotalDistance.Valid {
 		basics.TotalDistance = fmt.Sprintf("%.2f", run.TotalDistance.Float64)
