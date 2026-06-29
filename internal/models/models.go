@@ -53,7 +53,7 @@ const (
 	ByTime     EffortType = "time"
 )
 
-type DistanceUnit string // Km or Freedom units?
+type DistanceUnit string // km or Freedom units?
 
 const (
 	Miles      DistanceUnit = "miles"
