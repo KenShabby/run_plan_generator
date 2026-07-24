@@ -14,75 +14,73 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
     </div>
 
     <div style="max-width: 560px;">
-        <article>
-            <header><strong>What actually happened?</strong></header>
-            <form method="POST" action="/activity">
-                <div class="grid">
-                    <label>
-                        Distance
-                        <div style="display: flex; gap: 0.5rem;">
-                            <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
-                                style="flex: 1;">
-                            <select name="distance_unit" style="width: 160px; flex-shrink: 0;">
-                                for _, opt := range models.DistanceUnitOptions {
-                                    <option value={ opt.Value }
-                                    if opt.Value == defaultUnit {
-                                            selected
-                                        }>
-                                        { opt.Label }
-                                    </option>
-                                }
-                            </select>
-                        </div>
-                    </label>
-                </div>
-                <div class="grid">
-                    <label>
-                        Duration
-                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 45:00"
-                            if planned.TotalDuration.Valid {
-                                value={ models.FormatDuration(int(planned.TotalDuration.Int64)) }
-                            }>
-                        <small>Format: H:MM:SS or MM:SS</small>
-                    </label>
-                    <label>
-                        Pace (per mi)
-                        <input type="text" name="pace" placeholder="e.g. 8:30">
-                    </label>
-                </div>
-                <div class="grid">
-                    <label>
-                        Duration
-                        <input type="text" name="duration" placeholder="e.g. 1:30:00 or 45:00">
-                        <small>Format: H:MM:SS or MM:SS</small>
-                    </label>
-                    <label>
-                        Pace (per mi)
-                        <input type="text" name="pace" placeholder="e.g. 8:30 — calculated if blank">
-                    </label>
-                </div>
-
+    <article>
+        <header><strong>What actually happened?</strong></header>
+        <form method="POST" action="/activity">
+            <div class="grid">
                 <label>
-                    Effort (RPE)
-                    <select name="rpe">
-                        <option value="">— select effort —</option>
-                        for _, opt := range rpeOptions {
-                            <option value={ fmt.Sprintf("%d", opt.Value) }>{ opt.Label }</option>
-                        }
-                    </select>
+                    Distance
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
+                            style="flex: 1;">
+                        <select name="distance_unit" style="width: 160px; flex-shrink: 0;">
+                            for _, opt := range models.DistanceUnitOptions {
+                                <option value={ opt.Value }
+                                if opt.Value == defaultUnit {
+                                        selected
+                                    }>
+                                    { opt.Label }
+                                </option>
+                            }
+                        </select>
+                    </div>
                 </label>
-
+            </div>
+            <div class="grid">
                 <label>
-                    Notes
-                    <textarea name="notes" placeholder="How did it feel? Anything notable?">
-                        if planned.Notes.Valid {
-                            { planned.Notes.String }
-                        }
-                    </textarea>
+                    Date
+                    <input type="date" name="date" required
+                        if planned.Date.Valid {
+                            value={ planned.Date.Time.Format("YYYY-MM-DD") }
+                        }>
                 </label>
+            </div>
+            <div class="grid">
+                <label>
+                    Duration
+                    <input type="text" name="duration" placeholder="e.g. 1:30:00 or 45:00"
+                        if planned.TotalDuration.Valid {
+                            value={ models.FormatDuration(int(planned.TotalDuration.Int64)) }
+                        }>
+                    <small>Format: H:MM:SS or MM:SS</small>
+                </label>
+                <label>
+                    Pace (per mi)
+                    <input type="text" name="pace" placeholder="Leave blank to auto calculate">
+                </label>
+            </div>
+            
+            <label>
+                Effort (RPE)
+                <select name="rpe">
+                    <option value="">— select effort —</option>
+                    for _, opt := range rpeOptions {
+                        <option value={ fmt.Sprintf("%d", opt.Value) }>{ opt.Label }</option>
+                    }
+                </select>
+            </label>
 
-                <button type="submit">Save</button>
-            </form>
+            <label>
+                Notes
+                <textarea name="notes" placeholder="Notes">
+                    if planned.Notes.Valid {
+                        { planned.Notes.String }
+                    }
+                </textarea>
+            </label>
+
+            <button type="submit">Save</button>
+        </form>
         </article>
     </div>
 }
