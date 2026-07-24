@@ -215,7 +215,6 @@ func (app *application) handlePostActivity(w http.ResponseWriter, r *http.Reques
 
 	entry, err := app.queries.CreateActivityLog(r.Context(), params)
 	if err != nil {
-		app.logger.Printf("error creating activity log: %v", err)
 		http.Error(w, "failed to log activity", http.StatusInternalServerError)
 		return
 	}

@@ -44,6 +44,10 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
                             value={ planned.Date.Time.Format("YYYY-MM-DD") }
                         }>
                 </label>
+                    <label>
+                        Run Type
+                        @RunTypeSelect(planned.RunType)
+                    </label>
             </div>
             <div class="grid">
                 <label>
