@@ -7,13 +7,13 @@ peak_weekly_mileage: 85.0
 runs:
 - day_offset: 0
   run_type: recovery
-  notes: Recovery 6 mi a.m. / 4 mi p.m.
-  distance: 6.0
+  notes: Recovery 10 mi
+  distance: 10.0
   segments:
   - order_index: 1
     description: Recovery
     effort_type: distance
-    distance: 6.0
+    distance: 10.0
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 1

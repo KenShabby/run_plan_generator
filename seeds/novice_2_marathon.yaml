@@ -1,5 +1,5 @@
 name: "Novice 2 Marathon"
-description: "18-week marathon plan for runners who have completed a marathon and want to add mileage. Adds pace runs on Wednesdays and slightly higher overall mileage vs Novice 1."
+description: "18-week marathon plan for runners who have completed a marathon and want to take it up a level."
 plan_type: marathon
 distance_unit: miles
 total_weeks: 18
@@ -328,4 +328,4 @@ runs:
   - day_offset: 125
     run_type: race
     distance: 26.2
-    notes: "Race day! You've done the work. Trust your training."
+    notes: "Race day! You got this."

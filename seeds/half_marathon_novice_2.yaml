@@ -527,7 +527,7 @@ runs:
   - day_offset: 79
     run_type: race_pace
     distance: 2.0
-    notes: "Short pace run — stay sharp, don't tire yourself"
+    notes: "Short pace run"
     segments:
     - order_index: 1
       description: Main Effort
@@ -538,7 +538,7 @@ runs:
   - day_offset: 80
     run_type: easy
     distance: 2.0
-    notes: "Short shakeout, stay loose"
+    notes: "Short shakeout"
     segments:
     - order_index: 1
       description: Main Effort
@@ -549,4 +549,4 @@ runs:
   - day_offset: 83
     run_type: race
     distance: 13.1
-    notes: "Race day! You've done the work. Trust your training."
+    notes: "Race day!"

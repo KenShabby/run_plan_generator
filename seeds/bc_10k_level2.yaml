@@ -1,7 +1,6 @@
-name: 80/20 10K Level 2
+name: 10K Level 2
 description: 12-week 10K plan for intermediate runners. Base phase weeks 1-6, peak
   phase weeks 7-10, taper weeks 11-12. Workouts are time-based with heart rate zones.
-  Mon=rest except where noted. Ends with a 10K race.
 plan_type: 10k
 distance_unit: miles
 total_weeks: 12

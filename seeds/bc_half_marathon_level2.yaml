@@ -1,8 +1,6 @@
-name: 80/20 Half Marathon Level 3
-description: 15-week half marathon plan for experienced runners seeking maximum volume.
-  Base phase weeks 1-6, peak phase weeks 7-13, taper weeks 14-15. Workouts are time-based
-  with heart rate zones. Features double run days. Ends with a half marathon race
-  on Sunday of week 15.
+name: Half Marathon Level 2
+description: 15-week half marathon plan for intermediate runners. Base phase weeks
+  1-6, peak phase weeks 7-13, taper weeks 14-15.
 plan_type: half_marathon
 distance_unit: miles
 total_weeks: 15
@@ -10,7 +8,7 @@ peak_weekly_mileage: 0
 runs:
 - day_offset: 0
   run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  notes: Foundation Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -21,7 +19,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 2100
+    duration: 1800
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -32,7 +30,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 1
   run_type: fast_finish
-  notes: Fast Finish Run 6
+  notes: Fast Finish Run 3
   segments:
   - order_index: 1
     description: Warmup
@@ -43,40 +41,18 @@ runs:
   - order_index: 2
     description: Aerobic
     effort_type: time
-    duration: 1800
+    duration: 1200
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
     description: Fast Finish
     effort_type: time
-    duration: 720
+    duration: 600
     hr_zone_min: 3
     hr_zone_max: 3
-- day_offset: 1
-  run_type: foundation
-  notes: Foundation Run 3 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 1200
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
 - day_offset: 2
   run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  notes: Foundation Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -87,7 +63,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 2100
+    duration: 1800
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -98,7 +74,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 3
   run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  notes: Foundation Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -109,7 +85,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 2100
+    duration: 1800
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -120,7 +96,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 4
   run_type: speed_play
-  notes: Speed Play Run 8
+  notes: Speed Play Run 4
   segments:
   - order_index: 1
     description: Warmup
@@ -141,7 +117,7 @@ runs:
     hr_zone_min: 5
     hr_zone_max: 5
     set_index: 1
-    set_repetitions: 8
+    set_repetitions: 6
   - order_index: 4
     description: Recovery
     effort_type: time
@@ -149,7 +125,7 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 8
+    set_repetitions: 6
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -158,7 +134,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 5
   run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  notes: Foundation Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -169,7 +145,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 2100
+    duration: 1800
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -180,7 +156,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 6
   run_type: long_run
-  notes: Long Run 3
+  notes: Long Run 2
   segments:
   - order_index: 1
     description: Warmup
@@ -191,7 +167,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: distance
-    distance: 6.5
+    distance: 5.5
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -202,7 +178,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 7
   run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  notes: Foundation Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -213,7 +189,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 2100
+    duration: 1800
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -224,7 +200,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 8
   run_type: fast_finish
-  notes: Fast Finish Run 7
+  notes: Fast Finish Run 4
   segments:
   - order_index: 1
     description: Warmup
@@ -235,60 +211,16 @@ runs:
   - order_index: 2
     description: Aerobic
     effort_type: time
-    duration: 2100
+    duration: 1500
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
     description: Fast Finish
     effort_type: time
-    duration: 720
+    duration: 600
     hr_zone_min: 3
     hr_zone_max: 3
-- day_offset: 8
-  run_type: foundation
-  notes: Foundation Run 3 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 1200
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
 - day_offset: 9
-  run_type: foundation
-  notes: Foundation Run 7 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2400
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 10
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
   segments:
@@ -310,9 +242,31 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
+- day_offset: 10
+  run_type: foundation
+  notes: Foundation Run 5 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: time
+    duration: 1800
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
 - day_offset: 11
   run_type: speed_play
-  notes: Speed Play Run 10
+  notes: Speed Play Run 5
   segments:
   - order_index: 1
     description: Warmup
@@ -333,7 +287,7 @@ runs:
     hr_zone_min: 4
     hr_zone_max: 4
     set_index: 1
-    set_repetitions: 7
+    set_repetitions: 5
   - order_index: 4
     description: Recovery
     effort_type: time
@@ -341,7 +295,7 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 7
+    set_repetitions: 5
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -350,7 +304,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 12
   run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  notes: Foundation Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -361,7 +315,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 2100
+    duration: 1800
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -371,176 +325,6 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 13
-  run_type: long_run
-  notes: Long Run 5
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: distance
-    distance: 1.0
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: distance
-    distance: 8.5
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: distance
-    distance: 0.5
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 15
-  run_type: fast_finish
-  notes: Fast Finish Run 6
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Aerobic
-    effort_type: time
-    duration: 1800
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Fast Finish
-    effort_type: time
-    duration: 720
-    hr_zone_min: 3
-    hr_zone_max: 3
-- day_offset: 15
-  run_type: foundation
-  notes: Foundation Run 3 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 1200
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 16
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 17
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 18
-  run_type: speed_play
-  notes: Speed Play Run 8
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Pre-Work
-    effort_type: time
-    duration: 300
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Speed Effort
-    effort_type: time
-    duration: 60
-    hr_zone_min: 5
-    hr_zone_max: 5
-    set_index: 1
-    set_repetitions: 8
-  - order_index: 4
-    description: Recovery
-    effort_type: time
-    duration: 120
-    hr_zone_min: 1
-    hr_zone_max: 1
-    set_index: 1
-    set_repetitions: 8
-  - order_index: 5
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 19
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 20
   run_type: long_run
   notes: Long Run 3
   segments:
@@ -562,31 +346,9 @@ runs:
     distance: 0.5
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 21
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 22
+- day_offset: 15
   run_type: fast_finish
-  notes: Fast Finish Run 8
+  notes: Fast Finish Run 3
   segments:
   - order_index: 1
     description: Warmup
@@ -597,18 +359,18 @@ runs:
   - order_index: 2
     description: Aerobic
     effort_type: time
-    duration: 2100
+    duration: 1200
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
     description: Fast Finish
     effort_type: time
-    duration: 900
+    duration: 600
     hr_zone_min: 3
     hr_zone_max: 3
-- day_offset: 22
+- day_offset: 16
   run_type: foundation
-  notes: Foundation Run 4 or Cross-Train
+  notes: Foundation Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -618,36 +380,172 @@ runs:
     hr_zone_max: 1
   - order_index: 2
     description: Main Effort
+    effort_type: time
+    duration: 1800
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 17
+  run_type: foundation
+  notes: Foundation Run 5 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: time
+    duration: 1800
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 18
+  run_type: speed_play
+  notes: Speed Play Run 4
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Pre-Work
+    effort_type: time
+    duration: 300
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Speed Effort
+    effort_type: time
+    duration: 60
+    hr_zone_min: 5
+    hr_zone_max: 5
+    set_index: 1
+    set_repetitions: 6
+  - order_index: 4
+    description: Recovery
+    effort_type: time
+    duration: 120
+    hr_zone_min: 1
+    hr_zone_max: 1
+    set_index: 1
+    set_repetitions: 6
+  - order_index: 5
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 19
+  run_type: foundation
+  notes: Foundation Run 5 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: time
+    duration: 1800
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 20
+  run_type: long_run
+  notes: Long Run 1
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: distance
+    distance: 1.0
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: distance
+    distance: 4.5
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: distance
+    distance: 0.5
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 21
+  run_type: foundation
+  notes: Foundation Run 5 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: time
+    duration: 1800
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 22
+  run_type: fast_finish
+  notes: Fast Finish Run 4
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Aerobic
     effort_type: time
     duration: 1500
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
-    description: Cooldown
+    description: Fast Finish
     effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
+    duration: 600
+    hr_zone_min: 3
+    hr_zone_max: 3
 - day_offset: 23
-  run_type: foundation
-  notes: Foundation Run 8 or Cross-Train
+  run_type: recovery
+  notes: Recovery Run 6 or Cross-Train
   segments:
   - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
+    description: Recovery
     effort_type: time
     duration: 2700
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 24
@@ -674,7 +572,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 25
   run_type: hill_repetitions
-  notes: Hill Reps Run 7
+  notes: Hill Repetition Run 5
   segments:
   - order_index: 1
     description: Warmup
@@ -691,19 +589,19 @@ runs:
   - order_index: 3
     description: Hill Effort
     effort_type: time
-    duration: 90
+    duration: 30
     hr_zone_min: 5
     hr_zone_max: 5
     set_index: 1
-    set_repetitions: 6
+    set_repetitions: 12
   - order_index: 4
     description: Recovery
     effort_type: time
-    duration: 150
+    duration: 90
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 6
+    set_repetitions: 12
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -712,17 +610,17 @@ runs:
     hr_zone_max: 1
 - day_offset: 26
   run_type: recovery
-  notes: Recovery Run 6 or Cross-Train
+  notes: Recovery Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Recovery
     effort_type: time
-    duration: 2700
+    duration: 2400
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 27
   run_type: long_run
-  notes: Long Run 7
+  notes: Long Run 5
   segments:
   - order_index: 1
     description: Warmup
@@ -733,7 +631,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: distance
-    distance: 10.5
+    distance: 8.5
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -743,50 +641,6 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 28
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 29
-  run_type: fast_finish
-  notes: Fast Finish Run 9
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Aerobic
-    effort_type: time
-    duration: 2400
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Fast Finish
-    effort_type: time
-    duration: 900
-    hr_zone_min: 3
-    hr_zone_max: 3
-- day_offset: 29
   run_type: foundation
   notes: Foundation Run 5 or Cross-Train
   segments:
@@ -808,9 +662,9 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 30
-  run_type: foundation
-  notes: Foundation Run 8 or Cross-Train
+- day_offset: 29
+  run_type: fast_finish
+  notes: Fast Finish Run 5
   segments:
   - order_index: 1
     description: Warmup
@@ -819,15 +673,25 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
   - order_index: 2
-    description: Main Effort
+    description: Aerobic
     effort_type: time
-    duration: 2700
+    duration: 1500
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
-    description: Cooldown
+    description: Fast Finish
     effort_type: time
-    duration: 300
+    duration: 720
+    hr_zone_min: 3
+    hr_zone_max: 3
+- day_offset: 30
+  run_type: recovery
+  notes: Recovery Run 6 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Recovery
+    effort_type: time
+    duration: 2700
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 31
@@ -854,7 +718,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 32
   run_type: hill_repetitions
-  notes: Hill Reps Run 8
+  notes: Hill Repetition Run 6
   segments:
   - order_index: 1
     description: Warmup
@@ -875,7 +739,7 @@ runs:
     hr_zone_min: 5
     hr_zone_max: 5
     set_index: 1
-    set_repetitions: 10
+    set_repetitions: 8
   - order_index: 4
     description: Recovery
     effort_type: time
@@ -883,7 +747,7 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 10
+    set_repetitions: 8
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -902,7 +766,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 34
   run_type: long_run
-  notes: Long Run 9
+  notes: Long Run 7
   segments:
   - order_index: 1
     description: Warmup
@@ -913,7 +777,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: distance
-    distance: 12.5
+    distance: 10.5
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -924,7 +788,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 36
   run_type: fast_finish
-  notes: Fast Finish Run 7
+  notes: Fast Finish Run 4
   segments:
   - order_index: 1
     description: Warmup
@@ -935,62 +799,28 @@ runs:
   - order_index: 2
     description: Aerobic
     effort_type: time
-    duration: 2100
+    duration: 1500
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
     description: Fast Finish
     effort_type: time
-    duration: 720
+    duration: 600
     hr_zone_min: 3
     hr_zone_max: 3
-- day_offset: 36
-  run_type: foundation
-  notes: Foundation Run 4 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 1500
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
 - day_offset: 37
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  run_type: recovery
+  notes: Recovery Run 5 or Cross-Train
   segments:
   - order_index: 1
-    description: Warmup
+    description: Recovery
     effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
+    duration: 2400
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 38
   run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  notes: Foundation Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -1001,7 +831,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 2100
+    duration: 1800
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -1012,7 +842,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 39
   run_type: hill_repetitions
-  notes: Hill Reps Run 6
+  notes: Hill Repetition Run 4
   segments:
   - order_index: 1
     description: Warmup
@@ -1029,19 +859,19 @@ runs:
   - order_index: 3
     description: Hill Effort
     effort_type: time
-    duration: 60
+    duration: 30
     hr_zone_min: 5
     hr_zone_max: 5
     set_index: 1
-    set_repetitions: 8
+    set_repetitions: 10
   - order_index: 4
     description: Recovery
     effort_type: time
-    duration: 120
+    duration: 90
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 8
+    set_repetitions: 10
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -1050,17 +880,17 @@ runs:
     hr_zone_max: 1
 - day_offset: 40
   run_type: recovery
-  notes: Recovery Run 6 or Cross-Train
+  notes: Recovery Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Recovery
     effort_type: time
-    duration: 2700
+    duration: 2400
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 41
   run_type: long_run
-  notes: Long Run 4
+  notes: Long Run 3
   segments:
   - order_index: 1
     description: Warmup
@@ -1071,7 +901,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: distance
-    distance: 7.5
+    distance: 6.5
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -1104,7 +934,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 43
   run_type: lactate_threshold
-  notes: Cruise Interval Run 2
+  notes: Cruise Interval Run 1
   segments:
   - order_index: 1
     description: Warmup
@@ -1121,7 +951,7 @@ runs:
   - order_index: 3
     description: Cruise Interval
     effort_type: time
-    duration: 480
+    duration: 300
     hr_zone_min: 3
     hr_zone_max: 3
     set_index: 1
@@ -1146,48 +976,14 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 43
-  run_type: foundation
-  notes: Foundation Run 5 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 1800
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
 - day_offset: 44
-  run_type: foundation
-  notes: Foundation Run 9 or Cross-Train
+  run_type: recovery
+  notes: Recovery Run 6 or Cross-Train
   segments:
   - order_index: 1
-    description: Warmup
+    description: Recovery
     effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 3000
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
+    duration: 2700
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 45
@@ -1214,7 +1010,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 46
   run_type: interval
-  notes: Short Interval Run 6
+  notes: Short Interval Run 4
   segments:
   - order_index: 1
     description: Warmup
@@ -1235,7 +1031,7 @@ runs:
     hr_zone_min: 5
     hr_zone_max: 5
     set_index: 1
-    set_repetitions: 12
+    set_repetitions: 10
   - order_index: 4
     description: Recovery
     effort_type: time
@@ -1243,7 +1039,7 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 12
+    set_repetitions: 10
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -1299,30 +1095,18 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 49
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  run_type: recovery
+  notes: Recovery Run 6 or Cross-Train
   segments:
   - order_index: 1
-    description: Warmup
+    description: Recovery
     effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
+    duration: 2700
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 50
   run_type: tempo
-  notes: Tempo Run 6
+  notes: Tempo Run 4
   segments:
   - order_index: 1
     description: Warmup
@@ -1339,7 +1123,7 @@ runs:
   - order_index: 3
     description: Tempo
     effort_type: time
-    duration: 1800
+    duration: 1440
     hr_zone_min: 3
     hr_zone_max: 3
   - order_index: 4
@@ -1354,48 +1138,14 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 50
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
 - day_offset: 51
-  run_type: foundation
-  notes: Foundation Run 9 or Cross-Train
+  run_type: recovery
+  notes: Recovery Run 6 or Cross-Train
   segments:
   - order_index: 1
-    description: Warmup
+    description: Recovery
     effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 3000
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
+    duration: 2700
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 52
@@ -1422,7 +1172,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 53
   run_type: interval
-  notes: Short Interval Run 7
+  notes: Short Interval Run 5
   segments:
   - order_index: 1
     description: Warmup
@@ -1443,7 +1193,7 @@ runs:
     hr_zone_min: 5
     hr_zone_max: 5
     set_index: 1
-    set_repetitions: 10
+    set_repetitions: 8
   - order_index: 4
     description: Recovery
     effort_type: time
@@ -1451,7 +1201,7 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 10
+    set_repetitions: 8
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -1550,29 +1300,17 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 57
-  run_type: foundation
-  notes: Foundation Run 5 or Cross-Train
+- day_offset: 58
+  run_type: recovery
+  notes: Recovery Run 5 or Cross-Train
   segments:
   - order_index: 1
-    description: Warmup
+    description: Recovery
     effort_type: time
-    duration: 300
+    duration: 2400
     hr_zone_min: 1
     hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 1800
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 58
+- day_offset: 59
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
   segments:
@@ -1594,31 +1332,9 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 59
-  run_type: foundation
-  notes: Foundation Run 5 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 1800
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
 - day_offset: 60
   run_type: interval
-  notes: Short Interval Run 4
+  notes: Short Interval Run 3
   segments:
   - order_index: 1
     description: Warmup
@@ -1635,19 +1351,19 @@ runs:
   - order_index: 3
     description: Interval
     effort_type: time
-    duration: 60
+    duration: 90
     hr_zone_min: 5
     hr_zone_max: 5
     set_index: 1
-    set_repetitions: 10
+    set_repetitions: 6
   - order_index: 4
     description: Recovery
     effort_type: time
-    duration: 120
+    duration: 150
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 10
+    set_repetitions: 6
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -1665,8 +1381,8 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 62
-  run_type: long_run_speed_play
-  notes: Long Run with Speed Play 1
+  run_type: long_run_fast_finish
+  notes: Long Run with Fast Finish 1
   segments:
   - order_index: 1
     description: Warmup
@@ -1675,33 +1391,17 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
   - order_index: 2
-    description: Pre-Work
+    description: Main Effort
     effort_type: distance
-    distance: 1.0
+    distance: 8.5
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
-    description: Speed Play
+    description: Fast Finish
     effort_type: distance
-    distance: 0.25
+    distance: 1.0
     hr_zone_min: 3
     hr_zone_max: 3
-    set_index: 1
-    set_repetitions: 8
-  - order_index: 4
-    description: Recovery
-    effort_type: distance
-    distance: 0.75
-    hr_zone_min: 2
-    hr_zone_max: 2
-    set_index: 1
-    set_repetitions: 8
-  - order_index: 5
-    description: Cooldown
-    effort_type: distance
-    distance: 0.5
-    hr_zone_min: 1
-    hr_zone_max: 1
 - day_offset: 63
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
@@ -1726,7 +1426,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 64
   run_type: tempo
-  notes: Tempo Run 8
+  notes: Tempo Run 5
   segments:
   - order_index: 1
     description: Warmup
@@ -1743,7 +1443,7 @@ runs:
   - order_index: 3
     description: Tempo
     effort_type: time
-    duration: 2160
+    duration: 1680
     hr_zone_min: 3
     hr_zone_max: 3
   - order_index: 4
@@ -1758,7 +1458,7 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 64
+- day_offset: 65
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
   segments:
@@ -1766,28 +1466,6 @@ runs:
     description: Recovery
     effort_type: time
     duration: 2700
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 65
-  run_type: foundation
-  notes: Foundation Run 9 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 3000
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 66
@@ -1814,7 +1492,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 67
   run_type: long_interval
-  notes: Long Interval Run 7
+  notes: Long Interval Run 3
   segments:
   - order_index: 1
     description: Warmup
@@ -1835,7 +1513,7 @@ runs:
     hr_zone_min: 4
     hr_zone_max: 4
     set_index: 1
-    set_repetitions: 5
+    set_repetitions: 3
   - order_index: 4
     description: Recovery
     effort_type: time
@@ -1843,7 +1521,7 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 5
+    set_repetitions: 3
   - order_index: 5
     description: Cooldown
     effort_type: time
@@ -1862,7 +1540,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 69
   run_type: long_run_speed_play
-  notes: Long Run with Speed Play 3
+  notes: Long Run with Speed Play 2
   segments:
   - order_index: 1
     description: Warmup
@@ -1883,7 +1561,7 @@ runs:
     hr_zone_min: 3
     hr_zone_max: 3
     set_index: 1
-    set_repetitions: 12
+    set_repetitions: 10
   - order_index: 4
     description: Recovery
     effort_type: distance
@@ -1891,7 +1569,7 @@ runs:
     hr_zone_min: 2
     hr_zone_max: 2
     set_index: 1
-    set_repetitions: 12
+    set_repetitions: 10
   - order_index: 5
     description: Cooldown
     effort_type: distance
@@ -1909,190 +1587,6 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 71
-  run_type: lactate_threshold
-  notes: Cruise Interval Run 3
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Pre-Work
-    effort_type: time
-    duration: 300
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cruise Interval
-    effort_type: time
-    duration: 600
-    hr_zone_min: 3
-    hr_zone_max: 3
-    set_index: 1
-    set_repetitions: 4
-  - order_index: 4
-    description: Recovery
-    effort_type: time
-    duration: 180
-    hr_zone_min: 1
-    hr_zone_max: 1
-    set_index: 1
-    set_repetitions: 4
-  - order_index: 5
-    description: Post-Work
-    effort_type: time
-    duration: 300
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 6
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 71
-  run_type: recovery
-  notes: Recovery Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Recovery
-    effort_type: time
-    duration: 2700
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 72
-  run_type: foundation
-  notes: Foundation Run 9 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 3000
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 73
-  run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 2100
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 74
-  run_type: long_interval
-  notes: Long Interval Run 8
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Pre-Work
-    effort_type: time
-    duration: 300
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Long Interval
-    effort_type: time
-    duration: 300
-    hr_zone_min: 4
-    hr_zone_max: 4
-    set_index: 1
-    set_repetitions: 6
-  - order_index: 4
-    description: Recovery
-    effort_type: time
-    duration: 180
-    hr_zone_min: 1
-    hr_zone_max: 1
-    set_index: 1
-    set_repetitions: 6
-  - order_index: 5
-    description: Cooldown
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 75
-  run_type: recovery
-  notes: Recovery Run 6 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Recovery
-    effort_type: time
-    duration: 2700
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 76
-  run_type: long_run_speed_play
-  notes: Long Run with Speed Play 3
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: distance
-    distance: 0.5
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Pre-Work
-    effort_type: distance
-    distance: 1.0
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Speed Play
-    effort_type: distance
-    distance: 0.25
-    hr_zone_min: 3
-    hr_zone_max: 3
-    set_index: 1
-    set_repetitions: 12
-  - order_index: 4
-    description: Recovery
-    effort_type: distance
-    distance: 0.75
-    hr_zone_min: 2
-    hr_zone_max: 2
-    set_index: 1
-    set_repetitions: 12
-  - order_index: 5
-    description: Cooldown
-    effort_type: distance
-    distance: 0.5
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 78
   run_type: lactate_threshold
   notes: Cruise Interval Run 2
   segments:
@@ -2136,17 +1630,17 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 78
+- day_offset: 72
   run_type: recovery
-  notes: Recovery Run 5 or Cross-Train
+  notes: Recovery Run 6 or Cross-Train
   segments:
   - order_index: 1
     description: Recovery
     effort_type: time
-    duration: 2400
+    duration: 2700
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 79
+- day_offset: 73
   run_type: foundation
   notes: Foundation Run 6 or Cross-Train
   segments:
@@ -2168,9 +1662,123 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
+- day_offset: 74
+  run_type: long_interval
+  notes: Long Interval Run 6
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Pre-Work
+    effort_type: time
+    duration: 300
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Long Interval
+    effort_type: time
+    duration: 300
+    hr_zone_min: 4
+    hr_zone_max: 4
+    set_index: 1
+    set_repetitions: 4
+  - order_index: 4
+    description: Recovery
+    effort_type: time
+    duration: 180
+    hr_zone_min: 1
+    hr_zone_max: 1
+    set_index: 1
+    set_repetitions: 4
+  - order_index: 5
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 75
+  run_type: recovery
+  notes: Recovery Run 6 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Recovery
+    effort_type: time
+    duration: 2700
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 76
+  run_type: long_run_fast_finish
+  notes: Long Run with Fast Finish 2
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: distance
+    distance: 0.5
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: distance
+    distance: 10.5
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Fast Finish
+    effort_type: distance
+    distance: 1.0
+    hr_zone_min: 3
+    hr_zone_max: 3
+- day_offset: 78
+  run_type: tempo
+  notes: Tempo Run 4
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Pre-Tempo
+    effort_type: time
+    duration: 300
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Tempo
+    effort_type: time
+    duration: 1440
+    hr_zone_min: 3
+    hr_zone_max: 3
+  - order_index: 4
+    description: Post-Tempo
+    effort_type: time
+    duration: 300
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 5
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+- day_offset: 79
+  run_type: recovery
+  notes: Recovery Run 5 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Recovery
+    effort_type: time
+    duration: 2400
+    hr_zone_min: 1
+    hr_zone_max: 1
 - day_offset: 80
   run_type: foundation
-  notes: Foundation Run 5 or Cross-Train
+  notes: Foundation Run 6 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -2181,7 +1789,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 1800
+    duration: 2100
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -2239,8 +1847,8 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 83
-  run_type: long_run_fast_finish
-  notes: Long Run with Fast Finish 1
+  run_type: long_run_speed_play
+  notes: Long Run with Speed Play 1
   segments:
   - order_index: 1
     description: Warmup
@@ -2249,30 +1857,58 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
   - order_index: 2
-    description: Main Effort
+    description: Pre-Work
     effort_type: distance
-    distance: 8.5
+    distance: 1.0
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
-    description: Fast Finish
+    description: Speed Play
     effort_type: distance
-    distance: 1.0
+    distance: 0.25
     hr_zone_min: 3
     hr_zone_max: 3
+    set_index: 1
+    set_repetitions: 8
+  - order_index: 4
+    description: Recovery
+    effort_type: distance
+    distance: 0.75
+    hr_zone_min: 2
+    hr_zone_max: 2
+    set_index: 1
+    set_repetitions: 8
+  - order_index: 5
+    description: Cooldown
+    effort_type: distance
+    distance: 0.5
+    hr_zone_min: 1
+    hr_zone_max: 1
 - day_offset: 84
-  run_type: recovery
-  notes: Recovery Run 6 or Cross-Train
+  run_type: foundation
+  notes: Foundation Run 6 or Cross-Train
   segments:
   - order_index: 1
-    description: Recovery
+    description: Warmup
     effort_type: time
-    duration: 2700
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: time
+    duration: 2100
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: time
+    duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 85
   run_type: tempo
-  notes: Tempo Run 9
+  notes: Tempo Run 7
   segments:
   - order_index: 1
     description: Warmup
@@ -2289,7 +1925,7 @@ runs:
   - order_index: 3
     description: Tempo
     effort_type: time
-    duration: 2400
+    duration: 1920
     hr_zone_min: 3
     hr_zone_max: 3
   - order_index: 4
@@ -2304,7 +1940,7 @@ runs:
     duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
-- day_offset: 85
+- day_offset: 86
   run_type: recovery
   notes: Recovery Run 6 or Cross-Train
   segments:
@@ -2312,28 +1948,6 @@ runs:
     description: Recovery
     effort_type: time
     duration: 2700
-    hr_zone_min: 1
-    hr_zone_max: 1
-- day_offset: 86
-  run_type: foundation
-  notes: Foundation Run 9 or Cross-Train
-  segments:
-  - order_index: 1
-    description: Warmup
-    effort_type: time
-    duration: 300
-    hr_zone_min: 1
-    hr_zone_max: 1
-  - order_index: 2
-    description: Main Effort
-    effort_type: time
-    duration: 3000
-    hr_zone_min: 2
-    hr_zone_max: 2
-  - order_index: 3
-    description: Cooldown
-    effort_type: time
-    duration: 300
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 87
@@ -2360,7 +1974,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 88
   run_type: interval
-  notes: Mixed Interval Run 4
+  notes: Mixed Interval Run 2
   segments:
   - order_index: 1
     description: Warmup
@@ -2377,11 +1991,11 @@ runs:
   - order_index: 3
     description: Long Interval
     effort_type: time
-    duration: 300
+    duration: 180
     hr_zone_min: 4
     hr_zone_max: 4
     set_index: 1
-    set_repetitions: 4
+    set_repetitions: 3
   - order_index: 4
     description: Recovery
     effort_type: time
@@ -2389,7 +2003,7 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 1
-    set_repetitions: 4
+    set_repetitions: 3
   - order_index: 5
     description: Short Interval
     effort_type: time
@@ -2397,7 +2011,7 @@ runs:
     hr_zone_min: 5
     hr_zone_max: 5
     set_index: 2
-    set_repetitions: 4
+    set_repetitions: 3
   - order_index: 6
     description: Recovery
     effort_type: time
@@ -2405,7 +2019,7 @@ runs:
     hr_zone_min: 1
     hr_zone_max: 1
     set_index: 2
-    set_repetitions: 4
+    set_repetitions: 3
   - order_index: 7
     description: Cooldown
     effort_type: time
@@ -2424,7 +2038,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 90
   run_type: long_run_fast_finish
-  notes: Long Run with Fast Finish 4
+  notes: Long Run with Fast Finish 3
   segments:
   - order_index: 1
     description: Warmup
@@ -2435,7 +2049,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: distance
-    distance: 14.0
+    distance: 12.0
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -2446,17 +2060,17 @@ runs:
     hr_zone_max: 3
 - day_offset: 91
   run_type: recovery
-  notes: Recovery Run 6 or Cross-Train
+  notes: Recovery Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Recovery
     effort_type: time
-    duration: 2700
+    duration: 2400
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 92
   run_type: tempo
-  notes: Tempo Run 6 — VERIFY
+  notes: Tempo Run 5
   segments:
   - order_index: 1
     description: Warmup
@@ -2473,7 +2087,7 @@ runs:
   - order_index: 3
     description: Tempo
     effort_type: time
-    duration: 1800
+    duration: 1680
     hr_zone_min: 3
     hr_zone_max: 3
   - order_index: 4
@@ -2490,17 +2104,17 @@ runs:
     hr_zone_max: 1
 - day_offset: 93
   run_type: recovery
-  notes: Recovery Run 6 or Cross-Train
+  notes: Recovery Run 5 or Cross-Train
   segments:
   - order_index: 1
     description: Recovery
     effort_type: time
-    duration: 2700
+    duration: 2400
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 94
   run_type: foundation
-  notes: Foundation Run 6 or Cross-Train
+  notes: Foundation Run 4 or Cross-Train
   segments:
   - order_index: 1
     description: Warmup
@@ -2511,7 +2125,7 @@ runs:
   - order_index: 2
     description: Main Effort
     effort_type: time
-    duration: 2100
+    duration: 1500
     hr_zone_min: 2
     hr_zone_max: 2
   - order_index: 3
@@ -2522,7 +2136,7 @@ runs:
     hr_zone_max: 1
 - day_offset: 95
   run_type: interval
-  notes: Mixed Interval Run 3 — VERIFY
+  notes: Mixed Interval Run 2
   segments:
   - order_index: 1
     description: Warmup
@@ -2539,7 +2153,7 @@ runs:
   - order_index: 3
     description: Long Interval
     effort_type: time
-    duration: 300
+    duration: 180
     hr_zone_min: 4
     hr_zone_max: 4
     set_index: 1
@@ -2576,32 +2190,166 @@ runs:
     hr_zone_max: 1
 - day_offset: 96
   run_type: recovery
-  notes: Recovery Run 5 or Cross-Train
+  notes: Recovery Run 4 or Cross-Train
   segments:
   - order_index: 1
     description: Recovery
     effort_type: time
-    duration: 2400
+    duration: 2100
     hr_zone_min: 1
     hr_zone_max: 1
 - day_offset: 97
   run_type: long_run_speed_play
-  notes: Long Run with Speed Play — VERIFY
+  notes: Long Run with Speed Play 1
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: distance
+    distance: 0.5
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Pre-Work
+    effort_type: distance
+    distance: 1.0
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Speed Play
+    effort_type: distance
+    distance: 0.25
+    hr_zone_min: 3
+    hr_zone_max: 3
+    set_index: 1
+    set_repetitions: 8
+  - order_index: 4
+    description: Recovery
+    effort_type: distance
+    distance: 0.75
+    hr_zone_min: 2
+    hr_zone_max: 2
+    set_index: 1
+    set_repetitions: 8
+  - order_index: 5
+    description: Cooldown
+    effort_type: distance
+    distance: 0.5
+    hr_zone_min: 1
+    hr_zone_max: 1
 - day_offset: 99
   run_type: fast_finish
-  notes: Fast Finish Run — VERIFY
+  notes: Fast Finish Run 5
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Aerobic
+    effort_type: time
+    duration: 1500
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Fast Finish
+    effort_type: time
+    duration: 720
+    hr_zone_min: 3
+    hr_zone_max: 3
 - day_offset: 100
   run_type: foundation
-  notes: Foundation Run or Cross-Train — VERIFY
+  notes: Foundation Run 4 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: time
+    duration: 1500
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
 - day_offset: 101
   run_type: foundation
-  notes: Foundation Run or Cross-Train — VERIFY
+  notes: Foundation Run 3 or Cross-Train
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Main Effort
+    effort_type: time
+    duration: 1200
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
 - day_offset: 102
   run_type: speed_play
-  notes: Speed Play Run — VERIFY
+  notes: Speed Play Run 2
+  segments:
+  - order_index: 1
+    description: Warmup
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
+  - order_index: 2
+    description: Pre-Work
+    effort_type: time
+    duration: 300
+    hr_zone_min: 2
+    hr_zone_max: 2
+  - order_index: 3
+    description: Speed Effort
+    effort_type: time
+    duration: 60
+    hr_zone_min: 5
+    hr_zone_max: 5
+    set_index: 1
+    set_repetitions: 5
+  - order_index: 4
+    description: Recovery
+    effort_type: time
+    duration: 120
+    hr_zone_min: 1
+    hr_zone_max: 1
+    set_index: 1
+    set_repetitions: 5
+  - order_index: 5
+    description: Cooldown
+    effort_type: time
+    duration: 300
+    hr_zone_min: 1
+    hr_zone_max: 1
 - day_offset: 103
   run_type: recovery
-  notes: Recovery Run — VERIFY
+  notes: Recovery Run 2
+  segments:
+  - order_index: 1
+    description: Recovery
+    effort_type: time
+    duration: 1500
+    hr_zone_min: 1
+    hr_zone_max: 1
 - day_offset: 104
   run_type: race
   distance: 13.1
