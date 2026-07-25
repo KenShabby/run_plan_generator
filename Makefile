@@ -34,10 +34,6 @@ rebuild: check generate migrate build
 run: build
 	./bin/web
 
-# Development mode: watch for changes (requires air)
-dev:
-	air
-
 # Roll back last migration
 migrate-down:
 	./migrate_down.sh

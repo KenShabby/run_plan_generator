@@ -163,8 +163,8 @@ goose -dir migrations postgres "your-connection-string" up
 make seed
 ```
 
-This loads the pre-built training plan templates (80/20, Pfitzinger/Douglas,
-etc.). Run it once. If you need to start over:
+This loads the pre-built training plan templates. Run it once.
+If you need to start over:
 
 ```bash
 make reseed
