@@ -35,16 +35,16 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
         }
         .day-header {
             text-align: center;
-            font-size: 0.65rem;
+            font-size: 0.95rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--pico-muted-color);
+            color: var(--pico-color);
             padding: 4px 0;
         }
         .week-label {
-            font-size: 0.65rem;
-            color: var(--pico-muted-color);
+            font-size: 0.75rem;
+            color: var(--pico--color);
             padding: 6px 0 2px;
         }
         .day-cell {
@@ -107,11 +107,12 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
         <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d/export.ics", plan.ID)) }
            role="button"
            class="secondary"
-           style="font-size: 0.8rem; padding: 4px 12px;">
-            Export to Calendar
+           style="font-size: 1.0rem; padding: 1em 1em;">
+            Export to Calendar (.ics file)
         </a>
         <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d/runs/new", plan.ID)) }
-           role="button">
+           role="button"
+           style="font-size: 1.0rem; padding: 1em 1em;">
             + Add Run
         </a>
     </div>

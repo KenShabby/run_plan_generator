@@ -130,7 +130,7 @@ func PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<style>\n        .week-grid {\n            display: grid;\n            grid-template-columns: repeat(7, 1fr);\n            gap: 4px;\n            margin-bottom: 4px;\n        }\n        .day-header {\n            text-align: center;\n            font-size: 0.65rem;\n            font-weight: 600;\n            text-transform: uppercase;\n            letter-spacing: 0.05em;\n            color: var(--pico-muted-color);\n            padding: 4px 0;\n        }\n        .week-label {\n            font-size: 0.65rem;\n            color: var(--pico-muted-color);\n            padding: 6px 0 2px;\n        }\n        .day-cell {\n            min-height: 80px;\n            background: var(--pico-card-background-color);\n            border: 1px solid var(--pico-card-border-color);\n            border-radius: 4px;\n            padding: 4px;\n            font-size: 0.7rem;\n        }\n        .day-cell.empty {\n            background: transparent;\n            border: none;\n        }\n        .run-chip {\n            display: flex;\n            flex-direction: column;\n            gap: 2px;\n            height: 100%;\n        }\n        .run-chip .run-type {\n            font-weight: 600;\n            font-size: 0.65rem;\n            text-transform: uppercase;\n            letter-spacing: 0.03em;\n            color: var(--pico-primary);\n        }\n        .run-chip .run-dist {\n            font-size: 0.75rem;\n        }\n        .run-chip .run-date {\n            font-size: 0.6rem;\n            color: var(--pico-muted-color);\n        }\n        .run-chip .chip-actions {\n            display: flex;\n            gap: 4px;\n            margin-top: auto;\n            padding-top: 4px;\n        }\n        .chip-actions a,\n        .chip-actions button {\n            font-size: 0.6rem;\n            padding: 1px 6px;\n            margin: 0;\n            border-radius: 3px;\n        }\n        .add-run-bar {\n            display: flex;\n            justify-content: flex-end;\n            margin-bottom: 8px;\n        }\n        .add-run-bar button {\n            font-size: 0.8rem;\n            padding: 4px 12px;\n        }\n    </style><div class=\"add-run-bar\"><a href=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<style>\n        .week-grid {\n            display: grid;\n            grid-template-columns: repeat(7, 1fr);\n            gap: 4px;\n            margin-bottom: 4px;\n        }\n        .day-header {\n            text-align: center;\n            font-size: 0.95rem;\n            font-weight: 600;\n            text-transform: uppercase;\n            letter-spacing: 0.05em;\n            color: var(--pico-color);\n            padding: 4px 0;\n        }\n        .week-label {\n            font-size: 0.75rem;\n            color: var(--pico--color);\n            padding: 6px 0 2px;\n        }\n        .day-cell {\n            min-height: 80px;\n            background: var(--pico-card-background-color);\n            border: 1px solid var(--pico-card-border-color);\n            border-radius: 4px;\n            padding: 4px;\n            font-size: 0.7rem;\n        }\n        .day-cell.empty {\n            background: transparent;\n            border: none;\n        }\n        .run-chip {\n            display: flex;\n            flex-direction: column;\n            gap: 2px;\n            height: 100%;\n        }\n        .run-chip .run-type {\n            font-weight: 600;\n            font-size: 0.65rem;\n            text-transform: uppercase;\n            letter-spacing: 0.03em;\n            color: var(--pico-primary);\n        }\n        .run-chip .run-dist {\n            font-size: 0.75rem;\n        }\n        .run-chip .run-date {\n            font-size: 0.6rem;\n            color: var(--pico-muted-color);\n        }\n        .run-chip .chip-actions {\n            display: flex;\n            gap: 4px;\n            margin-top: auto;\n            padding-top: 4px;\n        }\n        .chip-actions a,\n        .chip-actions button {\n            font-size: 0.6rem;\n            padding: 1px 6px;\n            margin: 0;\n            border-radius: 3px;\n        }\n        .add-run-bar {\n            display: flex;\n            justify-content: flex-end;\n            margin-bottom: 8px;\n        }\n        .add-run-bar button {\n            font-size: 0.8rem;\n            padding: 4px 12px;\n        }\n    </style><div class=\"add-run-bar\"><a href=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -143,7 +143,7 @@ func PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" role=\"button\" class=\"secondary\" style=\"font-size: 0.8rem; padding: 4px 12px;\">Export to Calendar</a> <a href=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "\" role=\"button\" class=\"secondary\" style=\"font-size: 1.0rem; padding: 1em 1em;\">Export to Calendar (.ics file)</a> <a href=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -156,7 +156,7 @@ func PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" role=\"button\">+ Add Run</a></div><!-- Day of week headers --><div class=\"week-grid\"><div class=\"day-header\">Mon</div><div class=\"day-header\">Tue</div><div class=\"day-header\">Wed</div><div class=\"day-header\">Thu</div><div class=\"day-header\">Fri</div><div class=\"day-header\">Sat</div><div class=\"day-header\">Sun</div></div><div id=\"runs-list\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "\" role=\"button\" style=\"font-size: 1.0rem; padding: 1em 1em;\">+ Add Run</a></div><!-- Day of week headers --><div class=\"week-grid\"><div class=\"day-header\">Mon</div><div class=\"day-header\">Tue</div><div class=\"day-header\">Wed</div><div class=\"day-header\">Thu</div><div class=\"day-header\">Fri</div><div class=\"day-header\">Sat</div><div class=\"day-header\">Sun</div></div><div id=\"runs-list\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -201,7 +201,7 @@ func RunCalendar(runs []db.RunDay) templ.Component {
 			var templ_7745c5c3_Var11 string
 			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", week.WeekNum))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 137, Col: 70}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 138, Col: 70}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {
@@ -263,7 +263,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("run-%d", run.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 153, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 154, Col: 60}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var13)
 		if templ_7745c5c3_Err != nil {
@@ -276,7 +276,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(run.Date.Time.Format("Jan 2"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 155, Col: 66}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 156, Col: 66}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
@@ -289,7 +289,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 		var templ_7745c5c3_Var15 templ.SafeURL
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(fmt.Sprintf("/runs/%d?from_plan=%d", run.ID, run.PlanID)))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 157, Col: 92}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 158, Col: 92}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {
@@ -302,7 +302,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("/runs/%d?from_plan=%d", run.ID, run.PlanID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 158, Col: 79}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 159, Col: 79}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var16)
 		if templ_7745c5c3_Err != nil {
@@ -315,7 +315,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 		var templ_7745c5c3_Var17 string
 		templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(formatRunType(run.RunType))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 161, Col: 42}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 162, Col: 42}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 		if templ_7745c5c3_Err != nil {
@@ -333,7 +333,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 			var templ_7745c5c3_Var18 string
 			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(models.FormatDistance(run.TotalDistance.Float64, run.DistanceUnit))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 164, Col: 107}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 165, Col: 107}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 			if templ_7745c5c3_Err != nil {
@@ -352,7 +352,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 			var templ_7745c5c3_Var19 string
 			templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(run.Notes.String)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 167, Col: 57}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 168, Col: 57}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 			if templ_7745c5c3_Err != nil {
@@ -375,7 +375,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 			var templ_7745c5c3_Var20 templ.SafeURL
 			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinURLErrs(templ.SafeURL(fmt.Sprintf("/runs/%d/log", run.ID)))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 172, Col: 76}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 173, Col: 76}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 			if templ_7745c5c3_Err != nil {
@@ -388,7 +388,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 			var templ_7745c5c3_Var21 string
 			templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("/runs/%d/log", run.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 173, Col: 63}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 174, Col: 63}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var21)
 			if templ_7745c5c3_Err != nil {
@@ -411,7 +411,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 		var templ_7745c5c3_Var22 string
 		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("/runs/%d", run.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 182, Col: 59}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 183, Col: 59}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var22)
 		if templ_7745c5c3_Err != nil {
@@ -424,7 +424,7 @@ func CompactRunCard(run db.RunDay) templ.Component {
 		var templ_7745c5c3_Var23 string
 		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.ResolveAttributeValue(fmt.Sprintf("#run-%d", run.ID))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 183, Col: 58}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/plan_detail.templ`, Line: 184, Col: 58}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var23)
 		if templ_7745c5c3_Err != nil {
