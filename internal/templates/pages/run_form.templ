@@ -455,10 +455,11 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
 
                 <!-- Save / Cancel -->
                 <div class="grid">
-                    <button type="submit">Save Changes</button>
+                    <button type="submit" style="line-height: 1.5;">Save Changes</button>
                     <a href={ templ.SafeURL(fmt.Sprintf("/runs/%d", runID)) }
                        role="button"
                        class="secondary"
+                       style="line-height: 1.5; display: inline-flex; align-items: center; justify-content: center;"
                        hx-get={ fmt.Sprintf("/runs/%d", runID) }
                        hx-target="#run-edit-container"
                        hx-swap="outerHTML">

@@ -388,6 +388,7 @@ wrong.
 
 ## TODO
 
+- Make workout detail fields editable
 - Calorie tracking
 - Planned vs actual side by side on run detail
 - Progress charts
