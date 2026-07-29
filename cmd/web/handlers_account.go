@@ -45,8 +45,11 @@ func (app *application) handleGetAccountHr(w http.ResponseWriter, r *http.Reques
 
 	profile, err := app.queries.GetHRProfileByUser(r.Context(), user.ID)
 	if err != nil {
-		// no profile yet, render empty form
-		pages.HRProfile(nil, nil, "", app.username(r)).Render(r.Context(), w)
+		if r.Header.Get("HX-Request") == "true" {
+			pages.HRProfileContent(nil, nil, "").Render(r.Context(), w)
+		} else {
+			pages.HRProfile(nil, nil, "", app.username(r)).Render(r.Context(), w)
+		}
 		return
 	}
 
@@ -62,10 +65,12 @@ func (app *application) handleGetAccountHr(w http.ResponseWriter, r *http.Reques
 		method,
 	)
 
-	pages.HRProfile(&profile, zones, "", app.username(r)).Render(r.Context(), w)
-
+	if r.Header.Get("HX-Request") == "true" {
+		pages.HRProfileContent(&profile, zones, "").Render(r.Context(), w)
+	} else {
+		pages.HRProfile(&profile, zones, "", app.username(r)).Render(r.Context(), w)
+	}
 }
-
 func (app *application) handlePostAccountHr(w http.ResponseWriter, r *http.Request) {
 
 	user, ok := userFromContext(r.Context())
