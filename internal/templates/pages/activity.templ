@@ -241,7 +241,7 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
                         <input type="text" name="pace" placeholder="e.g. 8:30"
                             if entry.Pace.Valid {
                                 value={ models.FormatPaceInput(int(entry.Pace.Int32)) }
-                            }>
+                        }>
                     </label>
                 </div>
                 <label>

@@ -388,7 +388,7 @@ wrong.
 
 ## TODO
 
-- If distance/time is changed, pace has to be deleted to auto calculated
+- Allow "lock" option for pace to allow user overide for odd edge cases
 - Make workout detail fields editable
 - Calorie tracking
 - Planned vs actual side by side on run detail

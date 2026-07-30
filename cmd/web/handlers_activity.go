@@ -315,12 +315,12 @@ func (app *application) parseActivityForm(r *http.Request, userID int32) (db.Cre
 
 	// Calculate pace if not provided but distance and duration are
 	var pace pgtype.Int4
-	if v := r.FormValue("pace"); v != "" {
-		p, err := models.ParsePace(v)
-		if err != nil {
-			return db.CreateActivityLogParams{}, fmt.Errorf("invalid pace: %w", err)
+	if distance.Valid && duration.Valid {
+		if calculated := models.PaceFromDistanceAndDuration(distance.Float64, int(duration.Int32)); calculated > 0 {
+			pace = pgtype.Int4{Int32: int32(calculated), Valid: true}
 		}
-		if p > 0 {
+	} else if v := r.FormValue("pace"); v != "" {
+		if p, err := models.ParsePace(v); err == nil && p > 0 {
 			pace = pgtype.Int4{Int32: int32(p), Valid: true}
 		}
 	} else if distance.Valid && duration.Valid {
