@@ -388,8 +388,6 @@ wrong.
 
 ## TODO
 
-- Show plan template name on plan card
-- Edit logged runs 'loses' distance
 - If distance/time is changed, pace has to be deleted to auto calculated
 - Make workout detail fields editable
 - Calorie tracking

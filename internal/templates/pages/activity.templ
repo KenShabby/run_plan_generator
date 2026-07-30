@@ -210,7 +210,10 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
                         Distance
                         <div style="display: flex; gap: 0.5rem;">
                             <input type="number" name="distance" step="0.01" placeholder="e.g. 8.5"
-                                style="flex: 1;">
+                                style="flex: 1;"
+                                if entry.Distance.Valid {
+                                    value={ fmt.Sprintf("%.2f", entry.Distance.Float64) }
+                                }>
                             <select name="distance_unit" style="width: 160px; flex-shrink: 0;">
                                 for _, opt := range models.DistanceUnitOptions {
                                     <option value={ opt.Value }
