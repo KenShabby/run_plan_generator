@@ -388,6 +388,8 @@ wrong.
 
 ## TODO
 
+- Moving a run to a day with an existing run bumps the existing run to the next
+slot rather than just stacking two runs on the existing place
 - Allow "lock" option for pace to allow user overide for odd edge cases
 - Make workout detail fields editable
 - Calorie tracking
