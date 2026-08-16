@@ -1565,9 +1565,15 @@ runs:
   - order_index: 1
     description: General Aerobic
     effort_type: distance
-    distance: 7.0
-    hr_zone_min: 2
-    hr_zone_max: 2
+    distance: 5.0
+    hr_zone_min: 3
+    hr_zone_max: 4
+  - order_index: 2
+    description: Race Pace
+    effort_type: distance
+    distance: 2.0
+    hr_zone_min: 3
+    hr_zone_max: 4
 - day_offset: 123
   run_type: recovery_speed
   notes: Recovery + speed 5 mi w/ 6 × 100 m strides
