@@ -41,7 +41,7 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
                     Date
                     <input type="date" name="date" required
                         if planned.Date.Valid {
-                            value={ planned.Date.Time.Format("YYYY-MM-DD") }
+                            value={ planned.Date.Time.Format("2006-01-02") }
                         }>
                 </label>
                     <label>

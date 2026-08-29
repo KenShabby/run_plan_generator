@@ -95,7 +95,7 @@ func ActivityFormContent(planned db.RunDay, rpeOptions []struct {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.ResolveAttributeValue(planned.Date.Time.Format("YYYY-MM-DD"))
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.ResolveAttributeValue(planned.Date.Time.Format("2006-01-02"))
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/templates/pages/activity.templ`, Line: 44, Col: 74}
 			}

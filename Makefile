@@ -24,8 +24,11 @@ migrate:
 	./migrate_up.sh
 
 # Seed template plans (run once)
-seed:
+seed: cmd/seed/seed
 	./reset_run_templates.sh
+
+cmd/seed/seed: cmd/seed/*.go
+	go build -o /cmd/seed/seed ./cmd/seed/
 
 # Full rebuild: generate, migrate, build
 rebuild: check generate migrate build

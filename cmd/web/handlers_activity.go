@@ -112,7 +112,7 @@ func (app *application) handleGetLogRun(w http.ResponseWriter, r *http.Request) 
 	runDay := db.RunDay{
 		ID:            run.ID,
 		PlanID:        run.PlanID,
-		Date:          run.Date,
+		Date:          pgtype.Date{Time: time.Now(), Valid: true},
 		RunType:       run.RunType,
 		TotalDistance: run.TotalDistance,
 		TotalDuration: run.TotalDuration,

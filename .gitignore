@@ -5,3 +5,5 @@ tables.txt
 db_tables.sh
 web
 bin/
+/cmd/**/seed
+/cmd/**/server
