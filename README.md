@@ -349,43 +349,6 @@ wrong.
 
 ---
 
-## Changelog
-
-**06-21-2026**
-
-- Fix distance_unit not round-tripping through edit form
-- Bump Go to 1.26, templ to v0.3.1020, pin sqlc to v1.31.1 in Dockerfile
-
-**06-07-2026**
-
-- User preference for default distance unit
-
-**06-02-2026**
-
-- Add meters for short sprints
-
-**05-28-2026**
-
-- Allow multiple runs in a single day
-
-**05-24-2026**
-
-- Allow users to edit saved runs
-
-**05-23-2026**
-
-- Stop runs to the right of a deleted run in a plan from falling left on the calendar
-
-**Earlier**
-
-- Repeated segments in YAML templates (e.g. 6x [100 yards zone 5, recover 2 mins])
-- Export to Google Calendar / ICS
-- HR zone calculator (max HR, HRR, LTHR methods)
-- Multi-segment runs with repeat blocks
-- Activity log with mileage, time, pace, RPE tracking
-
----
-
 ## TODO
 
 - Moving a run to a day with an existing run bumps the existing run to the next
