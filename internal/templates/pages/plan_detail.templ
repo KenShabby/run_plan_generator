@@ -33,6 +33,12 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
             gap: 4px;
             margin-bottom: 4px;
         }
+        .week-container.week-current {
+            border-left: 4px solid var(--pico-primary);
+            background-color: var(--pico-primary-background);
+            padding-left: 8px;
+            border-radius: 4px;
+        }
         .day-header {
             text-align: center;
             font-size: 0.95rem;
@@ -129,27 +135,39 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
     </div>
 
     <div id="runs-list">
-        @RunCalendar(runs)
+        @RunCalendar(runs, CurrentWeekNumber(plan.StartDate.Time))
     </div>
 }
 
-templ RunCalendar(runs []db.RunDay) {
+templ RunCalendar(runs []db.RunDay, currentWeekNum int) {
     for _, week := range GroupRunsByWeek(runs) {
-        <div class="week-label">Week { fmt.Sprintf("%d", week.WeekNum) }</div>
-        <div class="week-grid">
-            for _, dayRuns := range week.Days {
-                if len(dayRuns) > 0 {
+        <div
+            id={ fmt.Sprintf("week-%d", week.WeekNum) }
+            class={ "week-container", templ.KV("week-current", week.WeekNum == currentWeekNum) }
+        >
+            <div class="week-label">Week { fmt.Sprintf("%d", week.WeekNum) }</div>
+            <div class="week-grid">
+                for _, dayRuns := range week.Days {
+                    if len(dayRuns) > 0 {
                         for _, run := range dayRuns {
                             @CompactRunCard(*run)
                         }
-                } else {
-                    <div class="day-cell empty"></div>
+                    } else {
+                        <div class="day-cell empty"></div>
+                    }
                 }
-            }
+            </div>
         </div>
     }
+    <script>
+        (() => {
+            const current = document.querySelector('.week-current');
+            if (current) {
+                current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        })();
+    </script>
 }
-
 templ CompactRunCard(run db.RunDay) {
     <div class="day-cell" id={ fmt.Sprintf("run-%d", run.ID) } style="display: flex; flex-direction: column; gap: 4px;">
         <div class="run-chip">

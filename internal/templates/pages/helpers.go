@@ -2,6 +2,7 @@ package pages
 
 import (
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/KenShabby/run_plan_generator/internal/db"
@@ -95,6 +96,17 @@ func GroupRunsByWeek(runs []db.RunDay) []WeekRow {
 		}
 	}
 	return rows
+}
+
+func CurrentWeekNumber(start time.Time) int {
+	if start.IsZero() {
+		return 0
+	}
+	days := int(time.Since(start).Hours() / 24)
+	if days < 0 {
+		return 0
+	}
+	return days/7 + 1
 }
 
 func mustFloat(n pgtype.Numeric) float64 {
