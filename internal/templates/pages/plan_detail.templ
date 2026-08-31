@@ -54,6 +54,9 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
             padding: 6px 0 2px;
         }
         .day-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
             min-height: 80px;
             background: var(--pico-card-background-color);
             border: 1px solid var(--pico-card-border-color);
@@ -149,9 +152,11 @@ templ RunCalendar(runs []db.RunDay, currentWeekNum int) {
             <div class="week-grid">
                 for _, dayRuns := range week.Days {
                     if len(dayRuns) > 0 {
-                        for _, run := range dayRuns {
-                            @CompactRunCard(*run)
-                        }
+                        <div class="day-cell">
+                            for _, run := range dayRuns {
+                                @CompactRunCard(*run)
+                            }
+                        </div>
                     } else {
                         <div class="day-cell empty"></div>
                     }
@@ -169,7 +174,7 @@ templ RunCalendar(runs []db.RunDay, currentWeekNum int) {
     </script>
 }
 templ CompactRunCard(run db.RunDay) {
-    <div class="day-cell" id={ fmt.Sprintf("run-%d", run.ID) } style="display: flex; flex-direction: column; gap: 4px;">
+    <div class="run-entry" id={ fmt.Sprintf("run-%d", run.ID) } style="display: flex; flex-direction: column; gap: 4px;">
         <div class="run-chip">
             <span class="run-date">{ run.Date.Time.Format("Jan 2") }</span>
             <a class="run-type"
@@ -197,14 +202,14 @@ templ CompactRunCard(run db.RunDay) {
             } else {
                 <span style="color: var(--pico-primary);">✓</span>
             }
-            <button class="secondary outline"
-                hx-delete={ fmt.Sprintf("/runs/%d", run.ID) }
-                hx-target={ fmt.Sprintf("#run-%d", run.ID) }
-                hx-swap="outerHTML"
-                hx-confirm="Delete this run?">
-                ✕
-            </button>
-        </div>
+                <button class="secondary outline"
+                    hx-delete={ fmt.Sprintf("/runs/%d", run.ID) }
+                    hx-target={ fmt.Sprintf("#run-%d", run.ID) }
+                    hx-swap="outerHTML"
+                    hx-confirm="Delete this run?">
+                    ✕
+                </button>
+            </div>
         </div>
     </div>
 }
