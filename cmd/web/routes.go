@@ -9,33 +9,32 @@ import (
 	"github.com/go-chi/httprate"
 )
 
+func clientIPKey(r *http.Request) (string, error) {
+	return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
+}
+
 func newServer(app *application) http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger, middleware.Recoverer, app.loadUser)
+	r.Use(middleware.ClientIPFromXFF("172.16.0.0/12")) // adjust to your docker network
 
-	// Global rate limiter
-	r.Use(httprate.LimitByIP(300, time.Minute, httprate.WithKeyFuncs(httprate.KeyByRealIP)))
+	// Global backstop
+	r.Use(httprate.LimitBy(300, time.Minute, clientIPKey))
 
 	app.registerMiscRoutes(r)
 
-	// Tighter rate limits for Auth routes
+	// Tighter limit for auth routes
 	r.Group(func(r chi.Router) {
-		r.Use(httprate.LimitByIP(
-			10, 
-			time.Minute, 
-			httprate.WithKeyFuncs(httprate.KeyByRealIP),
-			httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
-				w.WriteHeader(http.StatusTooManyRequests)
-				w.Write([]byte("Too many attempts. Try again in a minute."))
-			}),
+		r.Use(httprate.LimitBy(
+			10,
+			time.Minute,
+			clientIPKey,
 		))
-	}
-
-	app.registerAuthRoutes(r)
+		app.registerAuthRoutes(r)
+	})
 
 	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
-	// Protected groups - auth required
 	r.Group(func(r chi.Router) {
 		r.Use(app.requireAuth)
 		app.registerAccountRoutes(r)
@@ -46,5 +45,4 @@ func newServer(app *application) http.Handler {
 	})
 
 	return r
-
 }

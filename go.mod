@@ -4,7 +4,7 @@ go 1.26
 
 require (
 	github.com/a-h/templ v0.3.1020
-	github.com/go-chi/chi/v5 v5.2.5
+	github.com/go-chi/chi/v5 v5.3.2
 	github.com/gorilla/sessions v1.4.0
 	github.com/jackc/pgx/v5 v5.9.1
 	golang.org/x/crypto v0.50.0
