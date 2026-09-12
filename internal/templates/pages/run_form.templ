@@ -37,6 +37,7 @@ templ RunFormWithBuilder(planID int32, basics models.RunBasics, segments []model
     <form id="run-builder-form"
         method="POST"
         action={ templ.SafeURL(fmt.Sprintf("/plans/%d/runs", planID)) }>
+        @layouts.CSRFField()
         <!-- Run basics -->
         <div class="grid">
             <label>
@@ -330,6 +331,7 @@ templ RunEditFormContent(runID int32, planID int32, basics models.RunBasics, seg
                       method="POST"
                       action={ templ.SafeURL(fmt.Sprintf("/runs/%d/edit", runID)) }
                       hx-boost="false">
+                @layouts.CSRFField()
                 <!-- Run basics -->
                 <div class="grid">
                     <label>

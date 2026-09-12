@@ -54,7 +54,15 @@ func RegisterContent(errMsg string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<form method=\"POST\" action=\"/register\"><label>Username <input type=\"text\" name=\"username\" required autocomplete=\"username\"></label> <label>Email <input type=\"email\" name=\"email\" required autocomplete=\"email\"></label> <label>Password <input type=\"password\" name=\"password\" required autocomplete=\"new-password\" minlength=\"8\"></label> <label>Confirm Password <input type=\"password\" name=\"confirm_password\" required autocomplete=\"new-password\"></label> <button type=\"submit\">Create Account</button></form><p><small>Already have an account? <a href=\"/login\">Log in</a></small></p></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<form method=\"POST\" action=\"/register\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = layouts.CSRFField().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<label>Username <input type=\"text\" name=\"username\" required autocomplete=\"username\"></label> <label>Email <input type=\"email\" name=\"email\" required autocomplete=\"email\"></label> <label>Password <input type=\"password\" name=\"password\" required autocomplete=\"new-password\" minlength=\"8\"></label> <label>Confirm Password <input type=\"password\" name=\"confirm_password\" required autocomplete=\"new-password\"></label> <button type=\"submit\">Create Account</button></form><p><small>Already have an account? <a href=\"/login\">Log in</a></small></p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

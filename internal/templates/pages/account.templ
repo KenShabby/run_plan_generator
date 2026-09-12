@@ -22,6 +22,7 @@ templ AccountContent(user db.User, usernameErr string, emailErr string, password
                 <p style="color: var(--pico-del-color);"><small>{ usernameErr }</small></p>
             }
             <form method="POST" action="/account/username">
+            @layouts.CSRFField()
                 <label>
                     Username
                     <input type="text" name="username" value={ user.Username } required>
@@ -36,6 +37,7 @@ templ AccountContent(user db.User, usernameErr string, emailErr string, password
                 <p style="color: var(--pico-del-color);"><small>{ emailErr }</small></p>
             }
             <form method="POST" action="/account/email">
+            @layouts.CSRFField()
                 <label>
                     Email
                     <input type="email" name="email" value={ user.Email } required>
@@ -50,6 +52,7 @@ templ AccountContent(user db.User, usernameErr string, emailErr string, password
                 <p style="color: var(--pico-del-color);"><small>{ passwordErr }</small></p>
             }
             <form method="POST" action="/account/password">
+            @layouts.CSRFField()
                 <label>
                     Current Password
                     <input type="password" name="current_password" required autocomplete="current-password">
@@ -69,6 +72,7 @@ templ AccountContent(user db.User, usernameErr string, emailErr string, password
         <article>
             <header><strong>Preferences</strong></header>
             <form method="POST" action="/account/preferences">
+            @layouts.CSRFField()
                 <label>
                     Default Distance Unit
                     <select name="distance_unit">
@@ -91,6 +95,7 @@ templ AccountContent(user db.User, usernameErr string, emailErr string, password
             <p><small>Permanently delete your account and all associated training plans. This cannot be undone.</small></p>
             <form method="POST" action="/account/delete"
                 onsubmit="return confirm('Are you sure? This will permanently delete your account and all your training plans.')">
+                @layouts.CSRFField()
                 <button type="submit" class="secondary" style="color: var(--pico-del-color); border-color: var(--pico-del-color);">
                     Delete Account
                 </button>

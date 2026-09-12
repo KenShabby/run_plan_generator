@@ -54,7 +54,15 @@ func LoginContent(errMsg string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<form method=\"POST\" action=\"/login\"><label>Email <input type=\"email\" name=\"email\" required autocomplete=\"email\"></label> <label>Password <input type=\"password\" name=\"password\" required autocomplete=\"current-password\"></label> <button type=\"submit\">Log In</button></form><p><small>Don't have an account? <a href=\"/register\">Register</a></small></p></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<form method=\"POST\" action=\"/login\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = layouts.CSRFField().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<label>Email <input type=\"email\" name=\"email\" required autocomplete=\"email\"></label> <label>Password <input type=\"password\" name=\"password\" required autocomplete=\"current-password\"></label> <button type=\"submit\">Log In</button></form><p><small>Don't have an account? <a href=\"/register\">Register</a></small></p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

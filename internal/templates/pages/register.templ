@@ -11,6 +11,7 @@ templ RegisterContent(errMsg string) {
             </div>
         }
         <form method="POST" action="/register">
+            @layouts.CSRFField()
             <label>
                 Username
                 <input type="text" name="username" required autocomplete="username">

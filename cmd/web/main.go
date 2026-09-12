@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/KenShabby/run_plan_generator/internal/db"
+	"github.com/gorilla/csrf"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -18,6 +19,11 @@ func main() {
 	sessionSecret := getEnv("SESSION_SECRET", "")
 	if sessionSecret == "" {
 		log.Fatal("SESSION_SECRET environment variable is required")
+	}
+
+	csrfSecret := getEnv("CSRF_SECRET", "")
+	if csrfSecret == "" {
+		log.Fatal("CSRF_SECRET environment variable is required")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -39,8 +45,12 @@ func main() {
 	app := newApplication(queries, sessionSecret)
 
 	srv := &http.Server{
-		Addr:         ":8080",
-		Handler:      newServer(app),
+		Addr: ":8080",
+		Handler: csrf.Protect(
+			[]byte(csrfSecret),
+			csrf.Secure(true),
+			csrf.Path("/"),
+		)(newServer(app)),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,

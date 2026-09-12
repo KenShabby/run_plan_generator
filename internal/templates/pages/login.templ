@@ -11,6 +11,7 @@ templ LoginContent(errMsg string) {
             </div>
         }
         <form method="POST" action="/login">
+            @layouts.CSRFField()
             <label>
                 Email
                 <input type="email" name="email" required autocomplete="email">

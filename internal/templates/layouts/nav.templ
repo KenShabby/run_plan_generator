@@ -1,5 +1,11 @@
 package layouts
 
+import "github.com/KenShabby/run_plan_generator/internal/csrfctx"
+
+templ CSRFField() {
+	<input type="hidden" name="gorilla.csrf.Token" value={ csrfctx.Token(ctx) }>
+}
+
 templ Nav(username string) {
     <header class="container">
         <nav>
@@ -21,6 +27,7 @@ templ Nav(username string) {
                                 <li><a href="/activity/new">+ Log Run</a></li>
                                 <li>
                                     <form method="POST" action="/logout" style="margin: 0;">
+                                    @CSRFField()
                                         <button type="submit" class="secondary" style="width: 100%;">
                                             Log Out
                                         </button>

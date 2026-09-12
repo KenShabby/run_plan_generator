@@ -17,6 +17,7 @@ templ ActivityFormContent(planned db.RunDay, rpeOptions []struct{ Value int; Lab
     <article>
         <header><strong>What actually happened?</strong></header>
         <form method="POST" action="/activity">
+        @layouts.CSRFField()
             <div class="grid">
                 <label>
                     Distance
@@ -193,6 +194,7 @@ templ ActivityEditFormContent(entry db.ActivityLog, rpeOptions []struct{ Value i
         <article>
             <header><strong>Update your logged run</strong></header>
             <form method="POST" action={ templ.SafeURL(fmt.Sprintf("/activity/%d", entry.ID)) }>
+            @layouts.CSRFField()
                 <div class="grid">
                     <label>
                         Date

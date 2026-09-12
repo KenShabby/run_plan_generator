@@ -17,6 +17,7 @@ templ HRProfileContent(profile *db.UserHrProfile, zones []hrutil.CalculatedZone,
     <article>
         <header><strong>Your Heart Rate Data</strong></header>
         <form method="POST" action="/account/hr">
+        @layouts.CSRFField()
             <div class="grid">
                 <label>
                     Max Heart Rate

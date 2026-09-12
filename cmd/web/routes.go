@@ -4,10 +4,21 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/csrf"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httprate"
+
+	"github.com/KenShabby/run_plan_generator/internal/csrfctx"
 )
+
+func withCSRFContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := csrfctx.WithToken(r.Context(), csrf.Token(r))
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
 
 func clientIPKey(r *http.Request) (string, error) {
 	return httprate.CanonicalizeIP(middleware.GetClientIP(r.Context())), nil
@@ -15,7 +26,7 @@ func clientIPKey(r *http.Request) (string, error) {
 
 func newServer(app *application) http.Handler {
 	r := chi.NewRouter()
-	r.Use(middleware.Logger, middleware.Recoverer, app.loadUser)
+	r.Use(middleware.Logger, middleware.Recoverer, app.loadUser, withCSRFContext)
 	r.Use(middleware.ClientIPFromXFF("172.16.0.0/12")) // adjust to your docker network
 
 	// Global backstop
