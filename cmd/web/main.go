@@ -48,8 +48,9 @@ func main() {
 		Addr: ":8080",
 		Handler: csrf.Protect(
 			[]byte(csrfSecret),
-			csrf.Secure(true),
+			csrf.Secure(os.Getenv("ENV") == "production"),
 			csrf.Path("/"),
+			csrf.PlaintextHTTPRequest(os.Getenv("ENV") != "production"),
 		)(newServer(app)),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
