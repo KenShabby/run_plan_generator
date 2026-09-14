@@ -44,14 +44,21 @@ func main() {
 	queries := db.New(pool)
 	app := newApplication(queries, sessionSecret)
 
+	csrfMiddleware := csrf.Protect(
+		[]byte(csrfSecret),
+		csrf.Secure(os.Getenv("ENV") == "production"),
+		csrf.Path("/"),
+	)
+
 	srv := &http.Server{
 		Addr: ":8080",
-		Handler: csrf.Protect(
-			[]byte(csrfSecret),
-			csrf.Secure(os.Getenv("ENV") == "production"),
-			csrf.Path("/"),
-			csrf.PlaintextHTTPRequest(os.Getenv("ENV") != "production"),
-		)(newServer(app)),
+		Handler: plaintextHTTPInDev(csrfMiddleware(
+			csrf.Protect(
+				[]byte(csrfSecret),
+				csrf.Secure(os.Getenv("ENV") == "production"),
+				csrf.Path("/"),
+			)(newServer(app)),
+		)),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,

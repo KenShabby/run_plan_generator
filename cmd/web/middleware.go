@@ -2,6 +2,9 @@ package main
 
 import (
 	"net/http"
+	"os"
+
+	"github.com/gorilla/csrf"
 )
 
 func (app *application) requireAuth(next http.Handler) http.Handler {
@@ -23,6 +26,15 @@ func (app *application) loadUser(next http.Handler) http.Handler {
 			if err == nil {
 				r = r.WithContext(withUser(r.Context(), user))
 			}
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
+func plaintextHTTPInDev(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if os.Getenv("ENV") != "production" {
+			r = csrf.PlaintextHTTPRequest(r)
 		}
 		next.ServeHTTP(w, r)
 	})
