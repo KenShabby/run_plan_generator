@@ -351,10 +351,7 @@ wrong.
 
 ## TODO
 
-- Scroll run plan to current week by default. Avoid having to scroll down plan
-every time to find timely runs.
-- Moving a run to a day with an existing run bumps the existing run to the next
-slot rather than just stacking two runs on the existing place
+- Allow Plans to be edited (name, race date, etc.)
 - Allow "lock" option for pace to allow user overide for odd edge cases
 - Make workout detail fields editable
 - Calorie tracking
