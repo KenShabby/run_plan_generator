@@ -336,6 +336,7 @@ wrong.
 │   ├── web/          # Main web application
 │   └── seed/         # Template seeding tool
 ├── internal/
+|   |-- csrfctx       # Cross-site request forgery lib
 │   ├── db/           # sqlc generated database code
 │   ├── hrutil/       # Heart rate utilities
 │   ├── models/       # Domain models
@@ -353,8 +354,6 @@ wrong.
 
 - Allow Plans to be edited (name, race date, etc.)
 - Allow "lock" option for pace to allow user overide for odd edge cases
-- Make workout detail fields editable
-- Calorie tracking
 - Planned vs actual side by side on run detail
 - Progress charts
 - Elevation changes (manual entry)
