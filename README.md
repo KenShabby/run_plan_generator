@@ -336,7 +336,7 @@ wrong.
 │   ├── web/          # Main web application
 │   └── seed/         # Template seeding tool
 ├── internal/
-|   |-- csrfctx       # Cross-site request forgery lib
+|   |-- csrfctx/      # Cross-site request forgery lib
 │   ├── db/           # sqlc generated database code
 │   ├── hrutil/       # Heart rate utilities
 │   ├── models/       # Domain models
