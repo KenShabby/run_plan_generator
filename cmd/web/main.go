@@ -42,23 +42,19 @@ func main() {
 	fmt.Println("connected to postgres successfully")
 
 	queries := db.New(pool)
-	app := newApplication(queries, sessionSecret)
+
+	secure := os.Getenv("ENV") == "production"
+	app := newApplication(queries, sessionSecret, secure)
 
 	csrfMiddleware := csrf.Protect(
 		[]byte(csrfSecret),
-		csrf.Secure(os.Getenv("ENV") == "production"),
+		csrf.Secure(secure),
 		csrf.Path("/"),
 	)
 
 	srv := &http.Server{
-		Addr: ":8080",
-		Handler: plaintextHTTPInDev(csrfMiddleware(
-			csrf.Protect(
-				[]byte(csrfSecret),
-				csrf.Secure(os.Getenv("ENV") == "production"),
-				csrf.Path("/"),
-			)(newServer(app)),
-		)),
+		Addr:         ":8080",
+		Handler:      plaintextHTTPInDev(csrfMiddleware(newServer(app))),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,

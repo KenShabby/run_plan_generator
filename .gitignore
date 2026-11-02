@@ -3,7 +3,7 @@
 notes.txt
 tables.txt
 db_tables.sh
-web
+/web
 bin/
 /cmd/**/seed
 /cmd/**/server

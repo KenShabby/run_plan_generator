@@ -17,11 +17,20 @@ type application struct {
 	store   *sessions.CookieStore
 }
 
-func newApplication(queries *db.Queries, sessionSecret string) *application {
+func newApplication(queries *db.Queries, sessionSecret string, secure bool) *application {
+	store := sessions.NewCookieStore([]byte(sessionSecret))
+	store.Options = &sessions.Options{
+		Path:     "/",
+		MaxAge:   30 * 24 * 60 * 60,
+		HttpOnly: true,
+		Secure:   secure,
+		SameSite: http.SameSiteLaxMode,
+	}
+
 	return &application{
 		logger:  log.New(os.Stdout, "", log.Ldate|log.Ltime),
 		queries: queries,
-		store:   sessions.NewCookieStore([]byte(sessionSecret)),
+		store:   store,
 	}
 }
 
