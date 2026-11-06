@@ -21,6 +21,47 @@ type SegmentGroup struct {
 	Segments    []db.Segment
 }
 
+type TemplateWeekRow struct {
+	WeekNum int
+	Days    [7][]*db.TemplateRunDay // 0=Mon ... 6=Sun
+}
+
+// Total sums run distances for the week (0 for time-based plans)
+func (w TemplateWeekRow) Total() float64 {
+	var sum float64
+	for _, day := range w.Days {
+		for _, r := range day {
+			if r.Distance.Valid {
+				sum += r.Distance.Float64
+			}
+		}
+	}
+	return sum
+}
+
+func GroupTemplateRunsByWeek(runs []db.TemplateRunDay) []TemplateWeekRow {
+	if len(runs) == 0 {
+		return nil
+	}
+	maxOffset := 0
+	for _, r := range runs {
+		if int(r.DayOffset) > maxOffset {
+			maxOffset = int(r.DayOffset)
+		}
+	}
+	rows := make([]TemplateWeekRow, maxOffset/7+1)
+	for w := range rows {
+		rows[w].WeekNum = w + 1
+		for d := range rows[w].Days {
+			rows[w].Days[d] = []*db.TemplateRunDay{}
+		}
+	}
+	for i := range runs {
+		off := int(runs[i].DayOffset)
+		rows[off/7].Days[off%7] = append(rows[off/7].Days[off%7], &runs[i])
+	}
+	return rows
+}
 func GroupSegments(segments []db.Segment) []SegmentGroup {
 	var groups []SegmentGroup
 	// track which set_indexes we've already processed
