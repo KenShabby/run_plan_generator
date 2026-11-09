@@ -26,91 +26,7 @@ templ PlanDetailContent(plan db.TrainingPlan, runs []db.RunDay) {
         <p>{ plan.Description.String }</p>
     }
 
-    <style>
-        .week-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-            margin-bottom: 4px;
-        }
-        .week-container.week-current {
-            border-left: 4px solid var(--pico-primary);
-            background-color: var(--pico-primary-background);
-            padding-left: 8px;
-            border-radius: 4px;
-        }
-        .day-header {
-            text-align: center;
-            font-size: 0.95rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--pico-color);
-            padding: 4px 0;
-        }
-        .week-label {
-            font-size: 0.75rem;
-            color: var(--pico--color);
-            padding: 6px 0 2px;
-        }
-        .day-cell {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-height: 80px;
-            background: var(--pico-card-background-color);
-            border: 1px solid var(--pico-card-border-color);
-            border-radius: 4px;
-            padding: 4px;
-            font-size: 0.7rem;
-        }
-        .day-cell.empty {
-            background: transparent;
-            border: none;
-        }
-        .run-chip {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            height: 100%;
-        }
-        .run-chip .run-type {
-            font-weight: 600;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            color: var(--pico-primary);
-        }
-        .run-chip .run-dist {
-            font-size: 0.75rem;
-        }
-        .run-chip .run-date {
-            font-size: 0.6rem;
-            color: var(--pico-muted-color);
-        }
-        .run-chip .chip-actions {
-            display: flex;
-            gap: 4px;
-            margin-top: auto;
-            padding-top: 4px;
-        }
-        .chip-actions a,
-        .chip-actions button {
-            font-size: 0.6rem;
-            padding: 1px 6px;
-            margin: 0;
-            border-radius: 3px;
-        }
-        .add-run-bar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 8px;
-        }
-        .add-run-bar button {
-            font-size: 0.8rem;
-            padding: 4px 12px;
-        }
-    </style>
+    @CalendarStyles()
 
     <div class="add-run-bar">
         <a href={ templ.SafeURL(fmt.Sprintf("/plans/%d/export.ics", plan.ID)) }
@@ -218,4 +134,92 @@ templ PlanDetail(plan db.TrainingPlan, runs []db.RunDay, username string) {
     @layouts.Base(plan.Name, username) {
         @PlanDetailContent(plan, runs)
     }
+}
+
+templ CalendarStyles(){
+    <style>
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+        .week-container.week-current {
+            border-left: 4px solid var(--pico-primary);
+            background-color: var(--pico-primary-background);
+            padding-left: 8px;
+            border-radius: 4px;
+        }
+        .day-header {
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--pico-color);
+            padding: 4px 0;
+        }
+        .week-label {
+            font-size: 0.75rem;
+            color: var(--pico--color);
+            padding: 6px 0 2px;
+        }
+        .day-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 80px;
+            background: var(--pico-card-background-color);
+            border: 1px solid var(--pico-card-border-color);
+            border-radius: 4px;
+            padding: 4px;
+            font-size: 0.7rem;
+        }
+        .day-cell.empty {
+            background: transparent;
+            border: none;
+        }
+        .run-chip {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            height: 100%;
+        }
+        .run-chip .run-type {
+            font-weight: 600;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--pico-primary);
+        }
+        .run-chip .run-dist {
+            font-size: 0.75rem;
+        }
+        .run-chip .run-date {
+            font-size: 0.6rem;
+            color: var(--pico-muted-color);
+        }
+        .run-chip .chip-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: auto;
+            padding-top: 4px;
+        }
+        .chip-actions a,
+        .chip-actions button {
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            margin: 0;
+            border-radius: 3px;
+        }
+        .add-run-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+        .add-run-bar button {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+        }
+    </style>
 }
