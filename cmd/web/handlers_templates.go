@@ -14,6 +14,7 @@ import (
 
 func (app *application) registerTemplateRoutes(r chi.Router) {
 	r.Get("/templates", app.handleGetTemplates)
+	r.Get("/templates/{id}/preview", app.handleGetTemplatePreview)
 	r.Get("/templates/{id}/select", app.handleGetTemplateById)
 	r.Post("/templates/{id}/instantiate", app.handleTemplateInstantiate)
 }
@@ -176,4 +177,28 @@ func (app *application) handleTemplateInstantiate(w http.ResponseWriter, r *http
 		app.logger.Printf("error fetching plans after template instantiation: %v", err)
 	}
 	pages.PlansContent(plans).Render(r.Context(), w)
+}
+
+func (app *application) handleGetTemplatePreview(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		http.Error(w, "invalid id", http.StatusBadRequest)
+		return
+	}
+	tmpl, err := app.queries.GetTemplatePlan(r.Context(), int32(id))
+	if err != nil {
+		http.Error(w, "template not found", http.StatusNotFound)
+		return
+	}
+	runs, err := app.queries.ListTemplateRunDaysByPlan(r.Context(), tmpl.ID)
+	if err != nil {
+		log.Printf("error fetching template runs: %v", err)
+		http.Error(w, "failed to load template runs", http.StatusInternalServerError)
+		return
+	}
+	if r.Header.Get("HX-Request") == "true" {
+		pages.TemplatePreviewContent(tmpl, runs).Render(r.Context(), w)
+	} else {
+		pages.TemplatePreviewPage(tmpl, runs, app.username(r)).Render(r.Context(), w)
+	}
 }

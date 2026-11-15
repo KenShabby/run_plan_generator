@@ -3,6 +3,7 @@ package pages
 import (
     "fmt"
     "github.com/KenShabby/run_plan_generator/internal/db"
+    "github.com/KenShabby/run_plan_generator/internal/models"
     "github.com/KenShabby/run_plan_generator/internal/templates/layouts"
 )
 
@@ -76,12 +77,20 @@ templ TemplateCard(t db.ListTemplatePlansWithCountsRow) {
             }
         </p>
         <footer>
-            <button
-                hx-get={ fmt.Sprintf("/templates/%d/select", t.ID) }
-                hx-target="main"
-                hx-push-url="true">
-                Use This Plan
-            </button>
+            <div class="grid">
+                <button class="secondary"
+                    hx-get={ fmt.Sprintf("/templates/%d/preview", t.ID) }
+                    hx-target="main"
+                    hx-push-url="true">
+                    Preview
+                </button>
+                <button
+                    hx-get={ fmt.Sprintf("/templates/%d/select", t.ID) }
+                    hx-target="main"
+                    hx-push-url="true">
+                    Use This Plan
+                </button>
+            </div>
         </footer>
     </article>
 }
@@ -129,5 +138,63 @@ templ TemplateSelectContent(t db.TemplatePlan, username string) {
 templ TemplateSelectPage(t db.TemplatePlan, username string) {
     @layouts.Base(t.Name, username) {
         @TemplateSelectContent(t, username)
+    }
+}
+
+templ TemplatePreviewContent(t db.TemplatePlan, runs []db.TemplateRunDay) {
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>{ t.Name }</h1>
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="/templates" role="button" class="secondary"
+               hx-get="/templates" hx-target="main" hx-push-url="true">← Back</a>
+            <a href={ templ.SafeURL(fmt.Sprintf("/templates/%d/select", t.ID)) } role="button"
+               hx-get={ fmt.Sprintf("/templates/%d/select", t.ID) }
+               hx-target="main" hx-push-url="true">Use This Plan</a>
+        </div>
+    </div>
+    <p><small>{ t.PlanType } · { fmt.Sprintf("%d", t.TotalWeeks) } weeks</small></p>
+
+    @CalendarStyles()
+
+    <div class="week-grid">
+        for _, d := range []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"} {
+            <div class="day-header">{ d }</div>
+        }
+    </div>
+
+    for _, week := range GroupTemplateRunsByWeek(runs) {
+        <div class="week-label">
+            Week { fmt.Sprintf("%d", week.WeekNum) }
+            if week.Total() > 0 {
+                · { models.FormatDistance(week.Total(), t.DistanceUnit) }
+            }
+        </div>
+        <div class="week-grid">
+            for _, dayRuns := range week.Days {
+                if len(dayRuns) > 0 {
+                    for _, run := range dayRuns {
+                        <div class="day-cell">
+                            <div class="run-chip">
+                                <span class="run-type">{ formatRunType(run.RunType) }</span>
+                                if run.Distance.Valid {
+                                    <span class="run-dist">{ models.FormatDistance(run.Distance.Float64, t.DistanceUnit) }</span>
+                                }
+                                if run.Notes.Valid {
+                                    <span class="run-date">{ run.Notes.String }</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                } else {
+                    <div class="day-cell empty"></div>
+                }
+            }
+        </div>
+    }
+}
+
+templ TemplatePreviewPage(t db.TemplatePlan, runs []db.TemplateRunDay, username string) {
+    @layouts.Base(t.Name, username) {
+        @TemplatePreviewContent(t, runs)
     }
 }
