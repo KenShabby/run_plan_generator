@@ -12,8 +12,8 @@ vet: fmt
 
 # Generate templ and sqlc
 generate:
-	templ generate
-	sqlc generate
+	go tool templ generate
+	go tool sqlc generate
 
 # Build the binary
 build: vet
