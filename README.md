@@ -352,7 +352,6 @@ wrong.
 
 ## TODO
 
-- Allow templates to be viewed before selecting
 - Allow plan templates to be "applied" to existing plans
 - Change ordering of plan templates
 - Allow Plans to be edited (name, race date, etc.)
